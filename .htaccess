@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Keamanan: Blokir akses langsung ke file sensitif (.env, .git, dll)
+    RewriteRule ^(\.env|\.git|composer\.(json|lock)|package\.(json|lock)|phpunit\.xml) - [F,L,NC]
+
+    # Arahkan semua request publik ke folder public/ jika belum di folder public/
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

@@ -1,0 +1,689 @@
+// Google Fonts: Bricolage Grotesque and DM Sans
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap');
+
+// Bootstrap Icons
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+// Brand Variables
+$brand-navy-dark: #0A1B3D;        // Solid deep navy for typography, borders, and drop shadows
+$brand-navy: #16366D;             // Rich, classic Navy for theme primary highlights, badges, and buttons
+$brand-navy-hover: #1D4386;       // Interactive hover state for Navy buttons
+$brand-white: #FFFFFF;
+$brand-navy-light: #EBF1FA;       // Soft ice-navy tint for subtle card backgrounds
+$brand-navy-subtle: #D2E0F2;      // Subtle navy accent tint for pills and soft badges
+$brand-yellow: #FFE14D;           // Accent Yellow for Neo-Brutalism contrast
+
+// Override Bootstrap variables
+$primary: $brand-navy;
+$secondary: $brand-navy-subtle;
+$dark: $brand-navy-dark;
+$light: $brand-navy-light;
+$body-bg: $brand-white;
+$body-color: $brand-navy-dark;
+$font-family-sans-serif: 'DM Sans', system-ui, -apple-system, sans-serif;
+$headings-font-family: 'Bricolage Grotesque', sans-serif;
+$headings-font-weight: 800;
+$border-radius: 24px;
+$btn-border-radius: 9999px;
+
+@import 'bootstrap/scss/bootstrap';
+
+// Custom Gen Z Neo-Brutalism & Modern Clean Styling
+:root {
+    --navy: #{$brand-navy-dark};
+    --navy-primary: #{$brand-navy};
+    --electric: #{$brand-navy};
+    --blue-light: #{$brand-navy-light};
+    --blue-subtle: #{$brand-navy-subtle};
+    --yellow: #{$brand-yellow};
+}
+
+body {
+    font-family: $font-family-sans-serif;
+    color: var(--navy);
+    background-color: #F8FAFD;
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+}
+
+// Sticky Pill Navbar
+.pill-navbar-container {
+    position: sticky;
+    top: 20px;
+    z-index: 1030;
+    padding: 0 1rem;
+    transition: top 0.2s ease;
+
+    @media (max-width: 991.98px) {
+        top: 12px;
+        padding: 0 0.75rem;
+    }
+}
+
+.pill-navbar {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(12px);
+    border: 2px solid var(--navy);
+    border-radius: 9999px;
+    box-shadow: 4px 4px 0px var(--navy);
+    padding: 0.6rem 1.4rem;
+    transition: border-radius 0.25s ease, box-shadow 0.2s ease;
+
+    @media (max-width: 991.98px) {
+        width: 100%;
+        border-radius: 24px;
+        padding: 0.6rem 1rem;
+
+        .navbar-collapse {
+            padding-top: 1rem;
+            margin-top: 0.5rem;
+            border-top: 2px dashed var(--blue-subtle);
+        }
+
+        .navbar-nav {
+            width: 100%;
+            margin-bottom: 0.75rem;
+
+            .nav-item {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .nav-link-pill {
+            display: block;
+            width: 100%;
+            padding: 0.55rem 1rem !important;
+            margin-bottom: 0.25rem;
+        }
+
+        .navbar-actions {
+            width: 100%;
+            justify-content: center;
+            margin-top: 0.5rem;
+            padding-bottom: 0.25rem;
+        }
+    }
+}
+
+.nav-link-pill {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.4rem 1rem !important;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: var(--blue-subtle);
+        color: var(--navy);
+    }
+}
+
+// Hero Typography & Highlight
+.hero-title {
+    font-size: clamp(2rem, 5.5vw, 4.2rem);
+    line-height: 1.15;
+
+    @media (max-width: 576px) {
+        font-size: 2.1rem;
+        line-height: 1.2;
+    }
+}
+
+.hero-highlight {
+    background-color: var(--electric);
+    color: #FFFFFF;
+    padding: 0.15rem 0.6rem;
+    border-radius: 12px;
+    display: inline-block;
+    box-shadow: 3px 3px 0px var(--navy);
+
+    @media (max-width: 576px) {
+        box-shadow: 2px 2px 0px var(--navy);
+        border-radius: 10px;
+    }
+}
+
+// Stickers
+.sticker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 1rem;
+    border: 2px solid var(--navy);
+    border-radius: 9999px;
+    font-weight: 800;
+    font-size: 0.88rem;
+    box-shadow: 3px 3px 0px var(--navy);
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.35;
+    text-align: left;
+    box-sizing: border-box;
+
+    i {
+        flex-shrink: 0;
+    }
+
+    @media (max-width: 576px) {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.8rem;
+        border-radius: 16px;
+        box-shadow: 2px 2px 0px var(--navy);
+        gap: 0.35rem;
+    }
+}
+
+.sticker-yellow {
+    background-color: var(--yellow);
+    color: var(--navy);
+    transform: rotate(-2deg);
+
+    @media (max-width: 576px) {
+        transform: rotate(-1deg);
+    }
+}
+
+.sticker-blue {
+    background-color: var(--blue-subtle);
+    color: var(--navy);
+    transform: rotate(2deg);
+
+    @media (max-width: 576px) {
+        transform: rotate(1deg);
+    }
+}
+
+.sticker-electric {
+    background-color: var(--electric);
+    color: #FFFFFF;
+    transform: rotate(-2deg);
+
+    @media (max-width: 576px) {
+        transform: rotate(-1deg);
+    }
+}
+
+// Modern Cards
+.card-genz {
+    background: #FFFFFF;
+    border: 2px solid var(--navy) !important;
+    border-radius: 24px !important;
+    box-shadow: 6px 6px 0px var(--navy) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 8px 8px 0px var(--navy) !important;
+    }
+
+    @media (max-width: 576px) {
+        border-radius: 18px !important;
+        box-shadow: 4px 4px 0px var(--navy) !important;
+
+        &:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 5px 5px 0px var(--navy) !important;
+        }
+    }
+}
+
+.card-genz-blue {
+    background-color: var(--blue-light);
+    border: 2px solid var(--navy);
+    border-radius: 24px;
+    box-shadow: 6px 6px 0px var(--navy);
+
+    @media (max-width: 576px) {
+        border-radius: 18px;
+        box-shadow: 4px 4px 0px var(--navy);
+    }
+}
+
+// Interactive Buttons
+.btn-genz {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 46px;
+    padding: 0.6rem 1.6rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    border: 2px solid var(--navy);
+    box-shadow: 4px 4px 0px var(--navy);
+    transition: all 0.15s ease;
+    text-decoration: none;
+
+    &:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0px var(--navy);
+    }
+
+    &:active {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0px var(--navy);
+    }
+
+    @media (max-width: 576px) {
+        padding: 0.5rem 1.25rem;
+        box-shadow: 3px 3px 0px var(--navy);
+
+        &:hover {
+            box-shadow: 4px 4px 0px var(--navy);
+        }
+    }
+}
+
+.btn-genz-primary {
+    background-color: var(--navy-primary);
+    color: #FFFFFF;
+
+    &:hover {
+        color: #FFFFFF;
+        background-color: $brand-navy-hover;
+    }
+}
+
+.btn-genz-secondary {
+    background-color: #FFFFFF;
+    color: var(--navy);
+
+    &:hover {
+        background-color: var(--blue-subtle);
+        color: var(--navy);
+    }
+}
+
+.btn-genz-yellow {
+    background-color: var(--yellow);
+    color: var(--navy);
+
+    &:hover {
+        background-color: darken(#FFE14D, 5%);
+        color: var(--navy);
+    }
+}
+
+// Pills and Tags
+.pill-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    border: 1.5px solid var(--navy);
+    background-color: var(--blue-light);
+    color: var(--navy);
+}
+
+// Progress Bar for Skills
+.progress-genz {
+    height: 18px;
+    background-color: var(--blue-light);
+    border: 2px solid var(--navy);
+    border-radius: 9999px;
+    overflow: hidden;
+
+    .progress-bar-genz {
+        background-color: var(--electric);
+        height: 100%;
+        border-radius: 9999px;
+        transition: width 1s ease-in-out;
+    }
+}
+
+// Quotes Banner
+.quote-banner {
+    background: linear-gradient(135deg, var(--blue-light) 0%, var(--blue-subtle) 100%);
+    border: 2px solid var(--navy);
+    border-radius: 24px;
+    box-shadow: 6px 6px 0px var(--navy);
+
+    @media (max-width: 576px) {
+        border-radius: 18px;
+        box-shadow: 4px 4px 0px var(--navy);
+        padding: 1.5rem 1rem !important;
+
+        p.fs-3 {
+            font-size: 1.35rem !important;
+        }
+    }
+}
+
+// Section Header with Pill
+.section-pill {
+    display: inline-block;
+    background-color: var(--blue-subtle);
+    color: var(--navy);
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.3rem 1rem;
+    border-radius: 9999px;
+    border: 1.5px solid var(--navy);
+    margin-bottom: 0.75rem;
+
+    @media (max-width: 576px) {
+        font-size: 0.78rem;
+        padding: 0.25rem 0.8rem;
+    }
+}
+
+// Footer
+.footer-genz {
+    border-top: 2px solid var(--navy);
+    background-color: #FFFFFF;
+}
+
+// Gen-Z Experience Carousel & Sliders
+.carousel-genz {
+    .carousel-inner {
+        overflow: hidden;
+        padding: 12px 12px 22px 12px;
+        margin: -12px -12px -22px -12px;
+    }
+
+    .carousel-item {
+        transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+}
+
+.carousel-swipeable {
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-y pinch-zoom;
+
+    &:active {
+        cursor: grabbing;
+    }
+}
+
+.carousel-indicators-genz {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    .carousel-indicator-pill {
+        width: 12px;
+        height: 12px;
+        border-radius: 9999px;
+        border: 2px solid var(--navy);
+        background-color: #FFFFFF;
+        box-shadow: 2px 2px 0px var(--navy);
+        cursor: pointer;
+        padding: 0;
+        transition: all 0.25s ease;
+
+        &.active {
+            width: 32px;
+            background-color: var(--electric);
+        }
+    }
+}
+
+.carousel-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    border: 2px solid var(--navy);
+    box-shadow: 4px 4px 0px var(--navy);
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    z-index: 20;
+
+    &:hover {
+        background-color: var(--yellow);
+        transform: translateY(-50%) translate(-2px, -2px);
+        box-shadow: 6px 6px 0px var(--navy);
+        color: var(--navy);
+    }
+
+    &:active {
+        transform: translateY(-50%) translate(2px, 2px);
+        box-shadow: 2px 2px 0px var(--navy);
+    }
+}
+
+.carousel-nav-prev {
+    left: -24px;
+}
+
+.carousel-nav-next {
+    right: -24px;
+}
+
+// Project Slider (Responsive: 2 on desktop, 1 on mobile, smooth scroll & snap)
+.project-slider-container {
+    position: relative;
+}
+
+.project-slider-wrapper {
+    position: relative;
+    overflow: hidden;
+    padding: 12px 12px 26px 12px;
+    margin: -12px -12px -26px -12px;
+
+    @media (max-width: 576px) {
+        padding: 8px 8px 20px 8px;
+        margin: -8px -8px -20px -8px;
+    }
+}
+
+.project-slider-track {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-y pinch-zoom;
+
+    @media (max-width: 576px) {
+        gap: 1rem;
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    &.is-dragging {
+        cursor: grabbing;
+        scroll-behavior: auto;
+        scroll-snap-type: none;
+    }
+
+    img {
+        -webkit-user-drag: none;
+        user-select: none;
+    }
+}
+
+.project-slide-item {
+    // Mobile (< 992px): Exactly 1 project card per view
+    flex: 0 0 100%;
+    min-width: 0;
+    scroll-snap-align: start;
+    display: flex;
+
+    // Desktop (>= 992px): Exactly 2 project cards per view side-by-side
+    @media (min-width: 992px) {
+        flex: 0 0 calc(50% - 0.75rem);
+    }
+
+    > .card-genz {
+        width: 100%;
+    }
+}
+
+.project-nav-prev {
+    left: -24px;
+}
+
+.project-nav-next {
+    right: -24px;
+}
+
+// Experience Logo Box (Aesthetic Neo-Brutalism Avatar)
+.experience-logo-box {
+    width: 68px;
+    height: 68px;
+    background-color: #FFFFFF;
+    border: 2px solid var(--navy);
+    border-radius: 16px;
+    box-shadow: 3px 3px 0px var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    @media (max-width: 576px) {
+        width: 54px;
+        height: 54px;
+        border-radius: 12px;
+        box-shadow: 2px 2px 0px var(--navy);
+        padding: 4px;
+    }
+
+    .experience-logo-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 10px;
+    }
+
+    .experience-logo-fallback {
+        background-color: #F8F9FA;
+        border-radius: 10px;
+    }
+}
+
+.card-genz:hover .experience-logo-box {
+    transform: rotate(-2deg) scale(1.03);
+    box-shadow: 5px 5px 0px var(--navy);
+}
+
+// Project Thumbnail & Image Lightbox Styling
+.project-thumbnail-box {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: var(--blue-light);
+
+    .project-thumbnail-img {
+        transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+        display: block;
+    }
+
+    &:hover .project-thumbnail-img {
+        transform: scale(1.04);
+    }
+
+    .project-thumbnail-overlay {
+        background: rgba(10, 27, 61, 0.65);
+        backdrop-filter: blur(4px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.25s ease, visibility 0.25s ease;
+        z-index: 10;
+    }
+
+    &:hover .project-thumbnail-overlay,
+    &:focus-within .project-thumbnail-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    @media (hover: none) {
+        .project-thumbnail-overlay {
+            display: none !important;
+        }
+    }
+}
+
+.image-viewer-body {
+    background-color: #F8FAFD;
+}
+
+.image-viewer-stage {
+    min-height: 240px;
+    max-height: 72vh;
+    overflow: hidden;
+    background: radial-gradient(circle, rgba(210, 224, 242, 0.35) 10%, transparent 11%);
+    background-size: 16px 16px;
+    background-color: #FFFFFF;
+
+    @media (max-width: 576px) {
+        max-height: 60vh;
+        min-height: 180px;
+    }
+}
+
+.image-viewer-photo {
+    max-height: 68vh;
+    width: auto;
+    max-width: 100%;
+    transition: opacity 0.2s ease;
+
+    @media (max-width: 576px) {
+        max-height: 56vh;
+    }
+}
+
+// Blueprint Vault Callout Card in Skills section
+.blueprint-vault-card {
+    background: linear-gradient(135deg, var(--blue-light) 0%, rgba(255, 225, 77, 0.22) 100%);
+    box-shadow: 4px 4px 0px var(--navy);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0px var(--navy);
+    }
+}
+
+// Global Mobile Responsive Refinements
+@media (max-width: 576px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .display-4 {
+        font-size: 2.25rem !important;
+    }
+
+    .display-5 {
+        font-size: 1.85rem !important;
+    }
+
+    .card-genz.p-4 {
+        padding: 1.25rem !important;
+    }
+}
