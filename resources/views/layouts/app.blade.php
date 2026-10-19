@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', $settings['site_title'] ?? 'Portofolio Profesional — M. Rofiq Aulia')</title>
+    <title>@yield('title', 'Portofolio Professional')</title>
+    <link rel="icon" type="image/png" href="{{ !empty($profile->photo_path) ? asset('storage/' . $profile->photo_path) : asset('favicon.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ !empty($profile->photo_path) ? asset('storage/' . $profile->photo_path) : asset('favicon.png') }}">
     <meta name="description" content="@yield('meta_description', $settings['site_description'] ?? 'Portofolio individu web developer')">
     <meta name="keywords" content="@yield('meta_keywords', $settings['meta_keywords'] ?? 'laravel, developer, portfolio')">
     <meta name="author" content="{{ $settings['author_name'] ?? 'M. Rofiq Aulia' }}">

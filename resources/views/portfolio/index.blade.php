@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ($profile->full_name ?? 'M. Rofiq Aulia') . ' — ' . ($profile->headline ?? 'Senior Laravel Developer'))
+@section('title', 'Portofolio Professional')
 
 @section('content')
 <div class="container">
