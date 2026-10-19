@@ -128,6 +128,82 @@
                         @endforeach
                     </div>
                 @endif
+
+                <!-- Dokumentasi & Blueprint Terkait Proyek -->
+                @if($project->documentations && $project->documentations->count())
+                    <div id="blueprint-terkait" class="mt-4 pt-4 border-top border-2 border-light">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-primary text-white rounded-circle p-2">
+                                    <i class="bi bi-file-earmark-code"></i>
+                                </span>
+                                <h4 class="font-heading mb-0">Dokumentasi & Blueprint Sistem Terkait</h4>
+                            </div>
+                            <span class="badge bg-dark text-white rounded-pill px-3 py-1 small">
+                                {{ $project->documentations->count() }} Artefak
+                            </span>
+                        </div>
+                        <p class="text-muted small mb-3">
+                            Spesifikasi teknis, rancangan ERD database, dan blueprint arsitektur sistem yang saling terhubung untuk proyek ini.
+                        </p>
+
+                        <div class="row g-3">
+                            @foreach($project->documentations as $doc)
+                                @php
+                                    $previewUrl = $doc->getEffectivePreviewUrl();
+                                    $hasDownloadFile = $doc->file_path && Storage::disk('public')->exists($doc->file_path);
+                                @endphp
+                                <div class="col-md-6">
+                                    <div class="card-genz p-3 bg-white h-100 d-flex flex-column border border-2 border-dark" style="box-shadow: 4px 4px 0px var(--navy) !important;">
+                                        <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
+                                            <span class="sticker sticker-blue py-0 px-2" style="font-size: 0.72rem;">
+                                                {{ $doc->category }}
+                                            </span>
+                                            <span class="badge bg-light text-dark border border-dark rounded-pill px-2 py-0 small">
+                                                <i class="bi {{ $doc->type->icon() }}"></i> {{ $doc->getFileExtension() ? strtoupper($doc->getFileExtension()) : $doc->type->label() }}
+                                            </span>
+                                        </div>
+
+                                        <h5 class="font-heading fs-6 mb-2">
+                                            <a href="{{ route('portfolio.documentations.show', $doc->slug) }}" class="text-decoration-none text-dark">
+                                                {{ $doc->title }}
+                                            </a>
+                                        </h5>
+
+                                        @if($doc->summary)
+                                            <p class="text-muted small mb-3 flex-grow-1" style="font-size: 0.82rem;">
+                                                {{ Str::limit($doc->summary, 90) }}
+                                            </p>
+                                        @endif
+
+                                        <div class="d-flex align-items-center gap-2 pt-2 border-top border-light mt-auto">
+                                            <a href="{{ route('portfolio.documentations.show', $doc->slug) }}" class="btn-genz btn-genz-primary py-1 px-3 small fs-6">
+                                                Detail Dokumen <i class="bi bi-arrow-right-short"></i>
+                                            </a>
+                                            @if($previewUrl)
+                                                <button type="button" 
+                                                        class="btn-genz btn-genz-secondary py-1 px-2 small btn-lightbox-open"
+                                                        data-image-src="{{ $previewUrl }}"
+                                                        data-image-title="{{ $doc->title }}"
+                                                        data-image-desc="{{ $doc->summary }}"
+                                                        data-image-download="{{ $hasDownloadFile ? route('portfolio.documentations.download', $doc->slug) : $previewUrl }}"
+                                                        data-image-filename="{{ $doc->getDownloadFilename() }}"
+                                                        title="Pratinjau Diagram">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                            @endif
+                                            @if($hasDownloadFile)
+                                                <a href="{{ route('portfolio.documentations.download', $doc->slug) }}" class="btn-genz btn-genz-yellow py-1 px-2 small" title="Unduh Berkas Asli">
+                                                    <i class="bi bi-download"></i>
+                                                </a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -148,6 +224,14 @@
                             <li class="d-flex justify-content-between border-bottom pb-2">
                                 <span class="text-muted">Periode:</span>
                                 <span class="fw-bold">{{ $project->started_at->format('M Y') }} - {{ $project->finished_at ? $project->finished_at->format('M Y') : 'Selesai' }}</span>
+                            </li>
+                        @endif
+                        @if($project->documentations && $project->documentations->count())
+                            <li class="d-flex justify-content-between border-bottom pb-2">
+                                <span class="text-muted">Blueprint & ERD:</span>
+                                <a href="#blueprint-terkait" class="badge bg-primary text-white rounded-pill text-decoration-none">
+                                    {{ $project->documentations->count() }} Dokumen Terkait ↓
+                                </a>
                             </li>
                         @endif
                     </ul>

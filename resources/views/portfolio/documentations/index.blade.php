@@ -78,7 +78,7 @@
         <div class="card-genz p-3 p-md-4 bg-white">
             <form action="{{ route('portfolio.documentations.index') }}" method="GET" class="row g-3 align-items-center">
                 <!-- Search input -->
-                <div class="col-lg-5">
+                <div class="col-lg-4">
                     <div class="input-group">
                         <span class="input-group-text bg-white border-2 border-dark border-end-0 rounded-start-pill ps-3">
                             <i class="bi bi-search text-muted"></i>
@@ -86,13 +86,13 @@
                         <input type="text" 
                                name="q" 
                                class="form-control border-2 border-dark border-start-0 rounded-end-pill py-2 pe-3" 
-                               placeholder="Cari ERD, diagram UML, atau kata kunci..." 
+                               placeholder="Cari ERD, diagram UML, atau nama proyek..." 
                                value="{{ $search ?? '' }}">
                     </div>
                 </div>
 
                 <!-- Category filter dropdown / pills -->
-                <div class="col-sm-6 col-lg-4">
+                <div class="col-sm-6 col-lg-3">
                     <select name="kategori" class="form-select border-2 border-dark rounded-pill py-2 px-3" onchange="this.form.submit()">
                         <option value="all">Semua Kategori ({{ $documentations->count() }})</option>
                         @foreach($categories as $cat)
@@ -103,15 +103,29 @@
                     </select>
                 </div>
 
-                <!-- Type filter -->
-                <div class="col-sm-6 col-lg-3 d-flex gap-2">
-                    <select name="tipe" class="form-select border-2 border-dark rounded-pill py-2 px-3" onchange="this.form.submit()">
-                        <option value="all">Semua Tipe Artefak</option>
-                        <option value="image" {{ ($selectedType ?? '') === 'image' ? 'selected' : '' }}>🖼️ Diagram / Gambar</option>
-                        <option value="document" {{ ($selectedType ?? '') === 'document' ? 'selected' : '' }}>📄 Dokumen / PDF</option>
-                        <option value="link" {{ ($selectedType ?? '') === 'link' ? 'selected' : '' }}>🌐 Tautan Luar</option>
+                <!-- Project filter dropdown -->
+                <div class="col-sm-6 col-lg-3">
+                    <select name="proyek" class="form-select border-2 border-dark rounded-pill py-2 px-3" onchange="this.form.submit()">
+                        <option value="all">Semua Proyek Terkait</option>
+                        @if(isset($projects))
+                            @foreach($projects as $proj)
+                                <option value="{{ $proj->slug }}" {{ ($selectedProject ?? '') === $proj->slug ? 'selected' : '' }}>
+                                    📁 {{ Str::limit($proj->title, 26) }}
+                                </option>
+                            @endforeach
+                        @endif
                     </select>
-                    @if($selectedCategory || $selectedType || $search)
+                </div>
+
+                <!-- Type filter -->
+                <div class="col-sm-6 col-lg-2 d-flex gap-2">
+                    <select name="tipe" class="form-select border-2 border-dark rounded-pill py-2 px-3" onchange="this.form.submit()">
+                        <option value="all">Semua Tipe</option>
+                        <option value="image" {{ ($selectedType ?? '') === 'image' ? 'selected' : '' }}>🖼️ Diagram</option>
+                        <option value="document" {{ ($selectedType ?? '') === 'document' ? 'selected' : '' }}>📄 Dokumen</option>
+                        <option value="link" {{ ($selectedType ?? '') === 'link' ? 'selected' : '' }}>🌐 Tautan</option>
+                    </select>
+                    @if($selectedCategory || $selectedType || $selectedProject || $search)
                         <a href="{{ route('portfolio.documentations.index') }}" class="btn-genz btn-genz-secondary p-2 flex-shrink-0" title="Reset Filter" style="width: 44px; height: 44px;">
                             <i class="bi bi-arrow-counterclockwise fs-5"></i>
                         </a>
@@ -257,8 +271,13 @@
 
                                 @if($doc->project)
                                     <div class="mb-3">
-                                        <a href="{{ route('portfolio.project.show', $doc->project->slug) }}" class="badge bg-light text-primary border border-2 border-primary rounded-pill px-2 py-1 text-decoration-none small">
-                                            <i class="bi bi-briefcase me-1"></i> Proyek: {{ Str::limit($doc->project->title, 30) }}
+                                        <a href="{{ route('portfolio.project.show', $doc->project->slug) }}" 
+                                           class="pill-tag text-decoration-none py-1 px-3 d-inline-flex align-items-center gap-1"
+                                           style="font-size: 0.78rem; background-color: var(--blue-subtle);"
+                                           title="Buka detail proyek {{ $doc->project->title }}">
+                                            <i class="bi bi-briefcase-fill text-primary"></i> 
+                                            <span>Proyek Terkait: <strong>{{ Str::limit($doc->project->title, 32) }}</strong></span>
+                                            <i class="bi bi-arrow-up-right small"></i>
                                         </a>
                                     </div>
                                 @endif

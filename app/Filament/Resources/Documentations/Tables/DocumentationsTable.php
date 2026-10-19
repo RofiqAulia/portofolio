@@ -63,6 +63,11 @@ final class DocumentationsTable
             ])
             ->defaultSort('sort_order')
             ->filters([
+                SelectFilter::make('project_id')
+                    ->label('Terkait Proyek')
+                    ->relationship('project', 'title')
+                    ->searchable()
+                    ->preload(),
                 SelectFilter::make('category')
                     ->label('Kategori')
                     ->options([

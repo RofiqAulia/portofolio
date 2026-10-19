@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Enums\AttachmentType;
-use App\Enums\DocumentationType;
 use App\Enums\ExperienceType;
 use App\Enums\MessageStatus;
 use App\Enums\ProjectStatus;
 use App\Enums\SkillType;
 use App\Enums\UserRole;
-use App\Models\Documentation;
 use App\Models\Experience;
 use App\Models\Message;
 use App\Models\PageView;
@@ -267,67 +265,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 9. Documentations & Blueprints
-        $doc1 = Documentation::withTrashed()->firstOrNew(['slug' => 'erd-database-smart-warehouse-system']);
-        if ($doc1->trashed()) {
-            $doc1->restore();
-        }
-        $doc1->fill([
-            'title' => 'Desain ERD & Normalisasi Database Smart Warehouse System',
-            'category' => 'ERD & Database',
-            'summary' => 'Skema arsitektur entitas relasi (ERD) 3NF lengkap dengan indeks teroptimasi, foreign keys cascade, dan struktur audit log transaksi gudang.',
-            'description' => 'Dokumentasi arsitektur database relasional MySQL yang dirancang memenuhi kaidah Third Normal Form (3NF). Meliputi tabel master barang, pergerakan stok real-time (inbound/outbound), relasi multi-gudang, dan integrasi penomoran QR code unik.',
-            'type' => DocumentationType::Image,
-            'file_path' => 'documentations/files/erd-smart-warehouse.png',
-            'preview_image_path' => null,
-            'external_url' => 'https://whimsical.com',
-            'project_id' => $proj1->id ?? null,
-            'is_featured' => true,
-            'is_published' => true,
-            'sort_order' => 1,
-            'published_at' => now()->subMonths(2),
-        ]);
-        $doc1->save();
-
-        $doc2 = Documentation::withTrashed()->firstOrNew(['slug' => 'uml-flowchart-arsitektur-autentikasi-live-camera-qr']);
-        if ($doc2->trashed()) {
-            $doc2->restore();
-        }
-        $doc2->fill([
-            'title' => 'UML Sequence & Flowchart Alur Autentikasi Live Camera QR',
-            'category' => 'UML & Flowchart',
-            'summary' => 'Diagram urutan (Sequence Diagram) dan Flowchart alur pemindaian QR code via kamera browser, verifikasi token JWT, hingga pembaruan stok otomatis.',
-            'description' => 'Diagram detail yang memetakan siklus interaksi antara frontend kamera pengguna, enkripsi token QR dinamis, middleware validasi backend Laravel, dan atomic transaction lock di database.',
-            'type' => DocumentationType::Image,
-            'file_path' => 'documentations/files/uml-flowchart-qr.png',
-            'preview_image_path' => null,
-            'external_url' => 'https://miro.com',
-            'project_id' => $proj1->id ?? null,
-            'is_featured' => true,
-            'is_published' => true,
-            'sort_order' => 2,
-            'published_at' => now()->subMonth(),
-        ]);
-        $doc2->save();
-
-        $doc3 = Documentation::withTrashed()->firstOrNew(['slug' => 'arsitektur-sistem-clean-architecture-solid-laravel']);
-        if ($doc3->trashed()) {
-            $doc3->restore();
-        }
-        $doc3->fill([
-            'title' => 'Arsitektur Sistem: Clean Architecture & Penerapan SOLID Laravel',
-            'category' => 'Arsitektur Sistem',
-            'summary' => 'Dokumen blueprint rancangan modularisasi Service-Repository pattern, DTO (Data Transfer Objects), Action classes, dan decoupled domain logic.',
-            'description' => 'Blueprint panduan arsitektur rekayasa perangkat lunak untuk menjaga kode tetap modular, mudah diuji (testable), dan bebas dari dependensi yang berbelit-belit.',
-            'type' => DocumentationType::Document,
-            'file_path' => 'documentations/files/clean-architecture-guide.pdf',
-            'preview_image_path' => null,
-            'external_url' => 'https://github.com',
-            'project_id' => $proj2->id ?? null,
-            'is_featured' => true,
-            'is_published' => true,
-            'sort_order' => 3,
-            'published_at' => now()->subWeeks(3),
-        ]);
-        $doc3->save();
+        $this->call(DocumentationSeeder::class);
     }
 }

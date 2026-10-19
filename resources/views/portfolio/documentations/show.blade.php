@@ -200,6 +200,33 @@
                     </div>
                 </div>
 
+                <!-- Terkait Proyek Box -->
+                @if($documentation->project)
+                    <div class="card-genz p-4 bg-white border border-2 border-dark" style="box-shadow: 4px 4px 0px var(--navy) !important;">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-primary text-white rounded-circle p-2">
+                                <i class="bi bi-briefcase-fill"></i>
+                            </span>
+                            <h5 class="font-heading mb-0">Proyek Terkait</h5>
+                        </div>
+                        <p class="text-muted small mb-3">Blueprint ini merupakan spesifikasi teknis dari proyek berikut:</p>
+                        
+                        <div class="border border-2 border-dark rounded-3 p-3 bg-light mb-3">
+                            <h6 class="font-heading mb-1 text-dark">{{ $documentation->project->title }}</h6>
+                            <p class="text-muted small mb-2">{{ Str::limit($documentation->project->summary, 100) }}</p>
+                            @if($documentation->project->role)
+                                <span class="badge bg-white text-dark border border-dark rounded-pill px-2 py-1 small">
+                                    Peran: {{ $documentation->project->role }}
+                                </span>
+                            @endif
+                        </div>
+
+                        <a href="{{ route('portfolio.project.show', $documentation->project->slug) }}" class="btn-genz btn-genz-primary w-100 py-2 fs-6">
+                            Buka Detail Proyek <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                @endif
+
                 <!-- Related Documents -->
                 @if($relatedDocs->count())
                     <div class="card-genz p-4 bg-white">

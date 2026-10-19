@@ -79,7 +79,11 @@ final class PortfolioController extends Controller
     {
         $project = Project::published()
             ->where('slug', $slug)
-            ->with(['technologies', 'media'])
+            ->with([
+                'technologies',
+                'media',
+                'documentations' => fn ($q) => $q->published()->ordered(),
+            ])
             ->firstOrFail();
 
         $settings = SiteSetting::all()->pluck('value', 'key');
@@ -140,6 +144,7 @@ final class PortfolioController extends Controller
 
         $selectedCategory = $request->query('kategori');
         $selectedType = $request->query('tipe');
+        $selectedProject = $request->query('proyek');
         $search = $request->query('q');
 
         $query = Documentation::published()
@@ -154,16 +159,22 @@ final class PortfolioController extends Controller
             $query->where('type', $selectedType);
         }
 
+        if ($selectedProject && $selectedProject !== 'all') {
+            $query->whereHas('project', fn ($q) => $q->where('slug', $selectedProject));
+        }
+
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
                     ->orWhere('summary', 'like', "%{$search}%")
-                    ->orWhere('category', 'like', "%{$search}%");
+                    ->orWhere('category', 'like', "%{$search}%")
+                    ->orWhereHas('project', fn ($pq) => $pq->where('title', 'like', "%{$search}%"));
             });
         }
 
         $documentations = $query->get();
         $categories = Documentation::published()->distinct()->pluck('category')->filter()->values();
+        $projects = Project::published()->orderBy('title')->get(['id', 'title', 'slug']);
         $featuredDocs = Documentation::published()->featured()->ordered()->take(3)->get();
 
         return view('portfolio.documentations.index', compact(
@@ -171,9 +182,11 @@ final class PortfolioController extends Controller
             'settings',
             'documentations',
             'categories',
+            'projects',
             'featuredDocs',
             'selectedCategory',
             'selectedType',
+            'selectedProject',
             'search'
         ));
     }
