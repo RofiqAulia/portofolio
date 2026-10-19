@@ -289,7 +289,7 @@
                                     data-image-desc="{{ $documentation->summary }}"
                                     data-image-download="{{ $hasDownloadFile ? route('portfolio.documentations.download', $documentation->slug) : $previewUrl }}"
                                     data-image-filename="{{ $documentation->getDownloadFilename() }}">
-                                <i class="bi bi-eye"></i> Buka Preview Lightbox
+                                <i class="bi bi-eye"></i> Buka Preview Berkas Lengkap
                             </button>
                         @endif
                         @if($documentation->external_url)
