@@ -3,7 +3,7 @@
         <div class="d-flex align-items-start gap-3">
             <div class="experience-logo-box flex-shrink-0 mt-1">
                 @if($experience->cover_path)
-                    <img src="{{ asset('storage/' . $experience->cover_path) }}" alt="{{ $experience->organization_name }}" class="experience-logo-img">
+                    <img src="{{ asset('storage/' . $experience->cover_path) }}" alt="Logo {{ $experience->organization_name }} - {{ $experience->position }}" loading="lazy" class="experience-logo-img">
                 @else
                     <div class="experience-logo-fallback d-flex align-items-center justify-content-center w-100 h-100">
                         @if(($badgeType ?? '') === 'organisasi' || $experience->type?->value === 'organization')

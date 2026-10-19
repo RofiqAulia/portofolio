@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Portofolio Professional')
+@section('title', 'M. Rofiq Aulia | System Analyst & Software Engineer Indonesia')
+@section('meta_description', 'Portofolio M. Rofiq Aulia, Sarjana Terapan Teknik Informatika. Berfokus pada IT Business Analyst, System Analyst, dan Software Engineer berbasis PHP Laravel.')
+@section('meta_keywords', 'Portofolio Software Engineer, System Analyst Indonesia, Business Analyst Fresh Graduate, Web Developer PHP Laravel, Teknik Informatika, continuous improvement')
 
 @section('content')
 <div class="container">
@@ -50,7 +52,7 @@
                         @if(!empty($profile->photo_path))
                             <div class="project-thumbnail-box position-relative overflow-hidden rounded-4">
                                 <img src="{{ asset('storage/' . $profile->photo_path) }}" 
-                                     alt="{{ $profile->full_name }}" 
+                                     alt="{{ $profile->full_name ?? 'M. Rofiq Aulia' }} - System Analyst & Software Engineer Indonesia" 
                                      class="img-fluid rounded-4 w-100 object-fit-cover project-thumbnail-img" 
                                      style="height: 380px;"
                                      role="button"

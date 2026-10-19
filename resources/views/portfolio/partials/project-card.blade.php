@@ -2,7 +2,8 @@
     @if($project->thumbnail_path)
         <div class="project-thumbnail-box position-relative overflow-hidden border-bottom border-2 border-dark" style="height: 240px;">
             <img src="{{ asset('storage/' . $project->thumbnail_path) }}" 
-                 alt="{{ $project->title }}" 
+                 alt="{{ $project->title }} - Portofolio Proyek M. Rofiq Aulia" 
+                 loading="lazy"
                  class="w-100 h-100 object-fit-cover project-thumbnail-img"
                  role="button"
                  tabindex="0"

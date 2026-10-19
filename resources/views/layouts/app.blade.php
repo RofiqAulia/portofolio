@@ -7,9 +7,55 @@
     <link rel="icon" type="image/png" href="{{ !empty($profile->photo_path) ? asset('storage/' . $profile->photo_path) : asset('favicon.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <link rel="apple-touch-icon" href="{{ !empty($profile->photo_path) ? asset('storage/' . $profile->photo_path) : asset('favicon.png') }}">
-    <meta name="description" content="@yield('meta_description', $settings['site_description'] ?? 'Portofolio individu web developer')">
-    <meta name="keywords" content="@yield('meta_keywords', $settings['meta_keywords'] ?? 'laravel, developer, portfolio')">
+    <meta name="description" content="@yield('meta_description', $settings['site_description'] ?? 'Portofolio M. Rofiq Aulia, Sarjana Terapan Teknik Informatika.')">
+    <meta name="keywords" content="@yield('meta_keywords', $settings['meta_keywords'] ?? 'Portofolio Software Engineer, System Analyst Indonesia, Business Analyst Fresh Graduate, Web Developer PHP Laravel')">
     <meta name="author" content="{{ $settings['author_name'] ?? 'M. Rofiq Aulia' }}">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="EAJE6ckcx6X5-_Bbmqbz80tJYYnm-ehc4tep6PeCZ3c">
+
+    <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="@yield('title', 'Portofolio Professional')">
+    <meta property="og:description" content="@yield('meta_description', $settings['site_description'] ?? 'Portofolio M. Rofiq Aulia, Sarjana Terapan Teknik Informatika.')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:site_name" content="{{ $profile->full_name ?? 'M. Rofiq Aulia' }}">
+    @if(!empty($profile->photo_path))
+        <meta property="og:image" content="{{ asset('storage/' . $profile->photo_path) }}">
+    @endif
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', 'Portofolio Professional')">
+    <meta name="twitter:description" content="@yield('meta_description', $settings['site_description'] ?? 'Portofolio M. Rofiq Aulia')">
+    @if(!empty($profile->photo_path))
+        <meta name="twitter:image" content="{{ asset('storage/' . $profile->photo_path) }}">
+    @endif
+
+    <!-- Structured Data (JSON-LD Schema) for Google Rich Snippets -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "{{ $profile->full_name ?? 'M. Rofiq Aulia' }}",
+        "jobTitle": "{{ $profile->headline ?? 'System Analyst & Software Engineer' }}",
+        "url": "{{ url('/') }}",
+        "knowsAbout": [
+            "System Analysis",
+            "Business Analysis",
+            "PHP",
+            "Laravel",
+            "MySQL",
+            "Object-Oriented Programming",
+            "SOLID Principles",
+            "RESTful API",
+            "Continuous Improvement",
+            "Data Analysis"
+        ]
+    }
+    </script>
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
