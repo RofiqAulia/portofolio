@@ -202,15 +202,15 @@ class Documentation extends Model
 
     public function getEffectivePreviewUrl(): ?string
     {
-        if ($this->preview_image_path) {
-            return asset('storage/'.$this->preview_image_path);
-        }
-
         foreach ($this->getFilePaths() as $path) {
             $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION) ?: '');
             if (in_array($ext, ['png', 'jpg', 'jpeg', 'webp', 'svg', 'gif'])) {
                 return asset('storage/'.$path);
             }
+        }
+
+        if ($this->preview_image_path) {
+            return asset('storage/'.$this->preview_image_path);
         }
 
         return null;

@@ -14,9 +14,11 @@
     </div>
 
     @php
-        $previewUrl = $documentation->getEffectivePreviewUrl();
         $fileItems = $documentation->getFileItems();
         $hasDownloadFile = !empty($fileItems);
+        $firstFile = $fileItems[0] ?? null;
+        $isPdf = $firstFile && $firstFile['extension'] === 'pdf';
+        $previewUrl = $documentation->getEffectivePreviewUrl();
     @endphp
 
     <div class="row gy-4">
@@ -41,8 +43,35 @@
                     </p>
                 @endif
 
-                <!-- Visual Diagram / Image Preview Stage -->
-                @if($previewUrl)
+                <!-- Jika Berkas Utama adalah PDF: Embed Pratinjau Dokumen -->
+                @if($isPdf)
+                    <div class="card-genz p-3 p-md-4 bg-light border border-2 border-dark rounded-4 mb-4">
+                        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="badge bg-danger text-white rounded-circle p-3 fs-3">
+                                    <i class="bi bi-file-earmark-pdf"></i>
+                                </span>
+                                <div>
+                                    <span class="badge bg-dark text-white rounded-pill px-2 py-1 small">DOKUMEN SPESIFIKASI (PDF)</span>
+                                    <h5 class="font-heading mb-0 mt-1">{{ $firstFile['name'] }}</h5>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-primary py-2 px-3 fs-6">
+                                    <i class="bi bi-box-arrow-up-right"></i> Buka Layar Penuh
+                                </a>
+                                <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" class="btn-genz btn-genz-yellow py-2 px-3 fs-6">
+                                    <i class="bi bi-download"></i> Unduh PDF
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="border border-2 border-dark rounded-3 overflow-hidden bg-white shadow-sm" style="height: 600px;">
+                            <iframe src="{{ route('portfolio.documentations.preview', $documentation->slug) }}" class="w-100 h-100 border-0" title="Pratinjau PDF {{ $documentation->title }}"></iframe>
+                        </div>
+                    </div>
+                @elseif($previewUrl)
+                    <!-- Visual Diagram / Image Preview Stage -->
                     <div class="mb-4">
                         <div class="project-thumbnail-box position-relative overflow-hidden rounded-4 border border-2 border-dark">
                             <img src="{{ $previewUrl }}" 
@@ -61,14 +90,19 @@
 
                             <!-- Hover Overlay -->
                             <div class="project-thumbnail-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center gap-2">
+                                @if($hasDownloadFile)
+                                    <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-primary py-2 px-3 fs-6">
+                                        <i class="bi bi-box-arrow-up-right"></i> Buka File Asli
+                                    </a>
+                                @endif
                                 <button type="button" 
-                                        class="btn-genz btn-genz-primary py-2 px-3 fs-6 btn-lightbox-open"
+                                        class="btn-genz btn-genz-secondary py-2 px-3 fs-6 btn-lightbox-open"
                                         data-image-src="{{ $previewUrl }}"
                                         data-image-title="{{ $documentation->title }}"
                                         data-image-desc="{{ $documentation->summary }}"
                                         data-image-download="{{ $hasDownloadFile ? route('portfolio.documentations.download', $documentation->slug) : $previewUrl }}"
                                         data-image-filename="{{ $documentation->getDownloadFilename() }}">
-                                    <i class="bi bi-arrows-fullscreen"></i> View Resolusi Penuh
+                                    <i class="bi bi-zoom-in"></i> Zoom Lightbox
                                 </button>
                                 @if($hasDownloadFile)
                                     <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" class="btn-genz btn-genz-yellow py-2 px-3 fs-6">
@@ -79,14 +113,19 @@
 
                             <!-- Mobile Quick Action -->
                             <div class="position-absolute bottom-0 end-0 m-3 d-md-none d-flex gap-2">
+                                @if($hasDownloadFile)
+                                    <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-primary py-1 px-3 fs-6">
+                                        <i class="bi bi-box-arrow-up-right"></i> Buka File
+                                    </a>
+                                @endif
                                 <button type="button" 
-                                        class="btn-genz btn-genz-primary py-1 px-3 fs-6 btn-lightbox-open"
+                                        class="btn-genz btn-genz-secondary py-1 px-3 fs-6 btn-lightbox-open"
                                         data-image-src="{{ $previewUrl }}"
                                         data-image-title="{{ $documentation->title }}"
                                         data-image-desc="{{ $documentation->summary }}"
                                         data-image-download="{{ $hasDownloadFile ? route('portfolio.documentations.download', $documentation->slug) : $previewUrl }}"
                                         data-image-filename="{{ $documentation->getDownloadFilename() }}">
-                                    <i class="bi bi-eye"></i> View
+                                    <i class="bi bi-eye"></i> Zoom
                                 </button>
                                 @if($hasDownloadFile)
                                     <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" class="btn-genz btn-genz-yellow py-1 px-3 fs-6">
@@ -165,6 +204,11 @@
                                     </p>
                                 </div>
                                 <div class="d-flex flex-wrap gap-2">
+                                    @if($hasDownloadFile)
+                                        <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-primary py-2 px-3 fs-6">
+                                            <i class="bi bi-box-arrow-up-right"></i> Buka Preview Berkas
+                                        </a>
+                                    @endif
                                     @if(count($fileItems) > 1)
                                         <a href="{{ route('portfolio.documentations.download', ['slug' => $documentation->slug, 'all' => 1]) }}" class="btn-genz btn-genz-yellow py-2 px-3 fs-6">
                                             <i class="bi bi-file-zip"></i> Unduh Semua (.ZIP)
@@ -199,6 +243,13 @@
                                                     <span class="badge bg-secondary rounded-pill small">{{ strtoupper($file['extension'] ?: 'FILE') }}</span>
                                                 </div>
                                                 <div class="d-flex align-items-center gap-1 flex-shrink-0">
+                                                    <a href="{{ route('portfolio.documentations.preview', ['slug' => $documentation->slug, 'file' => $file['index']]) }}" 
+                                                       target="_blank" 
+                                                       rel="noopener noreferrer" 
+                                                       class="btn-genz btn-genz-primary py-1 px-2 small" 
+                                                       title="Buka / Preview Berkas Ini">
+                                                        <i class="bi bi-box-arrow-up-right"></i> Buka
+                                                    </a>
                                                     @if($file['is_image'])
                                                         <button type="button" 
                                                                 class="btn-genz btn-genz-secondary py-1 px-2 small btn-lightbox-open"
@@ -207,8 +258,8 @@
                                                                 data-image-desc="{{ $documentation->summary }}"
                                                                 data-image-download="{{ route('portfolio.documentations.download', ['slug' => $documentation->slug, 'file' => $file['index']]) }}"
                                                                 data-image-filename="{{ $documentation->getDownloadFilename($file['index']) }}"
-                                                                title="Lihat Gambar">
-                                                            <i class="bi bi-eye"></i>
+                                                                title="Zoom Modal">
+                                                            <i class="bi bi-zoom-in"></i>
                                                         </button>
                                                     @endif
                                                     <a href="{{ route('portfolio.documentations.download', ['slug' => $documentation->slug, 'file' => $file['index']]) }}" class="btn-genz btn-genz-yellow py-1 px-2 small" title="Unduh Berkas Ini">
@@ -271,6 +322,12 @@
 
                     <div class="pt-4 vstack gap-2">
                         @if($hasDownloadFile)
+                            <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               class="btn-genz btn-genz-primary w-100 py-2 fs-6">
+                                <i class="bi bi-box-arrow-up-right"></i> Buka Preview Berkas Lengkap
+                            </a>
                             @if(count($fileItems) > 1)
                                 <a href="{{ route('portfolio.documentations.download', ['slug' => $documentation->slug, 'all' => 1]) }}" class="btn-genz btn-genz-yellow w-100 py-2 fs-6">
                                     <i class="bi bi-file-zip"></i> Unduh Semua (.ZIP)
@@ -280,14 +337,13 @@
                                     <i class="bi bi-download"></i> Unduh Berkas Lengkap
                                 </a>
                             @endif
-                        @endif
-                        @if($previewUrl)
+                        @elseif($previewUrl)
                             <button type="button" 
                                     class="btn-genz btn-genz-primary w-100 py-2 fs-6 btn-lightbox-open"
                                     data-image-src="{{ $previewUrl }}"
                                     data-image-title="{{ $documentation->title }}"
                                     data-image-desc="{{ $documentation->summary }}"
-                                    data-image-download="{{ $hasDownloadFile ? route('portfolio.documentations.download', $documentation->slug) : $previewUrl }}"
+                                    data-image-download="{{ $previewUrl }}"
                                     data-image-filename="{{ $documentation->getDownloadFilename() }}">
                                 <i class="bi bi-eye"></i> Buka Preview Berkas Lengkap
                             </button>

@@ -211,6 +211,52 @@ final class PortfolioController extends Controller
         return view('portfolio.documentations.show', compact('documentation', 'relatedDocs', 'profile', 'settings'));
     }
 
+    public function previewDocumentation(string $slug, Request $request): Response
+    {
+        $documentation = Documentation::published()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $paths = $documentation->getFilePaths();
+        if (empty($paths)) {
+            if ($documentation->preview_image_path && Storage::disk('public')->exists($documentation->preview_image_path)) {
+                $fullPath = Storage::disk('public')->path($documentation->preview_image_path);
+                $mimeType = Storage::disk('public')->mimeType($documentation->preview_image_path) ?? 'image/jpeg';
+
+                return response()->file($fullPath, [
+                    'Content-Type' => $mimeType,
+                    'Content-Disposition' => 'inline; filename="'.basename($documentation->preview_image_path).'"',
+                ]);
+            }
+
+            abort(404, 'Berkas fisik dokumentasi tidak ditemukan.');
+        }
+
+        $fileIndex = $request->query('file');
+        $targetIndex = 0;
+        if ($fileIndex !== null && is_numeric($fileIndex)) {
+            $parsed = (int) $fileIndex;
+            if (isset($paths[$parsed])) {
+                $targetIndex = $parsed;
+            }
+        }
+
+        $targetPath = $paths[$targetIndex] ?? null;
+
+        if (! $targetPath || ! Storage::disk('public')->exists($targetPath)) {
+            abort(404, 'Berkas fisik tidak ditemukan di penyimpanan server.');
+        }
+
+        $fullPath = Storage::disk('public')->path($targetPath);
+        $mimeType = Storage::disk('public')->mimeType($targetPath) ?? 'application/octet-stream';
+        $filename = $documentation->getDownloadFilename($targetIndex);
+
+        return response()->file($fullPath, [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => 'inline; filename="'.$filename.'"',
+        ]);
+    }
+
     public function downloadDocumentation(string $slug, Request $request): Response
     {
         $documentation = Documentation::published()

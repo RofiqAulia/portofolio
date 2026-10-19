@@ -13,6 +13,7 @@ Route::get('/pengalaman/{id}', [PortfolioController::class, 'experience'])->name
 
 Route::get('/dokumentasi', [PortfolioController::class, 'documentations'])->name('portfolio.documentations.index');
 Route::get('/dokumentasi/{slug}', [PortfolioController::class, 'documentationDetail'])->name('portfolio.documentations.show');
+Route::get('/dokumentasi/{slug}/preview', [PortfolioController::class, 'previewDocumentation'])->name('portfolio.documentations.preview');
 Route::get('/dokumentasi/{slug}/download', [PortfolioController::class, 'downloadDocumentation'])->name('portfolio.documentations.download');
 
 Route::post('/kontak', [PortfolioController::class, 'sendMessage'])
