@@ -84,34 +84,8 @@ class DatabaseSeeder extends Seeder
         );
 
         // 3. Technologies
-        $techs = [
-            'Laravel' => ['slug' => 'laravel', 'icon_path' => 'logo/laravel-logo.jpg'],
-            'PHP' => ['slug' => 'php', 'icon_path' => 'logo/php-logo.png'],
-            'MySQL' => ['slug' => 'mysql', 'icon_path' => 'logo/mysql-logo.png'],
-            'Bootstrap 5' => ['slug' => 'bootstrap-5', 'icon_path' => 'logo/bootstrap-logo.jpg'],
-            'Tailwind CSS' => ['slug' => 'tailwind-css', 'icon_path' => 'logo/tailwind-logo.jpg'],
-            'Docker' => ['slug' => 'docker', 'icon_path' => 'logo/docker-logo.jpg'],
-            'Git' => ['slug' => 'git', 'icon_path' => 'logo/git-logo.png'],
-            'Notion' => ['slug' => 'notion', 'icon_path' => 'logo/notion-logo.png'],
-            'Canva' => ['slug' => 'canva', 'icon_path' => 'logo/canva-logo.png'],
-            'Draw.io' => ['slug' => 'draw-io', 'icon_path' => 'logo/draw-io-logo.png'],
-            'Microsoft Excel' => ['slug' => 'excel', 'icon_path' => 'logo/excel-logo.jpg'],
-            'Microsoft Word' => ['slug' => 'word', 'icon_path' => 'logo/word-logo.jpg'],
-            'Microsoft PowerPoint' => ['slug' => 'powerpoint', 'icon_path' => 'logo/pptx-logo.jpg'],
-            'Microsoft SharePoint' => ['slug' => 'sharepoint', 'icon_path' => 'logo/sharepoint.jpg'],
-            'Power Automate' => ['slug' => 'power-automate', 'icon_path' => 'logo/automate-logo.jpg'],
-            'Redis' => ['slug' => 'redis', 'icon_path' => null],
-            'Vue.js' => ['slug' => 'vue-js', 'icon_path' => null],
-            'React' => ['slug' => 'react', 'icon_path' => null],
-        ];
-
-        $techModels = [];
-        foreach ($techs as $name => $data) {
-            $techModels[$data['slug']] = Technology::updateOrCreate(
-                ['slug' => $data['slug']],
-                ['name' => $name, 'icon_path' => $data['icon_path']]
-            );
-        }
+        $this->call(TechnologySeeder::class);
+        $techModels = Technology::all()->keyBy('slug');
 
         // 4. Skill Categories & Skills
         $hardCat = SkillCategory::firstOrCreate(
@@ -155,52 +129,62 @@ class DatabaseSeeder extends Seeder
         }
 
         // 5. Projects
-        $proj1 = Project::firstOrCreate(
-            ['slug' => 'sistem-informasi-manajemen-logistik-enterprise'],
-            [
-                'title' => 'Sistem Informasi Manajemen Logistik Enterprise',
-                'summary' => 'Platform terintegrasi pelacakan armada armada pengiriman dan inventaris gudang berbasis IoT dan background jobs.',
-                'description' => 'Aplikasi web enterprise yang menangani lebih dari 10.000 transaksi harian dengan arsitektur queue Redis, pemantauan status real-time, laporan PDF otomatis, dan otorisasi multi-level yang ketat.',
-                'role' => 'Lead Software Engineer',
-                'demo_url' => 'https://demo.rofiq.dev/logistik',
-                'repo_url' => 'https://github.com/rofiq/logistics-erp',
-                'started_at' => now()->subMonths(8),
-                'finished_at' => now()->subMonths(2),
-                'status' => ProjectStatus::Published,
-                'is_featured' => true,
-                'sort_order' => 1,
-                'published_at' => now()->subMonths(2),
-            ]
-        );
-        $proj1->technologies()->sync([
-            $techModels['laravel']->id,
-            $techModels['mysql']->id,
-            $techModels['redis']->id,
-            $techModels['bootstrap-5']->id,
+        $proj1 = Project::withTrashed()->firstOrNew(['slug' => 'sistem-informasi-manajemen-logistik-enterprise']);
+        if ($proj1->trashed()) {
+            $proj1->restore();
+        }
+        $proj1->fill([
+            'title' => 'Sistem Informasi Manajemen Logistik Enterprise',
+            'summary' => 'Platform terintegrasi pelacakan armada armada pengiriman dan inventaris gudang berbasis IoT dan background jobs.',
+            'description' => 'Aplikasi web enterprise yang menangani lebih dari 10.000 transaksi harian dengan arsitektur queue Redis, pemantauan status real-time, laporan PDF otomatis, dan otorisasi multi-level yang ketat.',
+            'role' => 'Lead Software Engineer',
+            'demo_url' => 'https://demo.rofiq.dev/logistik',
+            'repo_url' => 'https://github.com/rofiq/logistics-erp',
+            'started_at' => now()->subMonths(8),
+            'finished_at' => now()->subMonths(2),
+            'status' => ProjectStatus::Published,
+            'is_featured' => true,
+            'sort_order' => 1,
+            'published_at' => now()->subMonths(2),
         ]);
+        $proj1->save();
 
-        $proj2 = Project::firstOrCreate(
-            ['slug' => 'platform-e-commerce-b2b-marketplace'],
-            [
-                'title' => 'Platform E-Commerce B2B Marketplace',
-                'summary' => 'Portal transaksi grosir multitenant dilengkapi verifikasi legalitas faktur dan integrasi payment gateway perbankan.',
-                'description' => 'Solusi e-commerce B2B lengkap dengan sistem negosiasi harga dinamis, approval purchase order, dan dashboard analitik keuangan berkala.',
-                'role' => 'Full-Stack Developer',
-                'demo_url' => 'https://b2b.rofiq.dev',
-                'repo_url' => 'https://github.com/rofiq/b2b-platform',
-                'started_at' => now()->subMonths(4),
-                'finished_at' => now()->subMonth(),
-                'status' => ProjectStatus::Published,
-                'is_featured' => true,
-                'sort_order' => 2,
-                'published_at' => now()->subMonth(),
-            ]
-        );
-        $proj2->technologies()->sync([
-            $techModels['laravel']->id,
-            $techModels['mysql']->id,
-            $techModels['bootstrap-5']->id,
+        if (isset($techModels['laravel'], $techModels['mysql'], $techModels['redis'], $techModels['bootstrap-5'])) {
+            $proj1->technologies()->sync([
+                $techModels['laravel']->id,
+                $techModels['mysql']->id,
+                $techModels['redis']->id,
+                $techModels['bootstrap-5']->id,
+            ]);
+        }
+
+        $proj2 = Project::withTrashed()->firstOrNew(['slug' => 'platform-e-commerce-b2b-marketplace']);
+        if ($proj2->trashed()) {
+            $proj2->restore();
+        }
+        $proj2->fill([
+            'title' => 'Platform E-Commerce B2B Marketplace',
+            'summary' => 'Portal transaksi grosir multitenant dilengkapi verifikasi legalitas faktur dan integrasi payment gateway perbankan.',
+            'description' => 'Solusi e-commerce B2B lengkap dengan sistem negosiasi harga dinamis, approval purchase order, dan dashboard analitik keuangan berkala.',
+            'role' => 'Full-Stack Developer',
+            'demo_url' => 'https://b2b.rofiq.dev',
+            'repo_url' => 'https://github.com/rofiq/b2b-platform',
+            'started_at' => now()->subMonths(4),
+            'finished_at' => now()->subMonth(),
+            'status' => ProjectStatus::Published,
+            'is_featured' => true,
+            'sort_order' => 2,
+            'published_at' => now()->subMonth(),
         ]);
+        $proj2->save();
+
+        if (isset($techModels['laravel'], $techModels['mysql'], $techModels['bootstrap-5'])) {
+            $proj2->technologies()->sync([
+                $techModels['laravel']->id,
+                $techModels['mysql']->id,
+                $techModels['bootstrap-5']->id,
+            ]);
+        }
 
         // 6. Experiences (Internship & Organization)
         $expIntern = Experience::firstOrCreate(
@@ -283,61 +267,67 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 9. Documentations & Blueprints
-        Documentation::firstOrCreate(
-            ['slug' => 'erd-database-smart-warehouse-system'],
-            [
-                'title' => 'Desain ERD & Normalisasi Database Smart Warehouse System',
-                'category' => 'ERD & Database',
-                'summary' => 'Skema arsitektur entitas relasi (ERD) 3NF lengkap dengan indeks teroptimasi, foreign keys cascade, dan struktur audit log transaksi gudang.',
-                'description' => 'Dokumentasi arsitektur database relasional MySQL yang dirancang memenuhi kaidah Third Normal Form (3NF). Meliputi tabel master barang, pergerakan stok real-time (inbound/outbound), relasi multi-gudang, dan integrasi penomoran QR code unik.',
-                'type' => DocumentationType::Image,
-                'file_path' => 'documentations/files/erd-smart-warehouse.png',
-                'preview_image_path' => null,
-                'external_url' => 'https://whimsical.com',
-                'project_id' => $proj1->id ?? null,
-                'is_featured' => true,
-                'is_published' => true,
-                'sort_order' => 1,
-                'published_at' => now()->subMonths(2),
-            ]
-        );
+        $doc1 = Documentation::withTrashed()->firstOrNew(['slug' => 'erd-database-smart-warehouse-system']);
+        if ($doc1->trashed()) {
+            $doc1->restore();
+        }
+        $doc1->fill([
+            'title' => 'Desain ERD & Normalisasi Database Smart Warehouse System',
+            'category' => 'ERD & Database',
+            'summary' => 'Skema arsitektur entitas relasi (ERD) 3NF lengkap dengan indeks teroptimasi, foreign keys cascade, dan struktur audit log transaksi gudang.',
+            'description' => 'Dokumentasi arsitektur database relasional MySQL yang dirancang memenuhi kaidah Third Normal Form (3NF). Meliputi tabel master barang, pergerakan stok real-time (inbound/outbound), relasi multi-gudang, dan integrasi penomoran QR code unik.',
+            'type' => DocumentationType::Image,
+            'file_path' => 'documentations/files/erd-smart-warehouse.png',
+            'preview_image_path' => null,
+            'external_url' => 'https://whimsical.com',
+            'project_id' => $proj1->id ?? null,
+            'is_featured' => true,
+            'is_published' => true,
+            'sort_order' => 1,
+            'published_at' => now()->subMonths(2),
+        ]);
+        $doc1->save();
 
-        Documentation::firstOrCreate(
-            ['slug' => 'uml-flowchart-arsitektur-autentikasi-live-camera-qr'],
-            [
-                'title' => 'UML Sequence & Flowchart Alur Autentikasi Live Camera QR',
-                'category' => 'UML & Flowchart',
-                'summary' => 'Diagram urutan (Sequence Diagram) dan Flowchart alur pemindaian QR code via kamera browser, verifikasi token JWT, hingga pembaruan stok otomatis.',
-                'description' => 'Diagram detail yang memetakan siklus interaksi antara frontend kamera pengguna, enkripsi token QR dinamis, middleware validasi backend Laravel, dan atomic transaction lock di database.',
-                'type' => DocumentationType::Image,
-                'file_path' => 'documentations/files/uml-flowchart-qr.png',
-                'preview_image_path' => null,
-                'external_url' => 'https://miro.com',
-                'project_id' => $proj1->id ?? null,
-                'is_featured' => true,
-                'is_published' => true,
-                'sort_order' => 2,
-                'published_at' => now()->subMonth(),
-            ]
-        );
+        $doc2 = Documentation::withTrashed()->firstOrNew(['slug' => 'uml-flowchart-arsitektur-autentikasi-live-camera-qr']);
+        if ($doc2->trashed()) {
+            $doc2->restore();
+        }
+        $doc2->fill([
+            'title' => 'UML Sequence & Flowchart Alur Autentikasi Live Camera QR',
+            'category' => 'UML & Flowchart',
+            'summary' => 'Diagram urutan (Sequence Diagram) dan Flowchart alur pemindaian QR code via kamera browser, verifikasi token JWT, hingga pembaruan stok otomatis.',
+            'description' => 'Diagram detail yang memetakan siklus interaksi antara frontend kamera pengguna, enkripsi token QR dinamis, middleware validasi backend Laravel, dan atomic transaction lock di database.',
+            'type' => DocumentationType::Image,
+            'file_path' => 'documentations/files/uml-flowchart-qr.png',
+            'preview_image_path' => null,
+            'external_url' => 'https://miro.com',
+            'project_id' => $proj1->id ?? null,
+            'is_featured' => true,
+            'is_published' => true,
+            'sort_order' => 2,
+            'published_at' => now()->subMonth(),
+        ]);
+        $doc2->save();
 
-        Documentation::firstOrCreate(
-            ['slug' => 'arsitektur-sistem-clean-architecture-solid-laravel'],
-            [
-                'title' => 'Arsitektur Sistem: Clean Architecture & Penerapan SOLID Laravel',
-                'category' => 'Arsitektur Sistem',
-                'summary' => 'Dokumen blueprint rancangan modularisasi Service-Repository pattern, DTO (Data Transfer Objects), Action classes, dan decoupled domain logic.',
-                'description' => 'Blueprint panduan arsitektur rekayasa perangkat lunak untuk menjaga kode tetap modular, mudah diuji (testable), dan bebas dari dependensi yang berbelit-belit.',
-                'type' => DocumentationType::Document,
-                'file_path' => 'documentations/files/clean-architecture-guide.pdf',
-                'preview_image_path' => null,
-                'external_url' => 'https://github.com',
-                'project_id' => $proj2->id ?? null,
-                'is_featured' => true,
-                'is_published' => true,
-                'sort_order' => 3,
-                'published_at' => now()->subWeeks(3),
-            ]
-        );
+        $doc3 = Documentation::withTrashed()->firstOrNew(['slug' => 'arsitektur-sistem-clean-architecture-solid-laravel']);
+        if ($doc3->trashed()) {
+            $doc3->restore();
+        }
+        $doc3->fill([
+            'title' => 'Arsitektur Sistem: Clean Architecture & Penerapan SOLID Laravel',
+            'category' => 'Arsitektur Sistem',
+            'summary' => 'Dokumen blueprint rancangan modularisasi Service-Repository pattern, DTO (Data Transfer Objects), Action classes, dan decoupled domain logic.',
+            'description' => 'Blueprint panduan arsitektur rekayasa perangkat lunak untuk menjaga kode tetap modular, mudah diuji (testable), dan bebas dari dependensi yang berbelit-belit.',
+            'type' => DocumentationType::Document,
+            'file_path' => 'documentations/files/clean-architecture-guide.pdf',
+            'preview_image_path' => null,
+            'external_url' => 'https://github.com',
+            'project_id' => $proj2->id ?? null,
+            'is_featured' => true,
+            'is_published' => true,
+            'sort_order' => 3,
+            'published_at' => now()->subWeeks(3),
+        ]);
+        $doc3->save();
     }
 }
