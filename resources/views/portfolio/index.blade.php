@@ -21,11 +21,11 @@
                 </div>
 
                 <h1 class="hero-title mb-4">
-                    Menjembatani <span class="hero-highlight">Kebutuhan Bisnis</span> & Solusi Sistem Berkinerja Tinggi.
+                    Menjembatani <span class="hero-highlight">Kebutuhan Bisnis</span> dan Solusi Berbasis Digital.
                 </h1>
 
                 <p class="fs-5 text-muted mb-4 pe-lg-4">
-                    {{ $profile->tagline ?? 'Fresh graduate Sarjana Terapan Teknik Informatika yang berfokus menerjemahkan proses bisnis kompleks menjadi rancangan sistem yang rapi, efisien, dan siap dikembangkan. Mengombinasikan proses analisis alur kerja dengan implementasi teknis.' }}
+                    {{ $profile->tagline ?? 'Fresh graduate Sarjana Terapan Teknik Informatika dengan spesialisasi : analisis sistem dan rekayasa perangkat lunak. Berfokus menerjemahkan alur bisnis manual menjadi spesifikasi sistem yang terstruktur berbasis digital, serta mengotomatisasi proses kerja demi efisiensi dan peningkatan berkelanjutan (continuous improvement). Terbuka di posisi IT Business Analyst, System Analyst, IT Staff Programming dan Analis Data berbasis AI.' }}
                 </p>
 
                 <div class="d-flex flex-wrap gap-3 mb-4">
