@@ -34,10 +34,10 @@ final class ProfileForm
                             ->placeholder('Contoh: Senior Full Stack Web Developer & Problem Solver')
                             ->required()
                             ->maxLength(255),
-                        TextInput::make('tagline')
-                            ->label('Tagline')
-                            ->placeholder('Contoh: Crafting robust and elegant digital solutions')
-                            ->maxLength(255),
+                        Textarea::make('tagline')
+                            ->label('Tagline / Sub-title')
+                            ->placeholder('Contoh: Fresh graduate Sarjana Terapan Teknik Informatika...')
+                            ->rows(3),
                         Textarea::make('bio')
                             ->label('Biografi / Tentang Saya')
                             ->rows(4),
