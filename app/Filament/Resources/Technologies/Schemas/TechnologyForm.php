@@ -16,7 +16,7 @@ final class TechnologyForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('Nama Teknologi')
+                    ->label('Nama Teknologi / Keahlian')
                     ->required()
                     ->maxLength(255)
                     ->live(onBlur: true)
@@ -27,19 +27,17 @@ final class TechnologyForm
                     ->unique(ignoreRecord: true)
                     ->maxLength(255),
                 FileUpload::make('icon_path')
-                    ->label('Ikon / Logo')
+                    ->label('Logo / Ikon')
+                    ->helperText('Unggah berkas logo (PNG, JPG, SVG, WebP). Jika dikosongkan, keahlian akan ditampilkan dalam bentuk teks di landing page.')
                     ->image()
                     ->imageEditor()
                     ->imageEditorAspectRatios([
                         '1:1',
                     ])
                     ->imageResizeMode('contain')
-                    ->imageResizeTargetWidth('400')
-                    ->imageResizeTargetHeight('400')
-                    ->imageResizeUpscale(false)
-                    ->maxSize(2048)
+                    ->maxSize(4096)
                     ->disk('public')
-                    ->directory('technologies')
+                    ->directory('logo')
                     ->visibility('public')
                     ->nullable(),
             ]);

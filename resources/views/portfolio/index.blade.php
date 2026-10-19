@@ -97,32 +97,64 @@
         </div>
     </section>
 
-    <!-- 2. STRIP TEKNOLOGI (MARQUEE BERJALAN ALA DIBIMBING) -->
-    <section class="py-4 my-3">
-        <div class="card-genz p-4 bg-white overflow-hidden">
-            <div class="row align-items-center gy-3">
-                <div class="col-lg-3 col-md-4 text-center text-md-start">
-                    <span class="section-pill mb-1">TECH STACK</span>
-                    <h5 class="mb-0 font-heading">Teknologi Andalan</h5>
-                    <p class="text-muted small mt-1 mb-0 d-none d-lg-block">Frameworks, bahasa & tools modern yang sering saya gunakan.</p>
-                </div>
-                <div class="col-lg-9 col-md-8 overflow-hidden">
-                    <div class="tech-marquee-wrapper">
-                        <div class="tech-marquee-track">
-                            {{-- Gandakan data 2 kali untuk efek loop continuous tanpa jeda (infinite marquee) --}}
-                            @for($i = 0; $i < 2; $i++)
-                                @forelse($technologies as $tech)
-                                    @include('portfolio.partials.tech-badge', ['tech' => $tech])
-                                @empty
-                                    @foreach(['Laravel', 'PHP', 'MySQL', 'Bootstrap 5', 'Tailwind CSS', 'Vue.js', 'React', 'Docker', 'Git', 'Redis'] as $defaultTech)
-                                        @include('portfolio.partials.tech-badge', ['tech' => (object)['name' => $defaultTech, 'slug' => \Illuminate\Support\Str::slug($defaultTech), 'icon_path' => null]])
-                                    @endforeach
-                                @endforelse
-                            @endfor
-                        </div>
-                    </div>
+    <!-- 2. STRIP KEAHLIAN & TECH STACK (INFINITE MARQUEE ALA DIBIMBING) -->
+    <section class="py-5 my-2 position-relative overflow-hidden">
+        <div class="text-center mb-4">
+            <span class="section-pill mb-2">KEAHLIAN & TECH STACK</span>
+            <h2 class="display-6 font-heading fw-bold mb-2">Teknologi & Tools Andalan</h2>
+            <p class="text-muted small mx-auto mb-0" style="max-width: 620px;">
+                Frameworks, bahasa pemrograman, dan ekosistem modern yang saya gunakan dalam membangun solusi digital berkualitas tinggi.
+            </p>
+        </div>
+
+        @php
+            $techList = $technologies->isNotEmpty() ? $technologies : collect([
+                (object)['name' => 'Laravel', 'slug' => 'laravel', 'icon_path' => 'logo/laravel-logo.jpg'],
+                (object)['name' => 'PHP', 'slug' => 'php', 'icon_path' => 'logo/php-logo.png'],
+                (object)['name' => 'MySQL', 'slug' => 'mysql', 'icon_path' => 'logo/mysql-logo.png'],
+                (object)['name' => 'Bootstrap 5', 'slug' => 'bootstrap-5', 'icon_path' => 'logo/bootstrap-logo.jpg'],
+                (object)['name' => 'Tailwind CSS', 'slug' => 'tailwind-css', 'icon_path' => 'logo/tailwind-logo.jpg'],
+                (object)['name' => 'Docker', 'slug' => 'docker', 'icon_path' => 'logo/docker-logo.jpg'],
+                (object)['name' => 'Git', 'slug' => 'git', 'icon_path' => 'logo/git-logo.png'],
+                (object)['name' => 'Notion', 'slug' => 'notion', 'icon_path' => 'logo/notion-logo.png'],
+                (object)['name' => 'Canva', 'slug' => 'canva', 'icon_path' => 'logo/canva-logo.png'],
+                (object)['name' => 'Draw.io', 'slug' => 'draw-io', 'icon_path' => 'logo/draw-io-logo.png'],
+                (object)['name' => 'Microsoft Excel', 'slug' => 'excel', 'icon_path' => 'logo/excel-logo.jpg'],
+                (object)['name' => 'Microsoft Word', 'slug' => 'word', 'icon_path' => 'logo/word-logo.jpg'],
+                (object)['name' => 'Microsoft PowerPoint', 'slug' => 'powerpoint', 'icon_path' => 'logo/pptx-logo.jpg'],
+                (object)['name' => 'Microsoft SharePoint', 'slug' => 'sharepoint', 'icon_path' => 'logo/sharepoint.jpg'],
+                (object)['name' => 'Power Automate', 'slug' => 'power-automate', 'icon_path' => 'logo/automate-logo.jpg'],
+            ]);
+
+            $halfCount = (int) ceil($techList->count() / 2);
+            $row1 = $techList->slice(0, $halfCount);
+            $row2 = $techList->slice($halfCount);
+        @endphp
+
+        <div class="tech-marquee-stream">
+            {{-- Baris 1: Berjalan ke kiri secara seamless --}}
+            <div class="tech-marquee-wrapper">
+                <div class="tech-marquee-track">
+                    @for($i = 0; $i < 2; $i++)
+                        @foreach($row1 as $tech)
+                            @include('portfolio.partials.tech-badge', ['tech' => $tech])
+                        @endforeach
+                    @endfor
                 </div>
             </div>
+
+            @if($row2->isNotEmpty())
+                {{-- Baris 2: Berjalan ke kanan (reverse) secara seamless --}}
+                <div class="tech-marquee-wrapper">
+                    <div class="tech-marquee-track reverse">
+                        @for($i = 0; $i < 2; $i++)
+                            @foreach($row2 as $tech)
+                                @include('portfolio.partials.tech-badge', ['tech' => $tech])
+                            @endforeach
+                        @endfor
+                    </div>
+                </div>
+            @endif
         </div>
     </section>
 

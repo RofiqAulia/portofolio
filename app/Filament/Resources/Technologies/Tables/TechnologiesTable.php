@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Technologies\Tables;
 
+use App\Models\Technology;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -19,13 +20,17 @@ final class TechnologiesTable
         return $table
             ->columns([
                 ImageColumn::make('icon_path')
-                    ->label('Ikon')
+                    ->label('Logo')
                     ->disk('public')
-                    ->circular(),
+                    ->defaultImageUrl(fn (Technology $record) => $record->logo_url)
+                    ->square()
+                    ->height(40)
+                    ->width(40),
                 TextColumn::make('name')
-                    ->label('Nama')
+                    ->label('Nama Keahlian')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->weight('bold'),
                 TextColumn::make('slug')
                     ->label('Slug')
                     ->copyable()
@@ -33,7 +38,8 @@ final class TechnologiesTable
                 TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->dateTime('d M Y')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->recordActions([
                 EditAction::make(),

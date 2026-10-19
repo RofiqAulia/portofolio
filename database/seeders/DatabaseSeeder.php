@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'rofiq@rofiq.dev',
                 'phone' => '+62 812-3456-7890',
                 'location' => 'Jakarta, Indonesia',
-                'quote_text' => 'Kerapian arsitektur kode hari ini adalah kemudahan inovasi di masa depan.',
+                'quote_text' => 'Bermula Dengan Bismilla Berkahir Dengan Alhamdulilla.',
                 'quote_author' => 'M. Rofiq Aulia',
                 'is_open_to_work' => true,
             ]
@@ -85,23 +85,31 @@ class DatabaseSeeder extends Seeder
 
         // 3. Technologies
         $techs = [
-            'Laravel' => 'laravel',
-            'PHP' => 'php',
-            'MySQL' => 'mysql',
-            'Bootstrap 5' => 'bootstrap-5',
-            'Vue.js' => 'vue-js',
-            'React' => 'react',
-            'Tailwind CSS' => 'tailwind-css',
-            'Redis' => 'redis',
-            'Docker' => 'docker',
-            'Git' => 'git',
+            'Laravel' => ['slug' => 'laravel', 'icon_path' => 'logo/laravel-logo.jpg'],
+            'PHP' => ['slug' => 'php', 'icon_path' => 'logo/php-logo.png'],
+            'MySQL' => ['slug' => 'mysql', 'icon_path' => 'logo/mysql-logo.png'],
+            'Bootstrap 5' => ['slug' => 'bootstrap-5', 'icon_path' => 'logo/bootstrap-logo.jpg'],
+            'Tailwind CSS' => ['slug' => 'tailwind-css', 'icon_path' => 'logo/tailwind-logo.jpg'],
+            'Docker' => ['slug' => 'docker', 'icon_path' => 'logo/docker-logo.jpg'],
+            'Git' => ['slug' => 'git', 'icon_path' => 'logo/git-logo.png'],
+            'Notion' => ['slug' => 'notion', 'icon_path' => 'logo/notion-logo.png'],
+            'Canva' => ['slug' => 'canva', 'icon_path' => 'logo/canva-logo.png'],
+            'Draw.io' => ['slug' => 'draw-io', 'icon_path' => 'logo/draw-io-logo.png'],
+            'Microsoft Excel' => ['slug' => 'excel', 'icon_path' => 'logo/excel-logo.jpg'],
+            'Microsoft Word' => ['slug' => 'word', 'icon_path' => 'logo/word-logo.jpg'],
+            'Microsoft PowerPoint' => ['slug' => 'powerpoint', 'icon_path' => 'logo/pptx-logo.jpg'],
+            'Microsoft SharePoint' => ['slug' => 'sharepoint', 'icon_path' => 'logo/sharepoint.jpg'],
+            'Power Automate' => ['slug' => 'power-automate', 'icon_path' => 'logo/automate-logo.jpg'],
+            'Redis' => ['slug' => 'redis', 'icon_path' => null],
+            'Vue.js' => ['slug' => 'vue-js', 'icon_path' => null],
+            'React' => ['slug' => 'react', 'icon_path' => null],
         ];
 
         $techModels = [];
-        foreach ($techs as $name => $slug) {
-            $techModels[$slug] = Technology::firstOrCreate(
-                ['slug' => $slug],
-                ['name' => $name]
+        foreach ($techs as $name => $data) {
+            $techModels[$data['slug']] = Technology::updateOrCreate(
+                ['slug' => $data['slug']],
+                ['name' => $name, 'icon_path' => $data['icon_path']]
             );
         }
 
