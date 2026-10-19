@@ -35,26 +35,29 @@
     @endif
 
     <!-- Structured Data (JSON-LD Schema) for Google Rich Snippets -->
+    @php
+        $schemaData = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Person',
+            'name' => $profile->full_name ?? 'M. Rofiq Aulia',
+            'jobTitle' => $profile->headline ?? 'System Analyst & Software Engineer',
+            'url' => url('/'),
+            'knowsAbout' => [
+                'System Analysis',
+                'Business Analysis',
+                'PHP',
+                'Laravel',
+                'MySQL',
+                'Object-Oriented Programming',
+                'SOLID Principles',
+                'RESTful API',
+                'Continuous Improvement',
+                'Data Analysis',
+            ],
+        ];
+    @endphp
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "{{ $profile->full_name ?? 'M. Rofiq Aulia' }}",
-        "jobTitle": "{{ $profile->headline ?? 'System Analyst & Software Engineer' }}",
-        "url": "{{ url('/') }}",
-        "knowsAbout": [
-            "System Analysis",
-            "Business Analysis",
-            "PHP",
-            "Laravel",
-            "MySQL",
-            "Object-Oriented Programming",
-            "SOLID Principles",
-            "RESTful API",
-            "Continuous Improvement",
-            "Data Analysis"
-        ]
-    }
+    {!! json_encode($schemaData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
     </script>
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
