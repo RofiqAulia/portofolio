@@ -16,7 +16,7 @@
                         </span>
                     @endif
                     <span class="sticker sticker-blue">
-                        <i class="bi bi-geo-alt-fill"></i> {{ $profile->location ?? 'Jakarta, ID' }}
+                        <i class="bi bi-geo-alt-fill"></i> {{ $profile->location ?? 'Malang, ID' }}
                     </span>
                 </div>
 
@@ -97,32 +97,29 @@
         </div>
     </section>
 
-    <!-- 2. STRIP TEKNOLOGI -->
+    <!-- 2. STRIP TEKNOLOGI (MARQUEE BERJALAN ALA DIBIMBING) -->
     <section class="py-4 my-3">
-        <div class="card-genz p-4 bg-white">
+        <div class="card-genz p-4 bg-white overflow-hidden">
             <div class="row align-items-center gy-3">
-                <div class="col-md-3 text-center text-md-start">
+                <div class="col-lg-3 col-md-4 text-center text-md-start">
                     <span class="section-pill mb-1">TECH STACK</span>
                     <h5 class="mb-0 font-heading">Teknologi Andalan</h5>
+                    <p class="text-muted small mt-1 mb-0 d-none d-lg-block">Frameworks, bahasa & tools modern yang sering saya gunakan.</p>
                 </div>
-                <div class="col-md-9">
-                    <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
-                        @forelse($technologies as $tech)
-                            <span class="pill-tag">
-                                @if($tech->icon_path)
-                                    <img src="{{ asset('storage/' . $tech->icon_path) }}" alt="{{ $tech->name }}" width="16" height="16" class="me-1">
-                                @else
-                                    <i class="bi bi-cpu me-1 text-primary"></i>
-                                @endif
-                                {{ $tech->name }}
-                            </span>
-                        @empty
-                            <span class="pill-tag">Laravel</span>
-                            <span class="pill-tag">PHP 8.3</span>
-                            <span class="pill-tag">MySQL</span>
-                            <span class="pill-tag">Bootstrap 5</span>
-                            <span class="pill-tag">Filament</span>
-                        @endforelse
+                <div class="col-lg-9 col-md-8 overflow-hidden">
+                    <div class="tech-marquee-wrapper">
+                        <div class="tech-marquee-track">
+                            {{-- Gandakan data 2 kali untuk efek loop continuous tanpa jeda (infinite marquee) --}}
+                            @for($i = 0; $i < 2; $i++)
+                                @forelse($technologies as $tech)
+                                    @include('portfolio.partials.tech-badge', ['tech' => $tech])
+                                @empty
+                                    @foreach(['Laravel', 'PHP', 'MySQL', 'Bootstrap 5', 'Tailwind CSS', 'Vue.js', 'React', 'Docker', 'Git', 'Redis'] as $defaultTech)
+                                        @include('portfolio.partials.tech-badge', ['tech' => (object)['name' => $defaultTech, 'slug' => \Illuminate\Support\Str::slug($defaultTech), 'icon_path' => null]])
+                                    @endforeach
+                                @endforelse
+                            @endfor
+                        </div>
                     </div>
                 </div>
             </div>
