@@ -72,15 +72,15 @@ class DatabaseSeeder extends Seeder
         // Social Links
         SocialLink::updateOrCreate(
             ['profile_id' => $profile->id, 'platform' => 'GitHub'],
-            ['url' => 'https://github.com', 'icon' => 'bi-github', 'sort_order' => 1, 'is_active' => true]
+            ['url' => 'https://github.com/RofiqAulia/', 'icon' => 'bi-github', 'sort_order' => 1, 'is_active' => true]
         );
         SocialLink::updateOrCreate(
             ['profile_id' => $profile->id, 'platform' => 'LinkedIn'],
-            ['url' => 'https://linkedin.com', 'icon' => 'bi-linkedin', 'sort_order' => 2, 'is_active' => true]
+            ['url' => 'https://www.linkedin.com/in/mrofiqaulia/', 'icon' => 'bi-linkedin', 'sort_order' => 2, 'is_active' => true]
         );
         SocialLink::updateOrCreate(
             ['profile_id' => $profile->id, 'platform' => 'Instagram'],
-            ['url' => 'https://instagram.com', 'icon' => 'bi-instagram', 'sort_order' => 3, 'is_active' => true]
+            ['url' => 'https://www.instagram.com/rofiqsyfhdytllah/', 'icon' => 'bi-instagram', 'sort_order' => 3, 'is_active' => true]
         );
 
         // 3. Technologies

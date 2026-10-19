@@ -42,6 +42,11 @@
             'name' => $profile->full_name ?? 'M. Rofiq Aulia',
             'jobTitle' => $profile->headline ?? 'System Analyst & Software Engineer',
             'url' => url('/'),
+            'sameAs' => [
+                'https://www.linkedin.com/in/mrofiqaulia/',
+                'https://www.instagram.com/rofiqsyfhdytllah/',
+                'https://github.com/RofiqAulia/',
+            ],
             'knowsAbout' => [
                 'System Analysis',
                 'Business Analysis',
@@ -151,16 +156,33 @@
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <div class="d-flex justify-content-center justify-content-md-end gap-2">
-                        @if(isset($profile) && $profile->socialLinks)
+                        @if(isset($profile) && $profile->socialLinks && $profile->socialLinks->isNotEmpty())
                             @foreach($profile->socialLinks as $link)
-                                <a href="{{ $link->url }}" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-secondary p-2" title="{{ $link->platform }}" style="width: 44px; height: 44px;">
+                                @php
+                                    $linkUrl = $link->url;
+                                    if (str_contains(strtolower($link->platform), 'github') && ($linkUrl === 'https://github.com' || empty($linkUrl))) {
+                                        $linkUrl = 'https://github.com/RofiqAulia/';
+                                    } elseif (str_contains(strtolower($link->platform), 'linkedin') && ($linkUrl === 'https://linkedin.com' || empty($linkUrl))) {
+                                        $linkUrl = 'https://www.linkedin.com/in/mrofiqaulia/';
+                                    } elseif (str_contains(strtolower($link->platform), 'instagram') && ($linkUrl === 'https://instagram.com' || empty($linkUrl))) {
+                                        $linkUrl = 'https://www.instagram.com/rofiqsyfhdytllah/';
+                                    }
+                                @endphp
+                                <a href="{{ $linkUrl }}" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-secondary p-2" title="{{ $link->platform }}" style="width: 44px; height: 44px;">
                                     <i class="bi {{ $link->icon ?: 'bi-link-45deg' }} fs-5"></i>
                                 </a>
                             @endforeach
+                        @else
+                            <a href="https://github.com/RofiqAulia/" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-secondary p-2" title="GitHub" style="width: 44px; height: 44px;">
+                                <i class="bi bi-github fs-5"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/mrofiqaulia/" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-secondary p-2" title="LinkedIn" style="width: 44px; height: 44px;">
+                                <i class="bi bi-linkedin fs-5"></i>
+                            </a>
+                            <a href="https://www.instagram.com/rofiqsyfhdytllah/" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-secondary p-2" title="Instagram" style="width: 44px; height: 44px;">
+                                <i class="bi bi-instagram fs-5"></i>
+                            </a>
                         @endif
-                        <a href="{{ url('/admin') }}" class="btn-genz btn-genz-secondary px-3 py-1 fs-6" title="Panel Admin">
-                            <i class="bi bi-lock"></i> Admin
-                        </a>
                     </div>
                 </div>
             </div>
