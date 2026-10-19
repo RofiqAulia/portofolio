@@ -199,9 +199,15 @@ final class DocumentationForm
                             ->live(),
                         FileUpload::make('file_path')
                             ->label('Unggah Berkas / Diagram')
+                            ->helperText('Dapat mengunggah lebih dari 1 berkas (misal: beberapa gambar diagram ERD/UML, PDF spesifikasi, atau arsip ZIP).')
                             ->disk('public')
                             ->directory('documentations/files')
                             ->visibility('public')
+                            ->multiple()
+                            ->reorderable()
+                            ->appendFiles()
+                            ->openable()
+                            ->downloadable()
                             ->maxSize(25600)
                             ->acceptedFileTypes([
                                 'image/jpeg', 'image/png', 'image/webp', 'image/svg+xml',

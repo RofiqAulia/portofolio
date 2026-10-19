@@ -173,7 +173,8 @@
                             <!-- Visual Stage (Preview / Image / Icon placeholder) -->
                             @php
                                 $previewUrl = $doc->getEffectivePreviewUrl();
-                                $hasDownloadFile = $doc->file_path && Storage::disk('public')->exists($doc->file_path);
+                                $hasDownloadFile = $doc->hasFiles();
+                                $fileCount = $doc->getFileCount();
                             @endphp
 
                             @if($previewUrl)
@@ -206,17 +207,22 @@
                                         @if($hasDownloadFile)
                                             <a href="{{ route('portfolio.documentations.download', $doc->slug) }}" 
                                                class="btn-genz btn-genz-yellow py-1 px-3 fs-6"
-                                               title="Unduh Berkas Asli">
-                                                <i class="bi bi-download"></i> Unduh
+                                               title="{{ $fileCount > 1 ? 'Unduh Semua (' . $fileCount . ' Berkas .ZIP)' : 'Unduh Berkas Asli' }}">
+                                                <i class="bi {{ $fileCount > 1 ? 'bi-file-zip' : 'bi-download' }}"></i> Unduh
                                             </a>
                                         @endif
                                     </div>
 
                                     <!-- Badges on Image -->
-                                    <div class="position-absolute top-0 start-0 m-2">
+                                    <div class="position-absolute top-0 start-0 m-2 d-flex flex-wrap gap-1">
                                         <span class="badge bg-dark bg-opacity-75 text-white rounded-pill px-2 py-1 small">
                                             <i class="bi {{ $doc->type->icon() }}"></i> {{ $doc->getFileExtension() ? strtoupper($doc->getFileExtension()) : 'DIAGRAM' }}
                                         </span>
+                                        @if($fileCount > 1)
+                                            <span class="badge bg-primary text-white border border-dark rounded-pill px-2 py-1 small fw-bold">
+                                                <i class="bi bi-files"></i> {{ $fileCount }} Berkas
+                                            </span>
+                                        @endif
                                     </div>
                                     <div class="position-absolute bottom-0 end-0 m-2 d-md-none">
                                         <button type="button" 
@@ -238,9 +244,16 @@
                                     <div class="badge bg-primary text-white rounded-circle p-3 mb-2 fs-3 shadow-sm">
                                         <i class="bi {{ $doc->type->icon() }}"></i>
                                     </div>
-                                    <span class="badge bg-dark text-white rounded-pill px-3 py-1 small fw-bold">
-                                        {{ $doc->getFileExtension() ? strtoupper($doc->getFileExtension()) : $doc->type->label() }}
-                                    </span>
+                                    <div class="d-flex flex-wrap justify-content-center gap-1 mt-1">
+                                        <span class="badge bg-dark text-white rounded-pill px-3 py-1 small fw-bold">
+                                            {{ $doc->getFileExtension() ? strtoupper($doc->getFileExtension()) : $doc->type->label() }}
+                                        </span>
+                                        @if($fileCount > 1)
+                                            <span class="badge bg-primary text-white border border-dark rounded-pill px-2 py-1 small fw-bold">
+                                                <i class="bi bi-files"></i> {{ $fileCount }} Berkas
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
                             @endif
 
@@ -289,8 +302,8 @@
                                     </a>
 
                                     @if($hasDownloadFile)
-                                        <a href="{{ route('portfolio.documentations.download', $doc->slug) }}" class="btn-genz btn-genz-yellow py-2 px-3 fs-6" title="Download Berkas">
-                                            <i class="bi bi-download"></i> Unduh
+                                        <a href="{{ route('portfolio.documentations.download', $doc->slug) }}" class="btn-genz btn-genz-yellow py-2 px-3 fs-6" title="{{ $fileCount > 1 ? 'Unduh Semua (' . $fileCount . ' Berkas .ZIP)' : 'Unduh Berkas' }}">
+                                            <i class="bi {{ $fileCount > 1 ? 'bi-file-zip' : 'bi-download' }}"></i> {{ $fileCount > 1 ? 'Unduh (' . $fileCount . ')' : 'Unduh' }}
                                         </a>
                                     @endif
 

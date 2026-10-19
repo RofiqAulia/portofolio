@@ -107,9 +107,15 @@ class DocumentationsRelationManager extends RelationManager
 
                 FileUpload::make('file_path')
                     ->label('Unggah Berkas / Diagram')
+                    ->helperText('Dapat mengunggah lebih dari 1 berkas (misal: beberapa gambar diagram ERD/UML, PDF spesifikasi, atau arsip ZIP).')
                     ->disk('public')
                     ->directory('documentations/files')
                     ->visibility('public')
+                    ->multiple()
+                    ->reorderable()
+                    ->appendFiles()
+                    ->openable()
+                    ->downloadable()
                     ->maxSize(25600)
                     ->acceptedFileTypes([
                         'image/jpeg', 'image/png', 'image/webp', 'image/svg+xml',
@@ -162,7 +168,7 @@ class DocumentationsRelationManager extends RelationManager
                 ImageColumn::make('preview_image_path')
                     ->label('Sampul')
                     ->disk('public')
-                    ->defaultImageUrl(fn ($record) => $record->isImage() && $record->file_path ? asset('storage/'.$record->file_path) : null)
+                    ->defaultImageUrl(fn ($record) => $record->getEffectivePreviewUrl())
                     ->square(),
                 TextColumn::make('title')
                     ->label('Judul Blueprint')

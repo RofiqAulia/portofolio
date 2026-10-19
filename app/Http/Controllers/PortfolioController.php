@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 final class PortfolioController extends Controller
@@ -210,19 +211,55 @@ final class PortfolioController extends Controller
         return view('portfolio.documentations.show', compact('documentation', 'relatedDocs', 'profile', 'settings'));
     }
 
-    public function downloadDocumentation(string $slug): StreamedResponse
+    public function downloadDocumentation(string $slug, Request $request): Response
     {
         $documentation = Documentation::published()
             ->where('slug', $slug)
             ->firstOrFail();
 
-        if (! $documentation->file_path || ! Storage::disk('public')->exists($documentation->file_path)) {
+        $paths = $documentation->getFilePaths();
+        if (empty($paths)) {
             abort(404, 'Berkas dokumentasi tidak ditemukan.');
         }
 
-        $filename = $documentation->getDownloadFilename();
+        // Unduh seluruh berkas dalam satu file ZIP jika diminta atau jika memiliki lebih dari 1 file
+        $wantsAll = $request->boolean('all') || ($request->query('file') === null && count($paths) > 1);
+        if ($wantsAll && count($paths) > 1 && class_exists('ZipArchive')) {
+            $zipFilename = Str::slug($documentation->title).'-arsip-lengkap.zip';
+            $tempFile = tempnam(sys_get_temp_dir(), 'doc_zip_');
+            $zip = new \ZipArchive;
+            if ($zip->open($tempFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+                foreach ($paths as $idx => $p) {
+                    if (Storage::disk('public')->exists($p)) {
+                        $fullPath = Storage::disk('public')->path($p);
+                        $entryName = ($idx + 1).'-'.basename($p);
+                        $zip->addFile($fullPath, $entryName);
+                    }
+                }
+                $zip->close();
 
-        return Storage::disk('public')->download($documentation->file_path, $filename);
+                return response()->download($tempFile, $zipFilename)->deleteFileAfterSend(true);
+            }
+        }
+
+        $fileIndex = $request->query('file');
+        $targetIndex = 0;
+        if ($fileIndex !== null && is_numeric($fileIndex)) {
+            $parsed = (int) $fileIndex;
+            if (isset($paths[$parsed])) {
+                $targetIndex = $parsed;
+            }
+        }
+
+        $targetPath = $paths[$targetIndex] ?? null;
+
+        if (! $targetPath || ! Storage::disk('public')->exists($targetPath)) {
+            abort(404, 'Berkas fisik tidak ditemukan di penyimpanan server.');
+        }
+
+        $filename = $documentation->getDownloadFilename($targetIndex);
+
+        return Storage::disk('public')->download($targetPath, $filename);
     }
 
     public function sendMessage(StoreMessageRequest $request, CreateMessage $createMessage): RedirectResponse

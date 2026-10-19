@@ -151,7 +151,8 @@
                             @foreach($project->documentations as $doc)
                                 @php
                                     $previewUrl = $doc->getEffectivePreviewUrl();
-                                    $hasDownloadFile = $doc->file_path && Storage::disk('public')->exists($doc->file_path);
+                                    $hasDownloadFile = $doc->hasFiles();
+                                    $fileCount = $doc->getFileCount();
                                 @endphp
                                 <div class="col-md-6">
                                     <div class="card-genz p-3 bg-white h-100 d-flex flex-column border border-2 border-dark" style="box-shadow: 4px 4px 0px var(--navy) !important;">
@@ -159,9 +160,16 @@
                                             <span class="sticker sticker-blue py-0 px-2" style="font-size: 0.72rem;">
                                                 {{ $doc->category }}
                                             </span>
-                                            <span class="badge bg-light text-dark border border-dark rounded-pill px-2 py-0 small">
-                                                <i class="bi {{ $doc->type->icon() }}"></i> {{ $doc->getFileExtension() ? strtoupper($doc->getFileExtension()) : $doc->type->label() }}
-                                            </span>
+                                            <div class="d-flex gap-1">
+                                                @if($fileCount > 1)
+                                                    <span class="badge bg-primary text-white border border-dark rounded-pill px-2 py-0 small fw-bold" style="font-size: 0.7rem;">
+                                                        <i class="bi bi-files"></i> {{ $fileCount }}
+                                                    </span>
+                                                @endif
+                                                <span class="badge bg-light text-dark border border-dark rounded-pill px-2 py-0 small">
+                                                    <i class="bi {{ $doc->type->icon() }}"></i> {{ $doc->getFileExtension() ? strtoupper($doc->getFileExtension()) : $doc->type->label() }}
+                                                </span>
+                                            </div>
                                         </div>
 
                                         <h5 class="font-heading fs-6 mb-2">
@@ -193,8 +201,8 @@
                                                 </button>
                                             @endif
                                             @if($hasDownloadFile)
-                                                <a href="{{ route('portfolio.documentations.download', $doc->slug) }}" class="btn-genz btn-genz-yellow py-1 px-2 small" title="Unduh Berkas Asli">
-                                                    <i class="bi bi-download"></i>
+                                                <a href="{{ route('portfolio.documentations.download', $doc->slug) }}" class="btn-genz btn-genz-yellow py-1 px-2 small" title="{{ $fileCount > 1 ? 'Unduh Semua (' . $fileCount . ' Berkas .ZIP)' : 'Unduh Berkas Asli' }}">
+                                                    <i class="bi {{ $fileCount > 1 ? 'bi-file-zip' : 'bi-download' }}"></i>
                                                 </a>
                                             @endif
                                         </div>

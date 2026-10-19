@@ -15,7 +15,8 @@
 
     @php
         $previewUrl = $documentation->getEffectivePreviewUrl();
-        $hasDownloadFile = $documentation->file_path && Storage::disk('public')->exists($documentation->file_path);
+        $fileItems = $documentation->getFileItems();
+        $hasDownloadFile = !empty($fileItems);
     @endphp
 
     <div class="row gy-4">
@@ -99,6 +100,42 @@
                                 <i class="bi bi-zoom-in text-primary me-1"></i> Klik gambar di atas untuk membuka modal zoom resolusi penuh.
                             </span>
                         </div>
+
+                        @php
+                            $imageItems = collect($fileItems)->filter(fn($f) => $f['is_image'])->values();
+                        @endphp
+                        @if($imageItems->count() > 1)
+                            <div class="pt-3 border-top border-2 border-light mt-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="small fw-bold text-dark">
+                                        <i class="bi bi-images text-primary me-1"></i> Semua Lembar Diagram / Gambar Terlampir ({{ $imageItems->count() }} Lembar):
+                                    </span>
+                                    <span class="text-muted small">Klik untuk membuka</span>
+                                </div>
+                                <div class="row g-2">
+                                    @foreach($imageItems as $imgItem)
+                                        <div class="col-4 col-sm-3 col-md-2">
+                                            <div class="project-thumbnail-box rounded-3 border border-2 border-dark overflow-hidden position-relative" style="height: 72px;">
+                                                <img src="{{ $imgItem['url'] }}" 
+                                                     alt="{{ $imgItem['name'] }}"
+                                                     class="w-100 h-100 object-fit-cover btn-lightbox-open"
+                                                     role="button"
+                                                     tabindex="0"
+                                                     data-image-src="{{ $imgItem['url'] }}"
+                                                     data-image-title="{{ $documentation->title }} (Lembar {{ $imgItem['index'] + 1 }})"
+                                                     data-image-desc="{{ $documentation->summary }}"
+                                                     data-image-download="{{ route('portfolio.documentations.download', ['slug' => $documentation->slug, 'file' => $imgItem['index']]) }}"
+                                                     data-image-filename="{{ $documentation->getDownloadFilename($imgItem['index']) }}"
+                                                     title="Lihat Lembar #{{ $imgItem['index'] + 1 }}: {{ $imgItem['name'] }}">
+                                                <span class="position-absolute bottom-0 start-0 m-1 badge bg-dark bg-opacity-75 text-white" style="font-size: 0.65rem;">
+                                                    #{{ $imgItem['index'] + 1 }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 @endif
 
@@ -115,23 +152,74 @@
                 <!-- Download Callout Box -->
                 @if($hasDownloadFile || $documentation->external_url)
                     <div class="card-genz-blue p-4 rounded-4 mt-4">
-                        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
-                            <div>
-                                <h5 class="font-heading mb-1">Dapatkan Salinan Asli Dokumen</h5>
-                                <p class="text-muted small mb-0">Unduh diagram / dokumen spesifikasi teknis ini langsung ke perangkat Anda.</p>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                                <div>
+                                    <h5 class="font-heading mb-1">Dapatkan Salinan Asli Dokumen</h5>
+                                    <p class="text-muted small mb-0">
+                                        @if(count($fileItems) > 1)
+                                            Tersedia {{ count($fileItems) }} berkas spesifikasi teknis dan blueprint untuk diunduh.
+                                        @else
+                                            Unduh diagram / dokumen spesifikasi teknis ini langsung ke perangkat Anda.
+                                        @endif
+                                    </p>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @if(count($fileItems) > 1)
+                                        <a href="{{ route('portfolio.documentations.download', ['slug' => $documentation->slug, 'all' => 1]) }}" class="btn-genz btn-genz-yellow py-2 px-3 fs-6">
+                                            <i class="bi bi-file-zip"></i> Unduh Semua (.ZIP)
+                                        </a>
+                                    @elseif(count($fileItems) === 1)
+                                        <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" class="btn-genz btn-genz-yellow py-2 px-3 fs-6">
+                                            <i class="bi bi-download"></i> Unduh File Asli
+                                        </a>
+                                    @endif
+                                    @if($documentation->external_url)
+                                        <a href="{{ $documentation->external_url }}" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-secondary py-2 px-3 fs-6">
+                                            <i class="bi bi-box-arrow-up-right"></i> Buka Tautan
+                                        </a>
+                                    @endif
+                                </div>
                             </div>
-                            <div class="d-flex flex-wrap gap-2">
-                                @if($hasDownloadFile)
-                                    <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" class="btn-genz btn-genz-yellow py-2 px-3 fs-6">
-                                        <i class="bi bi-download"></i> Unduh File Asli
-                                    </a>
-                                @endif
-                                @if($documentation->external_url)
-                                    <a href="{{ $documentation->external_url }}" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-secondary py-2 px-3 fs-6">
-                                        <i class="bi bi-box-arrow-up-right"></i> Buka Tautan
-                                    </a>
-                                @endif
-                            </div>
+
+                            @if(count($fileItems) > 1)
+                                <div class="border-top border-2 border-dark pt-3 mt-1">
+                                    <span class="small fw-bold text-dark d-block mb-2">
+                                        <i class="bi bi-files text-primary me-1"></i> Rincian Berkas Terlampir ({{ count($fileItems) }} Berkas):
+                                    </span>
+                                    <div class="vstack gap-2">
+                                        @foreach($fileItems as $file)
+                                            <div class="bg-white p-2 px-3 rounded-3 border border-2 border-dark d-flex align-items-center justify-content-between gap-2">
+                                                <div class="d-flex align-items-center gap-2 text-truncate">
+                                                    <span class="badge bg-light text-dark border border-dark rounded-pill px-2 py-1 small">
+                                                        #{{ $file['index'] + 1 }}
+                                                    </span>
+                                                    <i class="bi {{ $file['is_image'] ? 'bi-image' : ($file['extension'] === 'pdf' ? 'bi-file-earmark-pdf' : 'bi-file-earmark') }} text-primary fs-5"></i>
+                                                    <span class="small fw-bold text-truncate">{{ $file['name'] }}</span>
+                                                    <span class="badge bg-secondary rounded-pill small">{{ strtoupper($file['extension'] ?: 'FILE') }}</span>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-1 flex-shrink-0">
+                                                    @if($file['is_image'])
+                                                        <button type="button" 
+                                                                class="btn-genz btn-genz-secondary py-1 px-2 small btn-lightbox-open"
+                                                                data-image-src="{{ $file['url'] }}"
+                                                                data-image-title="{{ $documentation->title }} — Lembar #{{ $file['index'] + 1 }}"
+                                                                data-image-desc="{{ $documentation->summary }}"
+                                                                data-image-download="{{ route('portfolio.documentations.download', ['slug' => $documentation->slug, 'file' => $file['index']]) }}"
+                                                                data-image-filename="{{ $documentation->getDownloadFilename($file['index']) }}"
+                                                                title="Lihat Gambar">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                    @endif
+                                                    <a href="{{ route('portfolio.documentations.download', ['slug' => $documentation->slug, 'file' => $file['index']]) }}" class="btn-genz btn-genz-yellow py-1 px-2 small" title="Unduh Berkas Ini">
+                                                        <i class="bi bi-download"></i> Unduh
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @endif
@@ -153,6 +241,12 @@
                             <span class="text-muted">Tipe Artefak:</span>
                             <span class="badge bg-primary rounded-pill">{{ $documentation->type->label() }}</span>
                         </li>
+                        @if(count($fileItems) > 1)
+                            <li class="d-flex justify-content-between border-bottom pb-2">
+                                <span class="text-muted">Jumlah Berkas:</span>
+                                <span class="badge bg-dark rounded-pill">{{ count($fileItems) }} Berkas</span>
+                            </li>
+                        @endif
                         @if($documentation->getFileExtension())
                             <li class="d-flex justify-content-between border-bottom pb-2">
                                 <span class="text-muted">Format Ekstensi:</span>
@@ -177,9 +271,15 @@
 
                     <div class="pt-4 vstack gap-2">
                         @if($hasDownloadFile)
-                            <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" class="btn-genz btn-genz-yellow w-100 py-2 fs-6">
-                                <i class="bi bi-download"></i> Unduh Berkas Lengkap
-                            </a>
+                            @if(count($fileItems) > 1)
+                                <a href="{{ route('portfolio.documentations.download', ['slug' => $documentation->slug, 'all' => 1]) }}" class="btn-genz btn-genz-yellow w-100 py-2 fs-6">
+                                    <i class="bi bi-file-zip"></i> Unduh Semua (.ZIP)
+                                </a>
+                            @else
+                                <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" class="btn-genz btn-genz-yellow w-100 py-2 fs-6">
+                                    <i class="bi bi-download"></i> Unduh Berkas Lengkap
+                                </a>
+                            @endif
                         @endif
                         @if($previewUrl)
                             <button type="button" 

@@ -25,7 +25,7 @@ final class DocumentationsTable
                 ImageColumn::make('preview_image_path')
                     ->label('Sampul')
                     ->disk('public')
-                    ->defaultImageUrl(fn ($record) => $record->isImage() && $record->file_path ? asset('storage/'.$record->file_path) : null)
+                    ->defaultImageUrl(fn ($record) => $record->getEffectivePreviewUrl())
                     ->square(),
                 TextColumn::make('title')
                     ->label('Judul Dokumentasi')
