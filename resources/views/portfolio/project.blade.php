@@ -242,23 +242,9 @@
                                             Detail Dokumen <i class="bi bi-arrow-right-short"></i>
                                         </a>
                                         @if($hasDownloadFile)
-                                            <a href="{{ route('portfolio.documentations.preview', $doc->slug) }}" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-secondary py-1 px-2 small" title="Buka Preview Berkas">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
                                             <a href="{{ route('portfolio.documentations.download', $doc->slug) }}" class="btn-genz btn-genz-yellow py-1 px-2 small" title="{{ $fileCount > 1 ? 'Unduh Semua (' . $fileCount . ' Berkas .ZIP)' : 'Unduh Berkas' }}">
                                                 <i class="bi {{ $fileCount > 1 ? 'bi-file-zip' : 'bi-download' }}"></i>
                                             </a>
-                                        @elseif($previewUrl)
-                                            <button type="button" 
-                                                    class="btn-genz btn-genz-secondary py-1 px-2 small btn-lightbox-open"
-                                                    data-image-src="{{ $previewUrl }}"
-                                                    data-image-title="{{ $doc->title }}"
-                                                    data-image-desc="{{ $doc->summary }}"
-                                                    data-image-download="{{ $previewUrl }}"
-                                                    data-image-filename="{{ $doc->getDownloadFilename() }}"
-                                                    title="Pratinjau Diagram">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
                                         @endif
                                     </div>
                                 </div>

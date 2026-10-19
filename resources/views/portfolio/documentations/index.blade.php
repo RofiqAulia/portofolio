@@ -307,19 +307,7 @@
                                         </a>
                                     @endif
 
-                                    @if($previewUrl)
-                                        <button type="button" 
-                                                class="btn-genz btn-genz-secondary p-2 btn-lightbox-open"
-                                                data-image-src="{{ $previewUrl }}"
-                                                data-image-title="{{ $doc->title }}"
-                                                data-image-desc="{{ $doc->summary }}"
-                                                data-image-download="{{ $hasDownloadFile ? route('portfolio.documentations.download', $doc->slug) : $previewUrl }}"
-                                                data-image-filename="{{ $doc->getDownloadFilename() }}"
-                                                title="Lihat Pratinjau Gambar"
-                                                style="width: 44px; height: 44px;">
-                                            <i class="bi bi-eye fs-5"></i>
-                                        </button>
-                                    @endif
+
 
                                     @if($doc->external_url)
                                         <a href="{{ $doc->external_url }}" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-secondary p-2" title="Buka Tautan Eksternal" style="width: 44px; height: 44px;">
