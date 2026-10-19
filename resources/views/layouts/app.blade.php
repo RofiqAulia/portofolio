@@ -108,8 +108,8 @@
                                 <i class="bi bi-file-earmark-arrow-down"></i> Unduh CV
                             </a>
                         @endif
-                        <a href="{{ route('portfolio.home') }}#kontak" class="btn-genz btn-genz-primary py-1 px-3 fs-6">
-                            Hire Me <i class="bi bi-arrow-up-right"></i>
+                        <a href="https://wa.me/6282228035426" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-primary py-1 px-3 fs-6">
+                            Hire Me <i class="bi bi-whatsapp"></i>
                         </a>
                     </div>
                 </div>

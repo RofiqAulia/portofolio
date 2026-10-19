@@ -61,7 +61,7 @@ class DatabaseSeeder extends Seeder
                 'tagline' => 'Fresh graduate Sarjana Terapan Teknik Informatika dengan spesialisasi : analisis sistem dan rekayasa perangkat lunak. Berfokus menerjemahkan alur bisnis manual menjadi spesifikasi sistem yang terstruktur berbasis digital, serta mengotomatisasi proses kerja demi efisiensi dan peningkatan berkelanjutan (continuous improvement). Terbuka di posisi IT Business Analyst, System Analyst, IT Staff Programming dan Analis Data berbasis AI.',
                 'bio' => 'Memadukan kemampuan analisis kebutuhan bisnis (requirements analysis, perancangan UML & ERD) dengan kecakapan teknis berbasis PHP/Laravel dan MySQL. Berorientasi pada struktur data ternormalisasi, prinsip kode bersih (OOP & SOLID), serta komitmen tinggi terhadap continuous improvement dan efisiensi operasional sistem.',
                 'email' => 'rofiq@rofiq.dev',
-                'phone' => '+62 812-3456-7890',
+                'phone' => '+62 822-2803-5426',
                 'location' => 'Malang, Indonesia',
                 'quote_text' => 'Bermula Dengan Bismillah Berkahir Dengan Alhamdulillah.',
                 'quote_author' => 'M. Rofiq Aulia',

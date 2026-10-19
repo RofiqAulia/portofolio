@@ -31,8 +31,8 @@
                 </p>
 
                 <div class="d-flex flex-wrap gap-3 mb-4">
-                    <a href="#kontak" class="btn-genz btn-genz-primary">
-                        Hire Me <i class="bi bi-chat-dots-fill"></i>
+                    <a href="https://wa.me/6282228035426" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-primary">
+                        Hire Me <i class="bi bi-whatsapp"></i>
                     </a>
                     <a href="#proyek" class="btn-genz btn-genz-secondary">
                         Lihat Portofolio <i class="bi bi-arrow-down"></i>
