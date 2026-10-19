@@ -308,6 +308,18 @@ final class PortfolioController extends Controller
         return Storage::disk('public')->download($targetPath, $filename);
     }
 
+    public function sitemap(): Response
+    {
+        $projects = Project::published()->orderBy('updated_at', 'desc')->get();
+        $documentations = Documentation::published()->orderBy('updated_at', 'desc')->get();
+
+        $content = view('portfolio.sitemap', compact('projects', 'documentations'))->render();
+
+        return response($content, 200, [
+            'Content-Type' => 'application/xml',
+        ]);
+    }
+
     public function sendMessage(StoreMessageRequest $request, CreateMessage $createMessage): RedirectResponse
     {
         $createMessage->execute($request->toData());

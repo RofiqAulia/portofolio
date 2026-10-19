@@ -16,6 +16,8 @@ Route::get('/dokumentasi/{slug}', [PortfolioController::class, 'documentationDet
 Route::get('/dokumentasi/{slug}/preview', [PortfolioController::class, 'previewDocumentation'])->name('portfolio.documentations.preview');
 Route::get('/dokumentasi/{slug}/download', [PortfolioController::class, 'downloadDocumentation'])->name('portfolio.documentations.download');
 
+Route::get('/sitemap.xml', [PortfolioController::class, 'sitemap'])->name('portfolio.sitemap');
+
 Route::post('/kontak', [PortfolioController::class, 'sendMessage'])
     ->middleware('throttle:5,1')
     ->name('portfolio.contact.send');
