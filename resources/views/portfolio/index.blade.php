@@ -21,11 +21,11 @@
                 </div>
 
                 <h1 class="hero-title mb-4">
-                    Membangun Website <span class="hero-highlight">Tangguh</span>, Cepat & Berstandar OOP.
+                    Menjembatani <span class="hero-highlight">Kebutuhan Bisnis</span> & Solusi Sistem Berkinerja Tinggi.
                 </h1>
 
                 <p class="fs-5 text-muted mb-4 pe-lg-4">
-                    {{ $profile->tagline ?? 'Senior Software Engineer dengan spesialisasi arsitektur Laravel, database MySQL teroptimasi, dan frontend responsif.' }}
+                    {{ $profile->tagline ?? 'Fresh graduate Sarjana Terapan Teknik Informatika yang berfokus menerjemahkan proses bisnis kompleks menjadi rancangan sistem yang rapi, efisien, dan siap dikembangkan. Mengombinasikan proses analisis alur kerja dengan implementasi teknis.' }}
                 </p>
 
                 <div class="d-flex flex-wrap gap-3 mb-4">
@@ -37,13 +37,11 @@
                     </a>
                 </div>
 
-                @if($profile && $profile->bio)
-                    <div class="p-3 card-genz-blue mt-3">
-                        <p class="mb-0 fs-6">
-                            <strong>Sekilas Tentang Saya:</strong> {{ $profile->bio }}
-                        </p>
-                    </div>
-                @endif
+                <div class="p-3 card-genz-blue mt-3">
+                    <p class="mb-0 fs-6">
+                        <strong>Sekilas Tentang Saya:</strong> {{ $profile->bio ?? 'Memadukan kemampuan analisis kebutuhan bisnis (requirements analysis, perancangan UML & ERD) dengan kecakapan teknis berbasis PHP/Laravel dan MySQL. Berorientasi pada struktur data ternormalisasi, prinsip kode bersih (OOP & SOLID), serta komitmen tinggi terhadap continuous improvement dan efisiensi operasional sistem.' }}
+                    </p>
+                </div>
             </div>
 
             <div class="col-lg-5 text-center">
@@ -89,7 +87,7 @@
                         @endif
                         <div class="p-3 text-start">
                             <h4 class="mb-1">{{ $profile->full_name ?? 'M. Rofiq Aulia' }}</h4>
-                            <!-- <p class="text-muted small mb-0">{{ $profile->headline ?? 'Senior Software Engineer' }}</p> -->
+                            <p class="text-muted small mb-0">{{ $profile->headline ?? 'System Analyst & Software Engineer' }}</p>
                         </div>
                     </div>
                 </div>

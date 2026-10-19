@@ -57,13 +57,13 @@ class DatabaseSeeder extends Seeder
             ['user_id' => $admin->id],
             [
                 'full_name' => 'M. Rofiq Aulia',
-                'headline' => 'Senior Full-Stack Developer & Software Architect',
-                'tagline' => 'Membangun aplikasi web berkinerja tinggi, berskala besar, dan berstandar kode OOP elegan.',
-                'bio' => 'Pengembang perangkat lunak dengan pengalaman dalam ekosistem PHP/Laravel, modern frontend, dan arsitektur database relasional. Berfokus pada arsitektur SOLID, skalabilitas sistem, dan pengalaman pengguna yang responsif.',
+                'headline' => 'System Analyst & Software Engineer',
+                'tagline' => 'Fresh graduate Sarjana Terapan Teknik Informatika yang berfokus menerjemahkan proses bisnis kompleks menjadi rancangan sistem yang rapi, efisien, dan siap dikembangkan. Mengombinasikan proses analisis alur kerja dengan implementasi teknis.',
+                'bio' => 'Memadukan kemampuan analisis kebutuhan bisnis (requirements analysis, perancangan UML & ERD) dengan kecakapan teknis berbasis PHP/Laravel dan MySQL. Berorientasi pada struktur data ternormalisasi, prinsip kode bersih (OOP & SOLID), serta komitmen tinggi terhadap continuous improvement dan efisiensi operasional sistem.',
                 'email' => 'rofiq@rofiq.dev',
                 'phone' => '+62 812-3456-7890',
-                'location' => 'Jakarta, Indonesia',
-                'quote_text' => 'Bermula Dengan Bismilla Berkahir Dengan Alhamdulilla.',
+                'location' => 'Malang, Indonesia',
+                'quote_text' => 'Bermula Dengan Bismillah Berkahir Dengan Alhamdulillah.',
                 'quote_author' => 'M. Rofiq Aulia',
                 'is_open_to_work' => true,
             ]
