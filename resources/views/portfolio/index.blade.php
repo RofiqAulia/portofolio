@@ -97,14 +97,10 @@
         </div>
     </section>
 
-    <!-- 2. STRIP KEAHLIAN & TECH STACK (INFINITE MARQUEE ALA DIBIMBING) -->
-    <section class="py-5 my-2 position-relative overflow-hidden">
-        <div class="text-center mb-4">
-            <span class="section-pill mb-2">KEAHLIAN & TECH STACK</span>
-            <h2 class="display-6 font-heading fw-bold mb-2">Teknologi & Tools Andalan</h2>
-            <p class="text-muted small mx-auto mb-0" style="max-width: 620px;">
-                Frameworks, bahasa pemrograman, dan ekosistem modern yang saya gunakan dalam membangun solusi digital berkualitas tinggi.
-            </p>
+    <!-- 2. STRIP KEAHLIAN & TECH STACK (INFINITE MARQUEE SEPERTI GAMBAR 2) -->
+    <section class="tech-brand-strip" aria-label="Teknologi dan Tools Andalan">
+        <div class="tech-brand-header">
+            <h2 class="tech-brand-title">Teknologi & Tools Andalan</h2>
         </div>
 
         @php
@@ -113,7 +109,10 @@
                 (object)['name' => 'PHP', 'slug' => 'php', 'icon_path' => 'logo/php-logo.png'],
                 (object)['name' => 'MySQL', 'slug' => 'mysql', 'icon_path' => 'logo/mysql-logo.png'],
                 (object)['name' => 'Bootstrap 5', 'slug' => 'bootstrap-5', 'icon_path' => 'logo/bootstrap-logo.jpg'],
+                (object)['name' => 'Vue.js', 'slug' => 'vue-js', 'icon_path' => 'logo/vue-logo.svg'],
+                (object)['name' => 'React', 'slug' => 'react', 'icon_path' => 'logo/react-logo.svg'],
                 (object)['name' => 'Tailwind CSS', 'slug' => 'tailwind-css', 'icon_path' => 'logo/tailwind-logo.jpg'],
+                (object)['name' => 'Redis', 'slug' => 'redis', 'icon_path' => 'logo/redis-logo.svg'],
                 (object)['name' => 'Docker', 'slug' => 'docker', 'icon_path' => 'logo/docker-logo.jpg'],
                 (object)['name' => 'Git', 'slug' => 'git', 'icon_path' => 'logo/git-logo.png'],
                 (object)['name' => 'Notion', 'slug' => 'notion', 'icon_path' => 'logo/notion-logo.png'],
@@ -126,35 +125,25 @@
                 (object)['name' => 'Power Automate', 'slug' => 'power-automate', 'icon_path' => 'logo/automate-logo.jpg'],
             ]);
 
-            $halfCount = (int) ceil($techList->count() / 2);
-            $row1 = $techList->slice(0, $halfCount);
-            $row2 = $techList->slice($halfCount);
+            $count = $techList->count();
+            $repeatCount = $count > 0 ? (int) max(2, (int) ceil(24 / $count)) : 2;
         @endphp
 
-        <div class="tech-marquee-stream">
-            {{-- Baris 1: Berjalan ke kiri secara seamless --}}
-            <div class="tech-marquee-wrapper">
-                <div class="tech-marquee-track">
-                    @for($i = 0; $i < 2; $i++)
-                        @foreach($row1 as $tech)
-                            @include('portfolio.partials.tech-badge', ['tech' => $tech])
-                        @endforeach
-                    @endfor
-                </div>
+        <div class="tech-brand-marquee">
+            <div class="tech-brand-track">
+                @for($k = 0; $k < $repeatCount; $k++)
+                    @foreach($techList as $tech)
+                        @include('portfolio.partials.tech-badge', ['tech' => $tech])
+                    @endforeach
+                @endfor
             </div>
-
-            @if($row2->isNotEmpty())
-                {{-- Baris 2: Berjalan ke kanan (reverse) secara seamless --}}
-                <div class="tech-marquee-wrapper">
-                    <div class="tech-marquee-track reverse">
-                        @for($i = 0; $i < 2; $i++)
-                            @foreach($row2 as $tech)
-                                @include('portfolio.partials.tech-badge', ['tech' => $tech])
-                            @endforeach
-                        @endfor
-                    </div>
-                </div>
-            @endif
+            <div class="tech-brand-track" aria-hidden="true">
+                @for($k = 0; $k < $repeatCount; $k++)
+                    @foreach($techList as $tech)
+                        @include('portfolio.partials.tech-badge', ['tech' => $tech])
+                    @endforeach
+                @endfor
+            </div>
         </div>
     </section>
 

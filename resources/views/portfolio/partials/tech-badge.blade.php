@@ -9,8 +9,10 @@
     } else {
         $slug = strtolower($tech->slug ?? \Illuminate\Support\Str::slug($name));
         $possibleFiles = [
+            "logo/{$slug}-logo.svg",
             "logo/{$slug}-logo.png",
             "logo/{$slug}-logo.jpg",
+            "logo/{$slug}.svg",
             "logo/{$slug}.png",
             "logo/{$slug}.jpg",
         ];
@@ -29,6 +31,9 @@
                 'tailwind' => 'logo/tailwind-logo.jpg',
                 'docker' => 'logo/docker-logo.jpg',
                 'git' => 'logo/git-logo.png',
+                'vue' => 'logo/vue-logo.svg',
+                'react' => 'logo/react-logo.svg',
+                'redis' => 'logo/redis-logo.svg',
                 'notion' => 'logo/notion-logo.png',
                 'canva' => 'logo/canva-logo.png',
                 'draw' => 'logo/draw-io-logo.png',
@@ -50,12 +55,9 @@
     }
 @endphp
 
-<div class="tech-marquee-pill" title="{{ $name }}">
+<div class="tech-brand-item" title="{{ $name }}">
     @if($logoUrl)
-        <img src="{{ $logoUrl }}" alt="{{ $name }}" class="tech-icon-img" width="26" height="26" loading="lazy">
-        <span class="tech-name">{{ $name }}</span>
-    @else
-        {{-- Jika tidak ada logo, cukup tampilkan teks nama keahlian tanpa icon --}}
-        <span class="tech-name text-only">{{ $name }}</span>
+        <img src="{{ $logoUrl }}" alt="{{ $name }}" class="tech-brand-logo" width="30" height="30" loading="lazy">
     @endif
+    <span class="tech-brand-name">{{ $name }}</span>
 </div>
