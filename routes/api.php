@@ -14,7 +14,7 @@ Route::prefix('v1')->group(function (): void {
         Route::get('/projects', [PortfolioApiController::class, 'projects'])->name('api.v1.projects.index');
         Route::get('/projects/{slug}', [PortfolioApiController::class, 'project'])->name('api.v1.projects.show');
         Route::get('/experiences', [PortfolioApiController::class, 'experiences'])->name('api.v1.experiences.index');
-        Route::get('/experiences/{id}', [PortfolioApiController::class, 'experience'])->name('api.v1.experiences.show');
+        Route::get('/experiences/{slug}', [PortfolioApiController::class, 'experience'])->name('api.v1.experiences.show');
     });
 
     // Contact form endpoint throttled to 5 requests per minute

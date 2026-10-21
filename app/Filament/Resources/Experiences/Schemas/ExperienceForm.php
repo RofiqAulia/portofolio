@@ -17,6 +17,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 final class ExperienceForm
 {
@@ -36,10 +37,36 @@ final class ExperienceForm
                         TextInput::make('position')
                             ->label('Posisi / Jabatan')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (string $operation, $state, callable $set, callable $get) {
+                                if ($operation === 'create' || empty($get('slug'))) {
+                                    $org = (string) ($get('organization_name') ?? '');
+                                    $combined = trim(($state ?? '').' '.$org);
+                                    if (! empty($combined)) {
+                                        $set('slug', Str::slug($combined));
+                                    }
+                                }
+                            }),
                         TextInput::make('organization_name')
                             ->label('Nama Lembaga / Perusahaan / Organisasi')
                             ->required()
+                            ->maxLength(255)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (string $operation, $state, callable $set, callable $get) {
+                                if ($operation === 'create' || empty($get('slug'))) {
+                                    $pos = (string) ($get('position') ?? '');
+                                    $combined = trim($pos.' '.($state ?? ''));
+                                    if (! empty($combined)) {
+                                        $set('slug', Str::slug($combined));
+                                    }
+                                }
+                            }),
+                        TextInput::make('slug')
+                            ->label('Slug URL')
+                            ->helperText('URL slug untuk tautan detail pengalaman (otomatis disinkronkan).')
+                            ->required()
+                            ->unique(ignoreRecord: true)
                             ->maxLength(255),
                         TextInput::make('location')
                             ->label('Lokasi')

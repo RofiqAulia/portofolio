@@ -63,13 +63,33 @@ class DetailPagesTest extends TestCase
             'status' => ProjectStatus::Published,
         ]);
 
-        // Act
-        $response = $this->get('/pengalaman/'.$experience->id);
+        // Act - access via slug
+        $response = $this->get('/pengalaman/'.$experience->slug);
 
         // Assert
         $response->assertStatus(200);
         $response->assertSee('DevOps Intern');
         $response->assertSee('PT Cloud Nusantara');
+    }
+
+    public function test_accessing_experience_by_id_redirects_permanently_to_slug(): void
+    {
+        // Arrange
+        $admin = User::factory()->create();
+        Profile::factory()->create(['user_id' => $admin->id]);
+
+        $experience = Experience::factory()->internship()->create([
+            'position' => 'DevOps Intern',
+            'organization_name' => 'PT Cloud Nusantara',
+            'status' => ProjectStatus::Published,
+        ]);
+
+        // Act - access via old numeric ID
+        $response = $this->get('/pengalaman/'.$experience->id);
+
+        // Assert - 301 Permanent Redirect to canonical slug URL
+        $response->assertStatus(301);
+        $response->assertRedirect('/pengalaman/'.$experience->slug);
     }
 
     public function test_user_can_download_published_project_thumbnail(): void

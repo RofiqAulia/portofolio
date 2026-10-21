@@ -1,136 +1,157 @@
-<div class="card-genz h-100 d-flex flex-column bg-white overflow-hidden">
-    @if($project->thumbnail_path)
-        <div class="project-thumbnail-box position-relative overflow-hidden border-bottom border-2 border-dark" style="height: 240px;">
-            <img src="{{ asset('storage/' . $project->thumbnail_path) }}" 
-                 alt="{{ $project->title }} - Portofolio Proyek M. Rofiq Aulia" 
-                 loading="lazy"
-                 class="w-100 h-100 object-fit-cover project-thumbnail-img"
-                 role="button"
-                 tabindex="0"
-                 aria-label="Lihat gambar {{ $project->title }}"
-                 data-lightbox-trigger
-                 data-image-src="{{ asset('storage/' . $project->thumbnail_path) }}"
-                 data-image-title="{{ $project->title }}"
-                 data-image-desc="{{ $project->summary }}"
-                 data-image-download="{{ route('portfolio.project.download-thumbnail', $project->slug) }}"
-                 data-image-filename="{{ Str::slug($project->title) }}-preview">
-
-            <!-- Hover overlay with View and Download buttons (Desktop) -->
-            <div class="project-thumbnail-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center gap-2">
-                <button type="button" 
-                        class="btn-genz btn-genz-primary py-1 px-3 fs-6 btn-lightbox-open"
-                        data-image-src="{{ asset('storage/' . $project->thumbnail_path) }}"
-                        data-image-title="{{ $project->title }}"
-                        data-image-desc="{{ $project->summary }}"
-                        data-image-download="{{ route('portfolio.project.download-thumbnail', $project->slug) }}"
-                        data-image-filename="{{ Str::slug($project->title) }}-preview"
-                        title="Lihat Gambar">
-                    <i class="bi bi-eye-fill"></i> View
-                </button>
-                <a href="{{ route('portfolio.project.download-thumbnail', $project->slug) }}" 
-                   class="btn-genz btn-genz-yellow py-1 px-3 fs-6"
-                   title="Unduh Gambar Asli">
-                    <i class="bi bi-download"></i> Download
-                </a>
-            </div>
-
-            <!-- Image indicator badge (Top-Left) -->
-            <div class="position-absolute top-0 start-0 m-2">
-                <span class="badge bg-dark bg-opacity-75 text-white rounded-pill px-2 py-1 small d-inline-flex align-items-center gap-1 shadow-sm">
-                    <i class="bi bi-image"></i>
-                </span>
-            </div>
-
-            <!-- Mobile quick action icons (Bottom-Right) -->
-            <div class="position-absolute bottom-0 end-0 m-2 d-md-none">
-                <div class="d-flex gap-1">
-                    <button type="button" 
-                            class="btn-genz btn-genz-primary p-0 rounded-circle btn-lightbox-open"
-                            style="width: 36px; height: 36px; min-height: 36px;"
-                            data-image-src="{{ asset('storage/' . $project->thumbnail_path) }}"
-                            data-image-title="{{ $project->title }}"
-                            data-image-desc="{{ $project->summary }}"
-                            data-image-download="{{ route('portfolio.project.download-thumbnail', $project->slug) }}"
-                            data-image-filename="{{ Str::slug($project->title) }}-preview"
-                            aria-label="Lihat Gambar"
-                            title="Lihat Gambar">
-                        <i class="bi bi-eye-fill small"></i>
-                    </button>
-                    <a href="{{ route('portfolio.project.download-thumbnail', $project->slug) }}" 
-                       class="btn-genz btn-genz-yellow p-0 rounded-circle"
-                       style="width: 36px; height: 36px; min-height: 36px;"
-                       aria-label="Download Gambar"
-                       title="Download Gambar">
-                        <i class="bi bi-download small"></i>
-                    </a>
+<div class="project-bento-card h-100">
+    <div>
+        {{-- 1. Sharp, Prominent Highlight Image Stage (Full Width) --}}
+        <div class="project-preview-stage">
+            <!-- Browser Chrome Header Bar -->
+            <div class="project-preview-bar">
+                <div class="inspo-mockup-dots d-flex align-items-center gap-1">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-white text-dark border rounded-pill px-2 py-0 small font-monospace" style="font-size: 0.7rem;">
+                        {{ Str::slug($project->title) }}.app
+                    </span>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="status-pulse-dot" style="width: 6px; height: 6px;"></span>
+                    <span class="text-muted small fw-semibold" style="font-size: 0.68rem;">Live</span>
                 </div>
             </div>
-        </div>
-    @else
-        <div class="w-100 bg-light d-flex align-items-center justify-content-center border-bottom border-2 border-dark" style="height: 240px;">
-            <i class="bi bi-folder-fill display-2 text-muted"></i>
-        </div>
-    @endif
 
-    <div class="p-4 d-flex flex-column flex-grow-1">
+            <!-- Screen Area with Sharp Image -->
+            <div class="project-preview-screen position-relative">
+                @if($project->thumbnail_path)
+                    <img src="{{ asset('storage/' . $project->thumbnail_path) }}" 
+                         alt="{{ $project->title }}" 
+                         loading="lazy" 
+                         class="project-preview-img"
+                         role="button"
+                         tabindex="0"
+                         aria-label="Lihat gambar {{ $project->title }}"
+                         data-lightbox-trigger
+                         data-image-src="{{ asset('storage/' . $project->thumbnail_path) }}"
+                         data-image-title="{{ $project->title }}"
+                         data-image-desc="{{ $project->summary }}"
+                         data-image-download="{{ route('portfolio.project.download-thumbnail', $project->slug) }}"
+                         data-image-filename="{{ Str::slug($project->title) }}-preview">
+
+                    <!-- Floating Badges on Screen -->
+                    <div class="position-absolute top-0 start-0 m-2 d-flex flex-wrap gap-1 z-2">
+                        <span class="bento-badge-pill bento-badge-blue py-1 px-3 shadow-sm">
+                            <i class="bi bi-code-slash me-1"></i> {{ $project->role ?? 'Software Engineer' }}
+                        </span>
+                    </div>
+
+                    @if($project->is_featured)
+                        <div class="position-absolute top-0 end-0 m-2 z-2">
+                            <span class="bento-badge-pill bento-badge-amber py-1 px-3 shadow-sm">
+                                <i class="bi bi-star-fill text-warning me-1"></i> UNGGULAN
+                            </span>
+                        </div>
+                    @endif
+
+                    <!-- Hover Quick Actions Overlay -->
+                    <div class="project-preview-overlay">
+                        <button type="button" 
+                                class="btn-bento-primary py-2 px-3 fs-6 btn-lightbox-open shadow"
+                                data-image-src="{{ asset('storage/' . $project->thumbnail_path) }}"
+                                data-image-title="{{ $project->title }}"
+                                data-image-desc="{{ $project->summary }}"
+                                data-image-download="{{ route('portfolio.project.download-thumbnail', $project->slug) }}"
+                                data-image-filename="{{ Str::slug($project->title) }}-preview"
+                                title="Perbesar Gambar Resolusi Penuh">
+                            <i class="bi bi-arrows-angle-expand me-1"></i> Preview Penuh
+                        </button>
+                        <a href="{{ route('portfolio.project.download-thumbnail', $project->slug) }}" 
+                           class="btn-bento-amber py-2 px-3 fs-6 shadow"
+                           title="Unduh Gambar Resolusi Tinggi">
+                            <i class="bi bi-download me-1"></i> Unduh
+                        </a>
+                    </div>
+                @else
+                    {{-- Clean Branded Graphic Fallback --}}
+                    <div class="inspo-graphic-fallback w-100 h-100 d-flex flex-column align-items-center justify-content-center position-relative overflow-hidden">
+                        <div class="inspo-graphic-icon-wrap mb-2">
+                            <i class="bi bi-laptop fs-2 text-primary"></i>
+                        </div>
+                        <span class="badge bg-white text-dark rounded-pill px-3 py-1 shadow-sm small fw-bold mb-1">
+                            {{ $project->role ?? 'Software Project' }}
+                        </span>
+                        <span class="text-muted small" style="font-size: 0.75rem;">Production Ready Web App</span>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        {{-- 2. Metadata, Title & Summary --}}
         <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
-            @if($project->is_featured)
-                <span class="sticker sticker-yellow py-1 px-2" style="font-size: 0.75rem;">
-                    ★ FEATURED
-                </span>
-            @else
-                <span></span>
-            @endif
-            <span class="text-muted small fw-bold">
-                {{ $project->role ?? 'Software Developer' }}
+            <span class="small text-muted fw-semibold">
+                <i class="bi bi-calendar-check me-1 text-primary"></i>
+                {{ $project->finished_at ? $project->finished_at->format('M Y') : ($project->started_at ? $project->started_at->format('M Y') : 'Siap Produksi') }}
+            </span>
+            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1 small fw-bold">
+                <i class="bi bi-check-circle-fill me-1"></i> {{ $project->status?->label() ?? 'Selesai' }}
             </span>
         </div>
 
-        <h4 class="font-heading mb-2">
-            <a href="{{ route('portfolio.project.show', $project->slug) }}" class="text-decoration-none text-dark">
+        <h3 class="project-card-title mb-2">
+            <a href="{{ route('portfolio.project.show', $project->slug) }}">
                 {{ $project->title }}
             </a>
-        </h4>
+        </h3>
 
-        <p class="text-muted mb-4 flex-grow-1">
+        <p class="inspo-card-desc mb-3 text-dark">
             {{ $project->summary }}
         </p>
 
-        <div class="d-flex flex-wrap gap-1 mb-4">
-            @foreach($project->technologies as $tech)
-                <span class="pill-tag" style="font-size: 0.75rem; padding: 0.2rem 0.6rem;">
-                    {{ $tech->name }}
-                </span>
-            @endforeach
-        </div>
+        <!-- Tech Stack Tags -->
+        @if($project->technologies && $project->technologies->isNotEmpty())
+            <div class="inspo-tags-row mb-3">
+                @foreach($project->technologies->take(4) as $tech)
+                    <span class="bento-badge-pill bento-badge-blue py-0 px-2 small">{{ $tech->name }}</span>
+                @endforeach
+                @if($project->technologies->count() > 4)
+                    <span class="badge bg-light text-muted border rounded-pill px-2 py-0 small">+{{ $project->technologies->count() - 4 }}</span>
+                @endif
+            </div>
+        @endif
+    </div>
 
-        <div class="d-flex flex-wrap align-items-center gap-2 pt-2 border-top border-2 border-light mt-auto">
-            <a href="{{ route('portfolio.project.show', $project->slug) }}" class="btn-genz btn-genz-primary py-2 px-3 fs-6">
-                Detail Cerita <i class="bi bi-arrow-right"></i>
+    {{-- 3. Card Footer Action Bar with Transparent BG-Image Overlay --}}
+    <div class="project-action-overlay position-relative mt-auto overflow-hidden rounded-4">
+        {{-- Background image at 20% opacity --}}
+        @if($project->thumbnail_path)
+            <div class="project-action-bg" style="background-image: url('{{ asset('storage/' . $project->thumbnail_path) }}');"></div>
+        @else
+            <div class="project-action-bg project-action-bg-fallback"></div>
+        @endif
+
+        {{-- Overlay content --}}
+        <div class="project-action-content d-flex align-items-center justify-content-between gap-2 position-relative z-2">
+            <a href="{{ route('portfolio.project.show', $project->slug) }}" class="btn-bento-primary py-2 px-3 fs-6">
+                <span>Detail Cerita</span>
+                <i class="bi bi-arrow-right"></i>
             </a>
-            @if($project->demo_url)
-                <a href="{{ $project->demo_url }}" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-secondary py-2 px-3 fs-6">
-                    Live Demo <i class="bi bi-box-arrow-up-right"></i>
-                </a>
-            @endif
-            @if($project->repo_url)
-                <a href="{{ $project->repo_url }}" target="_blank" rel="noopener noreferrer" class="btn-genz btn-genz-secondary p-2" title="Source Code" style="width: 44px; height: 44px;">
-                    <i class="bi bi-github fs-5"></i>
-                </a>
-            @endif
-            @if($project->thumbnail_path)
-                <button type="button" 
-                        class="btn-genz btn-genz-secondary p-2 btn-lightbox-open"
-                        data-image-src="{{ asset('storage/' . $project->thumbnail_path) }}"
-                        data-image-title="{{ $project->title }}"
-                        data-image-desc="{{ $project->summary }}"
-                        data-image-download="{{ route('portfolio.project.download-thumbnail', $project->slug) }}"
-                        data-image-filename="{{ Str::slug($project->title) }}-preview"
-                        title="Lihat & Unduh Gambar"
-                        style="width: 44px; height: 44px;">
-                    <i class="bi bi-image fs-5"></i>
-                </button>
-            @endif
+
+            <div class="inspo-action-icons">
+                @if($project->demo_url)
+                    <a href="{{ $project->demo_url }}" target="_blank" rel="noopener noreferrer" class="btn-inspo-icon" title="Buka Live Demo">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                @endif
+                @if($project->repo_url)
+                    <a href="{{ $project->repo_url }}" target="_blank" rel="noopener noreferrer" class="btn-inspo-icon" title="Lihat Source Code di GitHub">
+                        <i class="bi bi-github"></i>
+                    </a>
+                @endif
+                @if($project->thumbnail_path)
+                    <a href="{{ route('portfolio.project.download-thumbnail', $project->slug) }}" class="btn-inspo-icon" title="Unduh Tangkapan Layar">
+                        <i class="bi bi-download"></i>
+                    </a>
+                @endif
+            </div>
         </div>
     </div>
 </div>

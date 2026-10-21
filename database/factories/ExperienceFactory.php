@@ -18,6 +18,7 @@ class ExperienceFactory extends Factory
         return [
             'type' => fake()->randomElement([ExperienceType::Internship, ExperienceType::Organization]),
             'position' => fake()->jobTitle(),
+            'slug' => fake()->unique()->slug(3),
             'organization_name' => fake()->company(),
             'location' => 'Jakarta, Indonesia',
             'start_date' => fake()->dateTimeBetween('-2 years', '-1 year'),

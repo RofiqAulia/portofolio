@@ -134,7 +134,7 @@ class ContentVisibilityTest extends TestCase
         $response->assertSee('Project Slidable Tiga');
     }
 
-    public function test_landing_page_renders_hard_skills_slider_when_more_than_seven_skills_exist(): void
+    public function test_landing_page_renders_hard_skills_pyramid_diagram_when_skills_exist(): void
     {
         // Arrange
         $user = User::factory()->create();
@@ -149,6 +149,8 @@ class ContentVisibilityTest extends TestCase
             Skill::factory()->create([
                 'skill_category_id' => $category->id,
                 'name' => "Skill Ke-{$i}",
+                'level' => 70 + ($i * 3),
+                'level_label' => $i > 4 ? 'Expert' : 'Advanced',
                 'is_visible' => true,
                 'sort_order' => $i,
             ]);
@@ -159,39 +161,28 @@ class ContentVisibilityTest extends TestCase
 
         // Assert
         $response->assertStatus(200);
-        $response->assertSee('hardSkillsCarousel');
-        $response->assertSee('carousel-item');
+        $response->assertSee('pyramid-svg');
+        $response->assertSee('pyramid-slice');
         $response->assertSee('Skill Ke-1');
         $response->assertSee('Skill Ke-8');
     }
 
-    public function test_landing_page_renders_hard_skills_statically_when_seven_or_fewer_skills_exist(): void
+    public function test_landing_page_renders_empty_state_when_no_skills_exist(): void
     {
         // Arrange
         $user = User::factory()->create();
         Profile::factory()->create(['user_id' => $user->id]);
 
-        $category = SkillCategory::factory()->create([
+        SkillCategory::factory()->create([
             'name' => 'Hard Skills',
             'type' => SkillType::Hard,
         ]);
-
-        for ($i = 1; $i <= 7; $i++) {
-            Skill::factory()->create([
-                'skill_category_id' => $category->id,
-                'name' => "Static Skill-{$i}",
-                'is_visible' => true,
-                'sort_order' => $i,
-            ]);
-        }
 
         // Act
         $response = $this->get(route('portfolio.home'));
 
         // Assert
         $response->assertStatus(200);
-        $response->assertDontSee('hardSkillsCarousel');
-        $response->assertSee('Static Skill-1');
-        $response->assertSee('Static Skill-7');
+        $response->assertSee('Belum ada data kompetensi');
     }
 }

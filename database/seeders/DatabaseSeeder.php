@@ -189,6 +189,7 @@ class DatabaseSeeder extends Seeder
             ['position' => 'Backend Engineer Intern', 'organization_name' => 'PT Teknologi Inovasi Nusantara'],
             [
                 'type' => ExperienceType::Internship,
+                'slug' => 'backend-engineer-intern-pt-teknologi-inovasi-nusantara',
                 'location' => 'Jakarta Selatan',
                 'start_date' => now()->subMonths(14)->toDateString(),
                 'end_date' => now()->subMonths(8)->toDateString(),
@@ -216,6 +217,7 @@ class DatabaseSeeder extends Seeder
             ['position' => 'Kepala Divisi Riset & Teknologi', 'organization_name' => 'Himpunan Mahasiswa Informatika'],
             [
                 'type' => ExperienceType::Organization,
+                'slug' => 'kepala-divisi-riset-teknologi-himpunan-mahasiswa-informatika',
                 'location' => 'Kampus Utama',
                 'start_date' => now()->subYears(2)->toDateString(),
                 'end_date' => now()->subYear()->toDateString(),
@@ -232,7 +234,7 @@ class DatabaseSeeder extends Seeder
 
         // 7. Site Settings
         $settings = [
-            'site_title' => 'Portofolio Profesional — M. Rofiq Aulia',
+            'site_title' => 'Portofolio M Rofiq Aulia',
             'site_description' => 'Website portofolio individu senior Laravel developer yang menyajikan proyek unggulan, keahlian, dan riwayat pengalaman.',
             'meta_keywords' => 'laravel developer, software engineer, web developer indonesia, backend engineer',
             'author_name' => 'M. Rofiq Aulia',
@@ -266,5 +268,8 @@ class DatabaseSeeder extends Seeder
 
         // 9. Documentations & Blueprints
         $this->call(DocumentationSeeder::class);
+
+        // 10. Certifications & Awards
+        $this->call(CertificationSeeder::class);
     }
 }

@@ -30,6 +30,10 @@ final class ExperiencesTable
                     ->searchable()
                     ->sortable()
                     ->description(fn ($record) => $record->organization_name),
+                TextColumn::make('slug')
+                    ->label('Slug')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('type')
                     ->label('Tipe')
                     ->badge()

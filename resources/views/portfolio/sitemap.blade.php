@@ -32,4 +32,16 @@
             <priority>0.7</priority>
         </url>
     @endforeach
+
+    <!-- Detail Pengalaman Magang & Organisasi -->
+    @if(isset($experiences))
+        @foreach($experiences as $exp)
+            <url>
+                <loc>{{ route('portfolio.experience.show', $exp->slug) }}</loc>
+                <lastmod>{{ $exp->updated_at?->tz('UTC')->toAtomString() ?? now()->toAtomString() }}</lastmod>
+                <changefreq>monthly</changefreq>
+                <priority>0.7</priority>
+            </url>
+        @endforeach
+    @endif
 </urlset>

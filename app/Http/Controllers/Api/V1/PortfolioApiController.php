@@ -94,11 +94,16 @@ final class PortfolioApiController extends Controller
         return ExperienceResource::collection($experiences);
     }
 
-    public function experience(int $id): JsonResponse
+    public function experience(string $slug): JsonResponse
     {
         $experience = Experience::published()
             ->with(['highlights', 'technologies', 'attachments' => fn ($q) => $q->visible(), 'media'])
-            ->where('id', $id)
+            ->where(function ($query) use ($slug) {
+                $query->where('slug', $slug);
+                if (is_numeric($slug)) {
+                    $query->orWhere('id', (int) $slug);
+                }
+            })
             ->first();
 
         if (! $experience) {

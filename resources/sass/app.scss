@@ -68,13 +68,14 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .pill-navbar {
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(12px);
-    border: 2px solid var(--navy);
+    background: rgba(255, 255, 255, 0.90);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(10, 27, 61, 0.08);
     border-radius: 9999px;
-    box-shadow: 4px 4px 0px var(--navy);
-    padding: 0.6rem 1.4rem;
-    transition: border-radius 0.25s ease, box-shadow 0.2s ease;
+    box-shadow: 0 8px 32px rgba(10, 27, 61, 0.06);
+    padding: 0.55rem 1.4rem;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
     @media (max-width: 991.98px) {
         width: 100%;
@@ -84,7 +85,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
         .navbar-collapse {
             padding-top: 1rem;
             margin-top: 0.5rem;
-            border-top: 2px dashed var(--blue-subtle);
+            border-top: 1px solid rgba(10, 27, 61, 0.08);
         }
 
         .navbar-nav {
@@ -113,24 +114,396 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     }
 }
 
+.inspo-brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5C46E5 0%, #38BDF8 100%);
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    box-shadow: 0 4px 14px rgba(92, 70, 229, 0.35);
+    flex-shrink: 0;
+}
+
 .nav-link-pill {
-    color: var(--navy);
-    font-weight: 700;
-    font-size: 0.95rem;
-    padding: 0.4rem 1rem !important;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 0.45rem 1rem !important;
     border-radius: 9999px;
     transition: all 0.2s ease;
 
     &:hover {
-        background-color: var(--blue-subtle);
-        color: var(--navy);
+        background-color: rgba(92, 70, 229, 0.08);
+        color: #5C46E5;
+    }
+
+    &.active {
+        background-color: rgba(92, 70, 229, 0.12);
+        color: #5C46E5;
+        font-weight: 700;
     }
 }
 
-// Hero Typography & Highlight
+// ==========================================
+// Bento Hero Stage Banner (Senior Designer & Front-End Redesign)
+// ==========================================
+.hero-brand-stage {
+    background: linear-gradient(140deg, #FFFFFF 0%, #F1F6FD 45%, #EAF2FC 100%);
+    border-radius: 32px;
+    padding: 3.5rem 3rem 2.5rem 3rem;
+    box-shadow: 0 20px 50px -15px rgba(10, 27, 61, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+    border: 1px solid rgba(14, 165, 233, 0.16);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: -120px;
+        right: -80px;
+        width: 440px;
+        height: 440px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(92, 70, 229, 0.14) 0%, rgba(56, 189, 248, 0.08) 50%, transparent 70%);
+        filter: blur(50px);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -120px;
+        left: -60px;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(245, 158, 11, 0.10) 0%, rgba(244, 63, 94, 0.07) 50%, transparent 70%);
+        filter: blur(50px);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    @media (max-width: 991.98px) {
+        padding: 2.5rem 1.75rem 2rem 1.75rem;
+        border-radius: 26px;
+    }
+
+    @media (max-width: 576px) {
+        padding: 2rem 1.25rem 1.75rem 1.25rem;
+        border-radius: 22px;
+    }
+}
+
+.hero-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.42rem 1.05rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.25s ease;
+
+    &:hover {
+        transform: translateY(-1px);
+    }
+}
+
+.hero-pill-available {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.12);
+}
+
+.hero-pill-location {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #0A1B3D;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    box-shadow: 0 4px 12px rgba(10, 27, 61, 0.04);
+}
+
+.hero-pill-role {
+    background-color: rgba(92, 70, 229, 0.08);
+    color: #5C46E5;
+    border: 1px solid rgba(92, 70, 229, 0.22);
+    box-shadow: 0 4px 12px rgba(92, 70, 229, 0.06);
+}
+
+.status-pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #10B981;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    animation: pulseDot 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes pulseDot {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+.hero-stage-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(1.85rem, 2.6vw, 2.45rem);
+    font-weight: 800;
+    color: #0A1B3D;
+    line-height: 1.24;
+    letter-spacing: -0.025em;
+}
+
+.hero-stage-highlight {
+    background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
+.hero-stage-highlight-blue {
+    background: linear-gradient(135deg, #0284C7 0%, #2563EB 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
+.hero-stage-desc {
+    font-size: 1.05rem;
+    color: #334155;
+    line-height: 1.68;
+    max-width: 620px;
+
+    @media (max-width: 576px) {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+}
+
+// Bento Vibrant Action Buttons
+.btn-hero-purple {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.85rem 2.1rem;
+    background: linear-gradient(135deg, #5C46E5 0%, #4338CA 100%);
+    color: #FFFFFF !important;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    box-shadow: 0 8px 25px rgba(92, 70, 229, 0.38);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+
+    &:hover {
+        background: linear-gradient(135deg, #4F38D9 0%, #372EBE 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(92, 70, 229, 0.48);
+        color: #FFFFFF !important;
+
+        i {
+            transform: translateX(4px);
+        }
+    }
+
+    i {
+        transition: transform 0.2s ease;
+    }
+}
+
+.btn-hero-white {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.9rem;
+    background-color: #FFFFFF;
+    color: #0A1B3D !important;
+    font-weight: 700;
+    font-size: 0.98rem;
+    border-radius: 9999px;
+    border: 1.5px solid rgba(10, 27, 61, 0.12);
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(10, 27, 61, 0.05);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+
+    &:hover {
+        background-color: #F8FAFD;
+        color: #5C46E5 !important;
+        border-color: #5C46E5;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(10, 27, 61, 0.09);
+    }
+}
+
+.hero-stage-bio {
+    background-color: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 30px rgba(10, 27, 61, 0.05);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 34px rgba(10, 27, 61, 0.08);
+    }
+}
+
+// Bento 3D Studio Showcase in Hero Right Column
+.hero-studio-stage {
+    position: relative;
+    padding: 1.5rem 0.5rem;
+}
+
+.hero-studio-card {
+    max-width: 380px;
+    background-color: #FFFFFF;
+    border-radius: 26px;
+    box-shadow: 0 24px 55px -12px rgba(10, 27, 61, 0.16), 0 0 0 1px rgba(10, 27, 61, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+    overflow: hidden;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 30px 65px -12px rgba(10, 27, 61, 0.22);
+    }
+}
+
+.hero-studio-photo-wrap {
+    height: 380px;
+    background-color: #F8FAFD;
+    position: relative;
+
+    .project-thumbnail-overlay {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        background: rgba(10, 27, 61, 0.55);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        transition: opacity 0.25s ease, visibility 0.25s ease;
+        z-index: 10;
+    }
+
+    &:hover .project-thumbnail-overlay,
+    &:focus-within .project-thumbnail-overlay {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+}
+
+.hero-studio-photo {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+
+    &:hover {
+        transform: scale(1.03);
+    }
+}
+
+// Floating Bento Pills & Badges (Matching Cards Theme - Carefully positioned away from text & photo center)
+.hero-float-pill {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 20px;
+    padding: 0.75rem 1.15rem;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 14px 32px rgba(10, 27, 61, 0.12);
+    z-index: 5;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+
+    &:hover {
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 18px 40px rgba(10, 27, 61, 0.18);
+    }
+}
+
+// Top Left Satellite: Sky Blue System Analyst
+.hero-float-pill-1 {
+    top: 2rem;
+    left: -2.5rem;
+
+    @media (max-width: 1199.98px) {
+        left: -1rem;
+    }
+}
+
+// Middle Right Satellite: Rose Coral / Backend (Positioned safely above card bottom text)
+.hero-float-pill-2 {
+    top: 8rem;
+    right: -2.5rem;
+
+    @media (max-width: 1199.98px) {
+        right: -1rem;
+    }
+}
+
+// Mid-Lower Left Satellite: Amber Industrial (Positioned beside photo, NEVER overlapping bottom name text)
+.hero-float-pill-3 {
+    top: 15rem;
+    left: -2.5rem;
+
+    @media (max-width: 1199.98px) {
+        left: -1rem;
+    }
+}
+
+// Hero Indicator Dots Pill (Ala BrandSurge Hero Dots)
+.hero-dots-pill {
+    border: 1px solid rgba(10, 27, 61, 0.08);
+}
+
+.hero-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #94A3B8;
+    display: inline-block;
+    transition: all 0.25s ease;
+
+    &.active {
+        width: 22px;
+        border-radius: 9999px;
+        background-color: #0A1B3D;
+    }
+}
+
+// Hero Typography & Highlight (Legacy Fallback)
 .hero-title {
-    font-size: clamp(2rem, 5.5vw, 4.2rem);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+    font-weight: 800;
+    color: #0A1B3D;
     line-height: 1.15;
+    letter-spacing: -0.025em;
 
     @media (max-width: 576px) {
         font-size: 2.1rem;
@@ -139,36 +512,99 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .hero-highlight {
-    background-color: var(--electric);
-    color: #FFFFFF;
-    padding: 0.15rem 0.6rem;
-    border-radius: 12px;
-    display: inline-block;
-    box-shadow: 3px 3px 0px var(--navy);
+    background: linear-gradient(135deg, #5C46E5 0%, #38BDF8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    display: inline;
+}
 
-    @media (max-width: 576px) {
-        box-shadow: 2px 2px 0px var(--navy);
-        border-radius: 10px;
+// Hero Status Pills
+.inspo-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.03em;
+    transition: all 0.2s ease;
+
+    i {
+        flex-shrink: 0;
     }
 }
 
-// Stickers
+.inspo-status-available {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.22);
+}
+
+.inspo-status-location {
+    background: #FFFFFF;
+    color: #475569;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    box-shadow: 0 2px 10px rgba(10, 27, 61, 0.04);
+}
+
+.status-pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #10B981;
+    display: inline-block;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    animation: pulseGreen 2s infinite;
+}
+
+@keyframes pulseGreen {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+.inspo-bio-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    box-shadow: 0 4px 20px rgba(10, 27, 61, 0.04);
+    transition: all 0.25s ease;
+
+    &:hover {
+        border-color: rgba(92, 70, 229, 0.2);
+        box-shadow: 0 8px 24px rgba(10, 27, 61, 0.06);
+    }
+}
+
+// Stickers & Legacy Badges (Modernized to clean pill design)
 .sticker {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.45rem 1rem;
-    border: 2px solid var(--navy);
+    padding: 0.4rem 0.95rem;
+    border: 1px solid rgba(10, 27, 61, 0.08);
     border-radius: 9999px;
-    font-weight: 800;
-    font-size: 0.88rem;
-    box-shadow: 3px 3px 0px var(--navy);
+    font-weight: 700;
+    font-size: 0.84rem;
+    box-shadow: 0 2px 8px rgba(10, 27, 61, 0.04);
     max-width: 100%;
     white-space: normal;
     word-break: break-word;
     line-height: 1.35;
     text-align: left;
     box-sizing: border-box;
+    transform: none !important;
 
     i {
         flex-shrink: 0;
@@ -177,154 +613,198 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     @media (max-width: 576px) {
         padding: 0.35rem 0.75rem;
         font-size: 0.8rem;
-        border-radius: 16px;
-        box-shadow: 2px 2px 0px var(--navy);
-        gap: 0.35rem;
     }
 }
 
-.sticker-yellow {
-    background-color: var(--yellow);
-    color: var(--navy);
-    transform: rotate(-2deg);
-
-    @media (max-width: 576px) {
-        transform: rotate(-1deg);
-    }
+// Modern Bento Pill Badges & Stickers
+.sticker, .bento-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.95rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
 }
 
-.sticker-blue {
-    background-color: var(--blue-subtle);
-    color: var(--navy);
-    transform: rotate(2deg);
-
-    @media (max-width: 576px) {
-        transform: rotate(1deg);
-    }
+.sticker-yellow, .bento-badge-amber {
+    background-color: #FEF3C7;
+    color: #B45309;
+    border-color: #FDE68A;
 }
 
-.sticker-electric {
-    background-color: var(--electric);
+.sticker-blue, .bento-badge-blue {
+    background-color: #E0F2FE;
+    color: #0369A1;
+    border-color: #BAE6FD;
+}
+
+.sticker-electric, .bento-badge-electric {
+    background: linear-gradient(135deg, #5C46E5 0%, #4338CA 100%);
     color: #FFFFFF;
-    transform: rotate(-2deg);
-
-    @media (max-width: 576px) {
-        transform: rotate(-1deg);
-    }
+    border-color: transparent;
+    box-shadow: 0 2px 10px rgba(92, 70, 229, 0.25);
 }
 
-// Modern Cards
-.card-genz {
+.bento-badge-purple {
+    background-color: #F3E8FF;
+    color: #7E22CE;
+    border-color: #E9D5FF;
+}
+
+.bento-badge-green {
+    background-color: #D1FAE5;
+    color: #047857;
+    border-color: #A7F3D0;
+}
+
+.bento-badge-rose {
+    background-color: #FFE4E6;
+    color: #BE123C;
+    border-color: #FECDD3;
+}
+
+// Bento Cards (Modern, Rounded 28px, Soft Elevation)
+.card-genz, .bento-detail-card {
     background: #FFFFFF;
-    border: 2px solid var(--navy) !important;
-    border-radius: 24px !important;
-    box-shadow: 6px 6px 0px var(--navy) !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(10, 27, 61, 0.08) !important;
+    border-radius: 28px !important;
+    box-shadow: 0 10px 30px -5px rgba(10, 27, 61, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.8) inset !important;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
 
     &:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 8px 8px 0px var(--navy) !important;
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px -8px rgba(10, 27, 61, 0.1) !important;
+        border-color: rgba(92, 70, 229, 0.22) !important;
     }
 
     @media (max-width: 576px) {
-        border-radius: 18px !important;
-        box-shadow: 4px 4px 0px var(--navy) !important;
+        border-radius: 20px !important;
+        box-shadow: 0 4px 16px rgba(10, 27, 61, 0.04) !important;
 
         &:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 5px 5px 0px var(--navy) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(10, 27, 61, 0.08) !important;
         }
     }
 }
 
 .card-genz-blue {
-    background-color: var(--blue-light);
-    border: 2px solid var(--navy);
-    border-radius: 24px;
-    box-shadow: 6px 6px 0px var(--navy);
-
-    @media (max-width: 576px) {
-        border-radius: 18px;
-        box-shadow: 4px 4px 0px var(--navy);
-    }
+    background: linear-gradient(145deg, #FFFFFF 0%, #F6FAFE 100%);
+    border: 1px solid rgba(14, 165, 233, 0.16);
+    border-radius: 26px;
+    box-shadow: 0 8px 24px rgba(10, 27, 61, 0.04);
 }
 
-// Interactive Buttons
-.btn-genz {
+// Interactive Pill Buttons (Modern Bento Design)
+.btn-genz, .btn-bento-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    min-height: 46px;
-    padding: 0.6rem 1.6rem;
+    min-height: 44px;
+    padding: 0.65rem 1.6rem;
     font-weight: 700;
+    font-size: 0.95rem;
     border-radius: 9999px;
-    border: 2px solid var(--navy);
-    box-shadow: 4px 4px 0px var(--navy);
-    transition: all 0.15s ease;
+    border: none;
+    box-shadow: 0 6px 18px rgba(92, 70, 229, 0.3);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     text-decoration: none;
+    background: linear-gradient(135deg, #5C46E5 0%, #4338CA 100%);
+    color: #FFFFFF !important;
 
     &:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 6px 6px 0px var(--navy);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 26px rgba(92, 70, 229, 0.42);
+        color: #FFFFFF !important;
     }
 
     &:active {
-        transform: translate(2px, 2px);
-        box-shadow: 2px 2px 0px var(--navy);
+        transform: translateY(0);
     }
+}
 
-    @media (max-width: 576px) {
-        padding: 0.5rem 1.25rem;
-        box-shadow: 3px 3px 0px var(--navy);
+.btn-genz-secondary, .btn-bento-secondary {
+    background: #FFFFFF !important;
+    color: #0A1B3D !important;
+    border: 1.5px solid rgba(10, 27, 61, 0.12) !important;
+    box-shadow: 0 3px 12px rgba(10, 27, 61, 0.04);
 
-        &:hover {
-            box-shadow: 4px 4px 0px var(--navy);
-        }
+    &:hover {
+        background-color: #F8FAFD !important;
+        color: #5C46E5 !important;
+        border-color: #5C46E5 !important;
+        box-shadow: 0 6px 18px rgba(10, 27, 61, 0.08);
+    }
+}
+
+.btn-genz-yellow, .btn-bento-amber {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    box-shadow: 0 6px 18px rgba(217, 119, 6, 0.3);
+
+    &:hover {
+        background: linear-gradient(135deg, #EAB308 0%, #B45309 100%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 26px rgba(217, 119, 6, 0.42);
+        color: #FFFFFF !important;
+    }
+}
+
+.btn-bento-purple {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    box-shadow: 0 6px 18px rgba(109, 40, 217, 0.3);
+
+    &:hover {
+        background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 26px rgba(109, 40, 217, 0.42);
+        color: #FFFFFF !important;
     }
 }
 
 .btn-genz-primary {
-    background-color: var(--navy-primary);
-    color: #FFFFFF;
-
-    &:hover {
-        color: #FFFFFF;
-        background-color: $brand-navy-hover;
-    }
-}
-
-.btn-genz-secondary {
-    background-color: #FFFFFF;
-    color: var(--navy);
-
-    &:hover {
-        background-color: var(--blue-subtle);
-        color: var(--navy);
-    }
-}
-
-.btn-genz-yellow {
-    background-color: var(--yellow);
-    color: var(--navy);
-
-    &:hover {
-        background-color: darken(#FFE14D, 5%);
-        color: var(--navy);
-    }
+    background: linear-gradient(135deg, #5C46E5 0%, #4338CA 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
 }
 
 // Pills and Tags
 .pill-tag {
     display: inline-flex;
     align-items: center;
-    padding: 0.35rem 0.9rem;
-    font-size: 0.85rem;
-    font-weight: 700;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 600;
     border-radius: 9999px;
-    border: 1.5px solid var(--navy);
-    background-color: var(--blue-light);
-    color: var(--navy);
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    background-color: #F1F5F9;
+    color: #334155;
 }
 
 // Tech Stack Marquee (Brand Logo Ticker - Height 150px)
@@ -474,32 +954,521 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     }
 }
 
-// Progress Bar for Skills
+// ==========================================
+// Bento Grid Showcase (Ala Gambar 1)
+// ==========================================
+.bento-showcase-section {
+    position: relative;
+}
+
+.bento-main-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 2.15rem;
+    font-weight: 800;
+    color: #0A1B3D;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+
+    @media (max-width: 768px) {
+        font-size: 1.65rem;
+    }
+}
+
+.btn-bento-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.6rem;
+    background-color: #5C46E5;
+    color: #FFFFFF !important;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(92, 70, 229, 0.35);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+
+    &:hover {
+        background-color: #4933d1;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(92, 70, 229, 0.45);
+        color: #FFFFFF !important;
+    }
+
+    i {
+        transition: transform 0.2s ease;
+    }
+
+    &:hover i {
+        transform: translateX(4px);
+    }
+}
+
+.bento-grid-container {
+    margin-top: 0.5rem;
+}
+
+.bento-card {
+    position: relative;
+    border-radius: 28px;
+    overflow: hidden;
+    padding: 2.15rem 2rem 2rem 2rem;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none;
+    box-shadow: 0 12px 30px -8px rgba(10, 27, 61, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 24px 44px -10px rgba(10, 27, 61, 0.22);
+    }
+
+    @media (max-width: 576px) {
+        border-radius: 22px;
+        padding: 1.75rem 1.5rem;
+    }
+
+    .bento-card-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+}
+
+// Card Color Themes (Faithfully Matched to Reference Image)
+.bento-card-sky {
+    background: linear-gradient(145deg, #0ea5e9 0%, #0284c7 100%);
+    min-height: 285px;
+}
+
+.bento-card-amber {
+    background: linear-gradient(145deg, #f59e0b 0%, #d97706 100%);
+    min-height: 295px;
+}
+
+.bento-card-cyan {
+    background: linear-gradient(145deg, #0284c7 0%, #0f766e 100%);
+    min-height: 335px;
+}
+
+.bento-card-royal {
+    background: linear-gradient(145deg, #3b82f6 0%, #1d4ed8 100%);
+    min-height: 245px;
+}
+
+.bento-card-purple {
+    background: linear-gradient(145deg, #8b5cf6 0%, #6d28d9 100%);
+    min-height: 295px;
+}
+
+.bento-card-coral {
+    background: linear-gradient(145deg, #f43f5e 0%, #e11d48 100%);
+    min-height: 285px;
+}
+
+// Elements inside cards
+.bento-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.7rem;
+    background-color: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 9999px;
+    width: fit-content;
+    margin-bottom: 0.95rem;
+    text-transform: uppercase;
+}
+
+.bento-number-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.bento-stat-number {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 2.9rem;
+    font-weight: 800;
+    line-height: 1;
+    color: #FFFFFF;
+    letter-spacing: -0.03em;
+}
+
+.bento-stat-label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.bento-card-heading {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.015em;
+}
+
+.bento-desc {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.92);
+    margin-bottom: 1.25rem;
+    font-weight: 400;
+}
+
+.bento-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    text-decoration: none;
+    margin-top: auto;
+    width: fit-content;
+    padding-bottom: 2px;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-bottom-color: #FFFFFF;
+        color: #FFFFFF !important;
+        transform: translateX(3px);
+    }
+}
+
+.btn-bento-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.3rem;
+    background-color: #FFFFFF;
+    color: #1d4ed8 !important;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    text-decoration: none;
+    margin-top: auto;
+    width: fit-content;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: #F8FAFD;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+        color: #1d4ed8 !important;
+    }
+}
+
+// Quote Card
+.bento-quote-text {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.45;
+    color: #FFFFFF;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.bento-quote-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.bento-avatar-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+// Tags wrap
+.bento-tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: auto;
+}
+
+.bento-tag {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.28rem 0.7rem;
+    background-color: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 9999px;
+    color: #FFFFFF;
+}
+
+// Visual Background Graphics inside Cards
+.bento-visual {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    z-index: 1;
+    opacity: 0.16;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.bento-card:hover .bento-visual {
+    opacity: 0.26;
+    transform: scale(1.06);
+}
+
+.bento-visual-building,
+.bento-visual-team,
+.bento-visual-layers,
+.bento-visual-award,
+.bento-visual-diagram {
+    right: 1.25rem;
+    bottom: 1.25rem;
+    font-size: 5.5rem;
+    line-height: 1;
+}
+
+.bento-visual-quote-bg {
+    right: -1rem;
+    bottom: -1.5rem;
+    font-size: 9.5rem;
+    line-height: 1;
+    opacity: 0.1 !important;
+}
+
+.bento-visual-code {
+    right: 1.25rem;
+    bottom: 1.25rem;
+    width: 145px;
+
+    .bento-mock-window {
+        background-color: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-radius: 12px;
+        padding: 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+
+        .mock-header {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 0.55rem;
+
+            .dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.7);
+            }
+        }
+
+        .mock-body {
+            font-size: 0.75rem;
+            color: #FFFFFF;
+            font-family: monospace;
+
+            .mock-line {
+                height: 4px;
+                background-color: rgba(255, 255, 255, 0.35);
+                border-radius: 2px;
+                margin-top: 6px;
+            }
+        }
+    }
+}
+
+// Modern Progress Bars for Skills
+.progress-modern {
+    height: 8px;
+    background-color: #E2E8F0;
+    border-radius: 9999px;
+    overflow: hidden;
+    position: relative;
+
+    .progress-bar-modern {
+        background: linear-gradient(90deg, #5C46E5 0%, #38BDF8 100%);
+        height: 100%;
+        border-radius: 9999px;
+        transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    &.progress-modern-green,
+    .progress-bar-modern-green {
+        background: linear-gradient(90deg, #059669 0%, #10B981 50%, #34D399 100%);
+    }
+}
+
+// Legacy .progress-genz compatibility
 .progress-genz {
-    height: 18px;
-    background-color: var(--blue-light);
-    border: 2px solid var(--navy);
+    height: 8px;
+    background-color: #E2E8F0;
+    border: none;
     border-radius: 9999px;
     overflow: hidden;
 
     .progress-bar-genz {
-        background-color: var(--electric);
+        background: linear-gradient(90deg, #5C46E5 0%, #38BDF8 100%);
         height: 100%;
         border-radius: 9999px;
-        transition: width 1s ease-in-out;
+        transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+}
+
+// Section Header with Pill
+.inspo-section-pill {
+    display: inline-block;
+    background: rgba(92, 70, 229, 0.08);
+    color: #5C46E5;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(92, 70, 229, 0.18);
+    margin-bottom: 0.75rem;
+
+    @media (max-width: 576px) {
+        font-size: 0.76rem;
+        padding: 0.28rem 0.8rem;
+    }
+}
+
+.section-pill {
+    display: inline-block;
+    background: rgba(92, 70, 229, 0.08);
+    color: #5C46E5;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(92, 70, 229, 0.18);
+    margin-bottom: 0.75rem;
+}
+
+// Prose & Article Content (High Contrast Black Typography)
+.prose {
+    color: #000000 !important;
+
+    p, span, li, div, strong, em {
+        color: #000000 !important;
+    }
+
+    p {
+        margin-bottom: 1rem;
+        line-height: 1.7;
+    }
+}
+
+// Modern Skill Tag Pills (Soft & Analysis)
+.inspo-skill-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.95rem;
+    border-radius: 9999px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+.analysis-skill-card {
+    background: #F8FAFD;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    border-radius: 16px;
+    padding: 0.85rem 1.15rem;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+        transform: translateY(-2px);
+        background-color: #FFFFFF !important;
+        box-shadow: 0 8px 22px rgba(10, 27, 61, 0.07);
+        border-color: rgba(92, 70, 229, 0.3) !important;
+    }
+}
+
+.analysis-icon-box {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 12px;
+    background: rgba(92, 70, 229, 0.1);
+    color: #5C46E5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+}
+
+.analysis-skill-card:hover .analysis-icon-box {
+    background: #5C46E5;
+    color: #FFFFFF;
+}
+
+// Guarantee inactive tab panes are fully hidden without taking vertical flow space
+.tab-content > .tab-pane:not(.active) {
+    display: none !important;
+}
+
+.inspo-skill-pill-green {
+    background-color: rgba(16, 185, 129, 0.08);
+    color: #065F46;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+
+    &:hover {
+        background-color: rgba(16, 185, 129, 0.15);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.12);
+    }
+}
+
+.inspo-skill-pill-indigo {
+    background-color: rgba(92, 70, 229, 0.08);
+    color: #3730A3;
+    border: 1px solid rgba(92, 70, 229, 0.2);
+
+    &:hover {
+        background-color: rgba(92, 70, 229, 0.14);
+        box-shadow: 0 4px 12px rgba(92, 70, 229, 0.15);
     }
 }
 
 // Quotes Banner
 .quote-banner {
-    background: linear-gradient(135deg, var(--blue-light) 0%, var(--blue-subtle) 100%);
-    border: 2px solid var(--navy);
-    border-radius: 24px;
-    box-shadow: 6px 6px 0px var(--navy);
+    background: linear-gradient(135deg, #F8FAFD 0%, #EDF2F9 100%);
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(10, 27, 61, 0.05);
 
     @media (max-width: 576px) {
-        border-radius: 18px;
-        box-shadow: 4px 4px 0px var(--navy);
+        border-radius: 16px;
         padding: 1.5rem 1rem !important;
 
         p.fs-3 {
@@ -508,33 +1477,13 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     }
 }
 
-// Section Header with Pill
-.section-pill {
-    display: inline-block;
-    background-color: var(--blue-subtle);
-    color: var(--navy);
-    font-size: 0.85rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 0.3rem 1rem;
-    border-radius: 9999px;
-    border: 1.5px solid var(--navy);
-    margin-bottom: 0.75rem;
-
-    @media (max-width: 576px) {
-        font-size: 0.78rem;
-        padding: 0.25rem 0.8rem;
-    }
-}
-
 // Footer
 .footer-genz {
-    border-top: 2px solid var(--navy);
+    border-top: 1px solid rgba(10, 27, 61, 0.08);
     background-color: #FFFFFF;
 }
 
-// Gen-Z Experience Carousel & Sliders
+// Carousel & Sliders
 .carousel-genz {
     .carousel-inner {
         overflow: hidden;
@@ -557,26 +1506,52 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     }
 }
 
+// Modern Carousel Indicators
+.carousel-indicators-modern {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+
+    .carousel-indicator-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #CBD5E1;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+        &.active {
+            width: 24px;
+            border-radius: 9999px;
+            background-color: #5C46E5;
+        }
+    }
+}
+
+// Legacy compatibility for carousel-indicators-genz
 .carousel-indicators-genz {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
 
     .carousel-indicator-pill {
-        width: 12px;
-        height: 12px;
-        border-radius: 9999px;
-        border: 2px solid var(--navy);
-        background-color: #FFFFFF;
-        box-shadow: 2px 2px 0px var(--navy);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: none;
+        background-color: #CBD5E1;
         cursor: pointer;
         padding: 0;
         transition: all 0.25s ease;
 
         &.active {
-            width: 32px;
-            background-color: var(--electric);
+            width: 24px;
+            border-radius: 9999px;
+            background-color: #5C46E5;
         }
     }
 }
@@ -585,30 +1560,31 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background-color: #FFFFFF;
-    border: 2px solid var(--navy);
-    box-shadow: 4px 4px 0px var(--navy);
-    color: var(--navy);
+    border: 1px solid rgba(10, 27, 61, 0.12);
+    box-shadow: 0 4px 14px rgba(10, 27, 61, 0.08);
+    color: #475569;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.15s ease;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
     z-index: 20;
 
     &:hover {
-        background-color: var(--yellow);
-        transform: translateY(-50%) translate(-2px, -2px);
-        box-shadow: 6px 6px 0px var(--navy);
-        color: var(--navy);
+        background-color: #5C46E5;
+        border-color: #5C46E5;
+        color: #FFFFFF;
+        transform: translateY(-50%) translateY(-2px);
+        box-shadow: 0 8px 20px rgba(92, 70, 229, 0.3);
     }
 
     &:active {
-        transform: translateY(-50%) translate(2px, 2px);
-        box-shadow: 2px 2px 0px var(--navy);
+        transform: translateY(-50%) translateY(1px);
+        box-shadow: 0 2px 6px rgba(10, 27, 61, 0.1);
     }
 }
 
@@ -620,23 +1596,16 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     right: -24px;
 }
 
-// Project Slider (Responsive: 2 on desktop, 1 on mobile, smooth scroll & snap)
+// Generic Responsive 2-Container Slider (Ala Gambar 2: Max 2 Container pada Desktop)
+.slider-container-3col,
+.slider-container-2col,
 .project-slider-container {
     position: relative;
+    width: 100%;
 }
 
-.project-slider-wrapper {
-    position: relative;
-    overflow: hidden;
-    padding: 12px 12px 26px 12px;
-    margin: -12px -12px -26px -12px;
-
-    @media (max-width: 576px) {
-        padding: 8px 8px 20px 8px;
-        margin: -8px -8px -20px -8px;
-    }
-}
-
+.slider-track-3col,
+.slider-track-2col,
 .project-slider-track {
     display: flex;
     gap: 1.5rem;
@@ -648,10 +1617,13 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     -ms-overflow-style: none;
     cursor: grab;
     user-select: none;
-    touch-action: pan-y pinch-zoom;
+    padding: 0.5rem 0.25rem 1.5rem 0.25rem;
+    margin: -0.5rem -0.25rem -1.5rem -0.25rem;
 
-    @media (max-width: 576px) {
+    @media (max-width: 639.98px) {
         gap: 1rem;
+        padding: 0.25rem 0.15rem 1rem 0.15rem;
+        margin: -0.25rem -0.15rem -1rem -0.15rem;
     }
 
     &::-webkit-scrollbar {
@@ -670,21 +1642,185 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     }
 }
 
-.project-slide-item {
-    // Mobile (< 992px): Exactly 1 project card per view
+// 2-Column Slider Items (Desktop: Max 2 container, Mobile: 1 container)
+.slider-item-2col,
+.project-slide-item,
+.internship-slide-item,
+.organization-slide-item,
+.experience-slide-item {
+    // Mobile (< 992px): Exactly 1 card per view (100%)
     flex: 0 0 100%;
-    min-width: 0;
+    max-width: 100%;
+    min-width: 100%;
+    width: 100%;
     scroll-snap-align: start;
     display: flex;
 
-    // Desktop (>= 992px): Exactly 2 project cards per view side-by-side
+    // Desktop (>= 992px): Exactly 2 cards per view (Max 2 Container! Equal Width)
     @media (min-width: 992px) {
         flex: 0 0 calc(50% - 0.75rem);
+        max-width: calc(50% - 0.75rem);
+        min-width: calc(50% - 0.75rem);
+        width: calc(50% - 0.75rem);
     }
 
-    > .card-genz {
-        width: 100%;
+    > .inspo-card,
+    > .card-genz,
+    > .bento-card,
+    > .bento-experience-card {
+        width: 100% !important;
+        height: 100% !important;
     }
+}
+
+// 3-Column Slider Items (Desktop: Max 3 container, Tablet: 2 container, Mobile: 1 container)
+.slider-item-3col,
+.certification-slide-item {
+    // Mobile (< 640px): Exactly 1 card per view (100% width)
+    flex: 0 0 100%;
+    max-width: 100%;
+    min-width: 100%;
+    width: 100%;
+    scroll-snap-align: start;
+    display: flex;
+
+    // Tablet (640px - 1024px): Exactly 2 cards per view (50%)
+    @media (min-width: 640px) and (max-width: 1024px) {
+        flex: 0 0 calc(50% - 0.75rem);
+        max-width: calc(50% - 0.75rem);
+        min-width: calc(50% - 0.75rem);
+        width: calc(50% - 0.75rem);
+    }
+
+    // Desktop (> 1024px): Exactly 3 cards per view (Max 3 Container!)
+    @media (min-width: 1024.02px) {
+        flex: 0 0 calc((100% - 3rem) / 3);
+        max-width: calc((100% - 3rem) / 3);
+        min-width: calc((100% - 3rem) / 3);
+        width: calc((100% - 3rem) / 3);
+    }
+
+    > .inspo-card {
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+
+// Circular Slider Navigation Buttons (Mobile touch target >= 44x44px)
+.btn-slider-nav {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(10, 27, 61, 0.14);
+    color: #0A1B3D;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px rgba(10, 27, 61, 0.04);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+        background-color: #0A1B3D;
+        border-color: #0A1B3D;
+        color: #FFFFFF;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(10, 27, 61, 0.15);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// ==========================================
+// Certification Card Badges & Logo Circle
+// (Guaranteed High Contrast & Visible Text)
+// ==========================================
+.cert-logo-circle {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1.5px solid rgba(10, 27, 61, 0.08);
+    box-shadow: 0 2px 8px rgba(10, 27, 61, 0.04);
+    background-color: #FFFFFF;
+    flex-shrink: 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    i {
+        font-size: 1.5rem;
+    }
+}
+
+.cert-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    padding: 0.35rem 0.85rem !important;
+    border-radius: 9999px !important;
+    letter-spacing: 0.2px;
+    line-height: 1.3 !important;
+    text-decoration: none !important;
+}
+
+.cert-badge-hki {
+    background-color: rgba(14, 165, 233, 0.12) !important;
+    color: #0369a1 !important;
+    border: 1px solid rgba(14, 165, 233, 0.28) !important;
+}
+
+.cert-badge-magang {
+    background-color: rgba(245, 158, 11, 0.14) !important;
+    color: #b45309 !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+
+.cert-badge-kinerja {
+    background-color: rgba(239, 68, 68, 0.12) !important;
+    color: #b91c1c !important;
+    border: 1px solid rgba(239, 68, 68, 0.28) !important;
+}
+
+.cert-badge-organisasi {
+    background-color: rgba(139, 92, 246, 0.14) !important;
+    color: #6d28d9 !important;
+    border: 1px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+.cert-badge-akademik {
+    background-color: rgba(16, 185, 129, 0.12) !important;
+    color: #047857 !important;
+    border: 1px solid rgba(16, 185, 129, 0.28) !important;
+}
+
+.cert-badge-blueprint {
+    background-color: rgba(59, 130, 246, 0.12) !important;
+    color: #1d4ed8 !important;
+    border: 1px solid rgba(59, 130, 246, 0.28) !important;
+}
+
+.cert-badge-default {
+    background-color: rgba(100, 116, 139, 0.12) !important;
+    color: #334155 !important;
+    border: 1px solid rgba(100, 116, 139, 0.28) !important;
 }
 
 .project-nav-prev {
@@ -695,26 +1831,26 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     right: -24px;
 }
 
-// Experience Logo Box (Aesthetic Neo-Brutalism Avatar)
+// Experience Logo Box (Clean Modern Avatar)
 .experience-logo-box {
     width: 68px;
     height: 68px;
     background-color: #FFFFFF;
-    border: 2px solid var(--navy);
+    border: 1px solid rgba(10, 27, 61, 0.08);
     border-radius: 16px;
-    box-shadow: 3px 3px 0px var(--navy);
+    box-shadow: 0 4px 14px rgba(10, 27, 61, 0.06);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 6px;
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
     @media (max-width: 576px) {
         width: 54px;
         height: 54px;
         border-radius: 12px;
-        box-shadow: 2px 2px 0px var(--navy);
+        box-shadow: 0 2px 8px rgba(10, 27, 61, 0.04);
         padding: 4px;
     }
 
@@ -731,9 +1867,10 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     }
 }
 
+.inspo-card:hover .experience-logo-box,
 .card-genz:hover .experience-logo-box {
-    transform: rotate(-2deg) scale(1.03);
-    box-shadow: 5px 5px 0px var(--navy);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(10, 27, 61, 0.1);
 }
 
 // Project Thumbnail & Image Lightbox Styling
@@ -803,15 +1940,1231 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     }
 }
 
-// Blueprint Vault Callout Card in Skills section
+// Blueprint Vault Callout Card in Skills section (Modern Indigo Gradient)
 .blueprint-vault-card {
-    background: linear-gradient(135deg, var(--blue-light) 0%, rgba(255, 225, 77, 0.22) 100%);
-    box-shadow: 4px 4px 0px var(--navy);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4338CA 100%);
+    border-radius: 22px;
+    box-shadow: 0 14px 36px rgba(30, 27, 75, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
 
     &:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 6px 6px 0px var(--navy);
+        transform: translateY(-3px);
+        box-shadow: 0 20px 44px rgba(30, 27, 75, 0.3);
+    }
+
+    .blueprint-badge-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: rgba(255, 255, 255, 0.18);
+        color: #FFFFFF !important;
+        font-weight: 700;
+        font-size: 0.74rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        border-radius: 9999px;
+        padding: 0.32rem 0.85rem;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+    }
+
+    .blueprint-badge-white {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: #FFFFFF;
+        color: #1E1B4B !important;
+        font-weight: 800;
+        font-size: 0.76rem;
+        border-radius: 9999px;
+        padding: 0.32rem 0.95rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .blueprint-feature-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: rgba(255, 255, 255, 0.14);
+        color: #FFFFFF !important;
+        font-weight: 600;
+        font-size: 0.75rem;
+        border-radius: 9999px;
+        padding: 0.35rem 0.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .btn-blueprint-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        background-color: #FFFFFF !important;
+        color: #1E1B4B !important;
+        font-weight: 800;
+        font-size: 0.92rem;
+        border-radius: 9999px;
+        padding: 0.75rem 1.4rem;
+        border: none !important;
+        text-decoration: none;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+        span {
+            color: #1E1B4B !important;
+            font-weight: 800;
+        }
+
+        i {
+            color: #4338CA !important;
+            transition: transform 0.2s ease;
+        }
+
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: #F8FAFD !important;
+            color: #1E1B4B !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+
+            span {
+                color: #1E1B4B !important;
+            }
+
+            i {
+                transform: translateX(4px);
+            }
+        }
+    }
+}
+
+// ==========================================
+// Inspo Showcase & Clean Cards (Ala Reference Image)
+// ==========================================
+.inspo-section {
+    position: relative;
+}
+
+.inspo-header-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #0A1B3D;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+
+    @media (max-width: 768px) {
+        font-size: 1.7rem;
+    }
+}
+
+.inspo-header-subtitle {
+    font-size: 0.95rem;
+    color: #64748B;
+    margin-top: 0.35rem;
+    line-height: 1.5;
+}
+
+.btn-inspo-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.5rem;
+    background-color: #5C46E5;
+    color: #FFFFFF !important;
+    font-weight: 700;
+    font-size: 0.92rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(92, 70, 229, 0.32);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+
+    &:hover {
+        background-color: #4933d1;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(92, 70, 229, 0.42);
+        color: #FFFFFF !important;
+    }
+
+    i {
+        transition: transform 0.2s ease;
+    }
+
+    &:hover i {
+        transform: translateX(4px);
+    }
+}
+
+.inspo-card {
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    padding: 1.25rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    box-shadow: 0 4px 20px rgba(10, 27, 61, 0.04);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 32px rgba(10, 27, 61, 0.09);
+        border-color: rgba(92, 70, 229, 0.25);
+
+        .inspo-card-img {
+            transform: scale(1.04);
+        }
+
+        .inspo-card-title a {
+            color: #5C46E5;
+        }
+    }
+}
+
+// ==========================================
+// Modern Bento Cards: Proyek, Magang, Organisasi
+// ==========================================
+
+// 1. Proyek (Project Card with Sharp, Prominent Highlight Image)
+.project-bento-card {
+    background-color: #FFFFFF;
+    border-radius: 28px;
+    padding: 1.35rem;
+    width: 100%;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    box-shadow: 0 10px 30px -5px rgba(10, 27, 61, 0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+    overflow: hidden;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 42px -8px rgba(10, 27, 61, 0.12);
+        border-color: rgba(92, 70, 229, 0.25);
+
+        .project-preview-img {
+            transform: scale(1.035);
+        }
+
+        .project-preview-overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .project-card-title a {
+            color: #5C46E5;
+        }
+    }
+
+    @media (max-width: 576px) {
+        border-radius: 22px;
+        padding: 1.15rem;
+    }
+}
+
+.project-preview-stage {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    background-color: #F8FAFD;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    box-shadow: 0 4px 18px rgba(10, 27, 61, 0.04);
+    margin-bottom: 1.25rem;
+}
+
+.project-preview-bar {
+    background-color: #F8FAFD;
+    border-bottom: 1px solid rgba(10, 27, 61, 0.07);
+    height: 32px;
+    padding: 0 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.project-preview-screen {
+    position: relative;
+    height: 235px;
+    overflow: hidden;
+    background-color: #F1F5F9;
+
+    @media (max-width: 768px) {
+        height: 190px;
+    }
+}
+
+.project-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    image-rendering: -webkit-optimize-contrast;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 27, 61, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    z-index: 5;
+}
+
+.project-card-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0A1B3D;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+
+    a {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+}
+
+// Project Card Action Footer with 20% Opacity Background Overlay
+.project-action-overlay {
+    position: relative;
+    border-radius: 18px;
+    padding: 0.85rem 1rem;
+    overflow: hidden;
+    background-color: #F8FAFD;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+
+    .project-action-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        opacity: 0.20; // 20% opacity per user specification
+        filter: saturate(1.2);
+        pointer-events: none;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    }
+
+    .project-action-bg-fallback {
+        background: linear-gradient(135deg, rgba(92, 70, 229, 0.15) 0%, rgba(56, 189, 248, 0.15) 100%);
+    }
+
+    &:hover .project-action-bg {
+        transform: scale(1.08);
+        opacity: 0.30;
+    }
+
+    .project-action-content {
+        position: relative;
+        z-index: 2;
+    }
+}
+
+// 2. Magang (Corporate Internship Card with Featured Logo Spotlight)
+.internship-bento-card {
+    background-color: #FFFFFF;
+    border-radius: 28px;
+    padding: 1.5rem;
+    width: 100%;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    box-shadow: 0 10px 30px -5px rgba(217, 119, 6, 0.07);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+    overflow: hidden;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 42px -8px rgba(217, 119, 6, 0.15);
+        border-color: rgba(245, 158, 11, 0.35);
+
+        .internship-logo-box {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 12px 26px rgba(217, 119, 6, 0.18);
+        }
+
+        .internship-card-title a {
+            color: #D97706;
+        }
+    }
+
+    @media (max-width: 576px) {
+        border-radius: 22px;
+        padding: 1.15rem;
+    }
+}
+
+.internship-logo-stage {
+    background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 60%, #FFFFFF 100%);
+    border-radius: 22px;
+    padding: 1.25rem 1.4rem;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+        content: '\F1AD'; // bi-buildings-fill
+        font-family: 'bootstrap-icons';
+        position: absolute;
+        right: -8px;
+        bottom: -22px;
+        font-size: 5.5rem;
+        opacity: 0.07;
+        color: #D97706;
+        pointer-events: none;
+    }
+}
+
+.internship-logo-box {
+    width: 88px;
+    height: 88px;
+    background-color: #FFFFFF;
+    border-radius: 18px;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    box-shadow: 0 6px 20px rgba(10, 27, 61, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    flex-shrink: 0;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    .internship-logo-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+.internship-card-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.28rem;
+    font-weight: 800;
+    color: #0A1B3D;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+
+    a {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+}
+
+// 3. Organisasi (Leadership & Organization Card with Crest Showcase)
+.organization-bento-card {
+    background-color: #FFFFFF;
+    border-radius: 28px;
+    padding: 1.5rem;
+    width: 100%;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    box-shadow: 0 10px 30px -5px rgba(109, 40, 217, 0.07);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+    overflow: hidden;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 42px -8px rgba(109, 40, 217, 0.15);
+        border-color: rgba(139, 92, 246, 0.35);
+
+        .organization-crest-box {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 12px 26px rgba(109, 40, 217, 0.18);
+        }
+
+        .organization-card-title a {
+            color: #7C3AED;
+        }
+    }
+
+    @media (max-width: 576px) {
+        border-radius: 22px;
+        padding: 1.15rem;
+    }
+}
+
+.organization-crest-stage {
+    background: linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 60%, #FFFFFF 100%);
+    border-radius: 22px;
+    padding: 1.25rem 1.4rem;
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+        content: '\F4DA'; // bi-people-fill
+        font-family: 'bootstrap-icons';
+        position: absolute;
+        right: -8px;
+        bottom: -22px;
+        font-size: 5.5rem;
+        opacity: 0.07;
+        color: #7C3AED;
+        pointer-events: none;
+    }
+}
+
+.organization-crest-box {
+    width: 88px;
+    height: 88px;
+    background-color: #FFFFFF;
+    border-radius: 18px;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    box-shadow: 0 6px 20px rgba(10, 27, 61, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    flex-shrink: 0;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    .organization-crest-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+.organization-card-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.28rem;
+    font-weight: 800;
+    color: #0A1B3D;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+
+    a {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+}
+
+// ==========================================
+// Modern Bento Experience Cards (Ala Capaian Nyata)
+// ==========================================
+.bento-experience-card {
+    width: 100%;
+    height: 430px !important;
+    min-height: 430px !important;
+    max-height: 430px !important;
+    padding: 1.75rem;
+    border-radius: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+
+    .bento-card-heading {
+        font-size: 1.35rem;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: 2.6em; /* Guarantee all headings align baseline */
+    }
+
+    .bento-desc {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.55;
+        min-height: 4.6em; /* Guarantee all summaries take uniform space */
+    }
+
+    .bento-tags-row {
+        min-height: 32px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        overflow: hidden;
+    }
+
+    @media (max-width: 991.98px) {
+        height: auto !important;
+        min-height: 400px !important;
+        max-height: none !important;
+        padding: 1.5rem 1.25rem;
+        border-radius: 24px;
+
+        .bento-card-heading,
+        .bento-desc {
+            min-height: auto;
+        }
+    }
+}
+
+// Bulat (Circular) Logo Box for Magang & Organisasi (Equal Width x Height)
+.bento-logo-circle,
+.bento-crest-square {
+    width: 76px;
+    height: 76px;
+    min-width: 76px;
+    min-height: 76px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+    padding: 10px;
+    overflow: hidden;
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+
+    .bento-logo-img-circle,
+    .bento-crest-img-square {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 50%;
+    }
+}
+
+.bento-experience-card:hover {
+    .bento-logo-circle,
+    .bento-crest-square {
+        transform: translateY(-2px) scale(1.05);
+    }
+}
+
+.bento-date-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #FFFFFF;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.bento-tag-pill {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #FFFFFF;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.bento-highlights-box {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    padding: 0.75rem 1rem;
+}
+
+.btn-bento-icon-white {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: #FFFFFF;
+        color: #0A1B3D;
+        transform: translateY(-2px);
+    }
+}
+
+.btn-bento-pill.text-amber {
+    color: #b45309 !important;
+
+    &:hover {
+        color: #92400e !important;
+    }
+}
+
+.btn-bento-pill.text-purple {
+    color: #6d28d9 !important;
+
+    &:hover {
+        color: #5b21b6 !important;
+    }
+}
+
+// Bento Filter Controls
+.bento-filter-group {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(10, 27, 61, 0.1);
+    box-shadow: 0 2px 8px rgba(10, 27, 61, 0.04);
+
+    .bento-filter-btn {
+        border: none;
+        color: #64748B;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+
+        &:hover {
+            color: #0A1B3D;
+            background-color: #F8FAFD;
+        }
+
+        &.active {
+            background-color: #0A1B3D;
+            color: #FFFFFF;
+            box-shadow: 0 2px 8px rgba(10, 27, 61, 0.2);
+        }
+    }
+}
+
+// Bento Segmented Tabs (Hard Skills / Soft Skills)
+.bento-tabs-pill {
+    background: #F1F5F9;
+    padding: 4px;
+    border-radius: 9999px;
+
+    .nav-link {
+        border-radius: 9999px;
+        padding: 0.45rem 1.15rem;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: #64748B;
+        border: none;
+        transition: all 0.2s ease;
+
+        &.active {
+            background: #5C46E5;
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(92, 70, 229, 0.3);
+        }
+
+        &:hover:not(.active) {
+            color: #0A1B3D;
+        }
+    }
+}
+
+// Contact Bento Card (Full Width Alignment)
+.contact-bento-card {
+    border-radius: 28px;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    box-shadow: 0 10px 30px -5px rgba(10, 27, 61, 0.06);
+    background-color: #FFFFFF;
+
+    @media (max-width: 576px) {
+        border-radius: 22px;
+        padding: 1.5rem 1.25rem !important;
+    }
+}
+
+// Legacy Inspo Card Showcase fallback
+.inspo-card-showcase {
+    background-color: #FFFFFF;
+    border-radius: 26px;
+    padding: 1.5rem;
+    width: 100%;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    box-shadow: 0 10px 30px -5px rgba(10, 27, 61, 0.05);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+    overflow: hidden;
+
+    @media (max-width: 576px) {
+        padding: 1.15rem;
+        border-radius: 20px;
+    }
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 18px 40px rgba(10, 27, 61, 0.1);
+        border-color: rgba(92, 70, 229, 0.25);
+
+        .inspo-card-title a {
+            color: #5C46E5;
+        }
+
+        .inspo-mockup-frame {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 14px 28px rgba(10, 27, 61, 0.12);
+        }
+
+        .inspo-mockup-img {
+            transform: scale(1.04);
+        }
+
+        .inspo-graphic-icon-wrap {
+            transform: scale(1.1) rotate(-3deg);
+        }
+    }
+}
+
+.inspo-showcase-content {
+    padding-right: 1.5rem;
+
+    @media (max-width: 767.98px) {
+        padding-right: 0;
+        margin-bottom: 1.25rem;
+    }
+}
+
+.inspo-showcase-visual-col {
+    padding-left: 0.5rem;
+
+    @media (max-width: 767.98px) {
+        padding-left: 0;
+        width: 100%;
+    }
+}
+
+.inspo-showcase-visual {
+    min-height: 220px;
+    border-radius: 16px;
+
+    @media (max-width: 767.98px) {
+        min-height: 180px;
+    }
+}
+
+// Browser Mockup Frame
+.inspo-mockup-frame {
+    background-color: #FFFFFF;
+    border-radius: 14px;
+    border: 1px solid rgba(10, 27, 61, 0.1);
+    box-shadow: 0 8px 22px rgba(10, 27, 61, 0.08);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    height: 100%;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 767.98px) {
+        min-height: 180px;
+    }
+}
+
+.inspo-mockup-bar {
+    background-color: #F8FAFD;
+    border-bottom: 1px solid rgba(10, 27, 61, 0.07);
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.inspo-mockup-dots {
+    .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        display: inline-block;
+
+        &.dot-red { background-color: #EF4444; }
+        &.dot-yellow { background-color: #F59E0B; }
+        &.dot-green { background-color: #10B981; }
+    }
+}
+
+.inspo-mockup-url {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #94A3B8;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(10, 27, 61, 0.06);
+    border-radius: 9999px;
+    padding: 0.05rem 0.6rem;
+    max-width: 120px;
+}
+
+.inspo-mockup-screen {
+    flex-grow: 1;
+    background-color: #F1F5F9;
+    height: 190px;
+    cursor: pointer;
+
+    @media (max-width: 767.98px) {
+        height: 160px;
+    }
+
+    .inspo-mockup-img {
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        display: block;
+    }
+
+    .inspo-mockup-overlay {
+        background: rgba(10, 27, 61, 0.55);
+        backdrop-filter: blur(3px);
+        opacity: 0;
+        transition: opacity 0.25s ease;
+        z-index: 5;
+    }
+
+    &:hover .inspo-mockup-overlay {
+        opacity: 1;
+    }
+}
+
+// Graphic Fallback for cards without screenshot
+.inspo-graphic-fallback {
+    background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #F1F5F9 100%);
+    border-radius: 14px;
+    border: 1px solid rgba(92, 70, 229, 0.12);
+    box-shadow: 0 4px 16px rgba(92, 70, 229, 0.06);
+    height: 100%;
+    min-height: 220px;
+    padding: 1.5rem;
+    text-align: center;
+
+    @media (max-width: 767.98px) {
+        min-height: 180px;
+    }
+}
+
+.inspo-graphic-icon-wrap {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background-color: #FFFFFF;
+    box-shadow: 0 8px 20px rgba(92, 70, 229, 0.12);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 2;
+}
+
+.inspo-wireframe-lines {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    opacity: 0.35;
+    pointer-events: none;
+
+    .w-line {
+        height: 4px;
+        border-radius: 2px;
+        background-color: #5C46E5;
+        margin-top: 5px;
+
+        &.w-line-1 { width: 75%; }
+        &.w-line-2 { width: 50%; }
+        &.w-line-3 { width: 60%; }
+    }
+}
+
+.inspo-card-thumb {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #F8FAFD;
+    flex-shrink: 0;
+
+    .inspo-card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+}
+
+.inspo-thumb-fallback {
+    background: linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%);
+    padding: 1.5rem;
+    text-align: center;
+
+    .inspo-fallback-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.85rem;
+    }
+}
+
+.inspo-card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 1rem 0.25rem 0.25rem 0.25rem;
+}
+
+.inspo-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.84rem;
+    margin-bottom: 0.55rem;
+}
+
+.inspo-meta-category {
+    font-weight: 700;
+    color: #5C46E5;
+    letter-spacing: 0.02em;
+
+    &.text-warning-dark {
+        color: #D97706;
+    }
+}
+
+.inspo-meta-sep {
+    color: #CBD5E1;
+}
+
+.inspo-meta-date {
+    color: #64748B;
+    font-weight: 500;
+}
+
+.inspo-card-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.22rem;
+    font-weight: 800;
+    color: #0A1B3D;
+    line-height: 1.35;
+    margin-bottom: 0.45rem;
+    letter-spacing: -0.015em;
+
+    a {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+}
+
+.inspo-card-subtitle {
+    font-size: 0.88rem;
+    color: #475569;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.inspo-card-desc {
+    font-size: 0.91rem;
+    color: #64748B;
+    line-height: 1.55;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+.inspo-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+}
+
+.inspo-tag {
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    background-color: #F1F5F9;
+    color: #334155;
+    border-radius: 6px;
+}
+
+.inspo-tag-more {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2rem 0.45rem;
+    background-color: #E2E8F0;
+    color: #64748B;
+    border-radius: 6px;
+}
+
+.inspo-card-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(10, 27, 61, 0.05);
+}
+
+.btn-inspo-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 1.25rem;
+    border: 1.5px solid #5C46E5;
+    color: #5C46E5 !important;
+    background-color: transparent;
+    font-size: 0.86rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+
+    &:hover {
+        background-color: #5C46E5;
+        color: #FFFFFF !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(92, 70, 229, 0.28);
+    }
+
+    i {
+        transition: transform 0.2s ease;
+    }
+
+    &:hover i {
+        transform: translateX(3px);
+    }
+}
+
+.inspo-action-icons {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.btn-inspo-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(10, 27, 61, 0.12);
+    background-color: #FFFFFF;
+    color: #475569;
+    font-size: 0.88rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: #F8FAFD;
+        border-color: #5C46E5;
+        color: #5C46E5;
+        transform: translateY(-2px);
+    }
+}
+
+// Modern Form Inputs
+.form-control-modern {
+    background-color: #F8FAFD;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 9999px;
+    color: #0A1B3D;
+    font-size: 0.95rem;
+    padding: 0.65rem 1.2rem;
+    transition: all 0.2s ease;
+
+    &:focus {
+        background-color: #FFFFFF;
+        border-color: #5C46E5;
+        box-shadow: 0 0 0 4px rgba(92, 70, 229, 0.12);
+        outline: none;
+        color: #0A1B3D;
+    }
+
+    &::placeholder {
+        color: #94A3B8;
+        font-size: 0.9rem;
+    }
+}
+
+textarea.form-control-modern {
+    border-radius: 18px !important;
+}
+
+// Modern Alerts
+.modern-alert {
+    border-radius: 18px;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.08);
+}
+
+.modern-alert-danger {
+    border-radius: 18px;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    background-color: #FEF2F2;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.06);
+}
+
+// Modern Footer
+.footer-modern {
+    background-color: #FFFFFF;
+    border-top: 1px solid rgba(10, 27, 61, 0.08);
+}
+
+.btn-social-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(10, 27, 61, 0.1);
+    color: #475569;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+        background-color: #5C46E5;
+        border-color: #5C46E5;
+        color: #FFFFFF;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(92, 70, 229, 0.3);
     }
 }
 
@@ -832,5 +3185,67 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
     .card-genz.p-4 {
         padding: 1.25rem !important;
+    }
+}
+
+// ==========================================
+// Dynamic Skill Pyramid Diagram
+// ==========================================
+.pyramid-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.pyramid-svg-container {
+    padding: 0.25rem 0;
+
+    .pyramid-svg {
+        overflow: visible;
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+.pyramid-slice {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease, opacity 0.25s ease;
+    cursor: pointer;
+    outline: none;
+
+    &:hover,
+    &.is-active {
+        filter: brightness(1.12) drop-shadow(0 6px 14px rgba(10, 27, 61, 0.25)) !important;
+        transform: scale(1.02);
+        transform-origin: center;
+    }
+}
+
+.pyramid-connector {
+    transition: opacity 0.25s ease;
+}
+
+.pyramid-breakdown-list {
+    margin-top: 0.5rem;
+}
+
+.pyramid-tier-item {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 6px rgba(10, 27, 61, 0.02);
+
+    &:hover,
+    &.is-highlighted {
+        background-color: #FFFFFF !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(10, 27, 61, 0.08);
+    }
+}
+
+.pyramid-skill-pill {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 3px rgba(10, 27, 61, 0.03);
+
+    &:hover {
+        transform: translateY(-1.5px);
+        box-shadow: 0 4px 10px rgba(10, 27, 61, 0.08);
+        border-color: #CBD5E1 !important;
     }
 }

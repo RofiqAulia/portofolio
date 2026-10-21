@@ -8,6 +8,7 @@ use App\Actions\CreateMessage;
 use App\Enums\ProjectStatus;
 use App\Enums\SkillType;
 use App\Http\Requests\StoreMessageRequest;
+use App\Models\Certification;
 use App\Models\Documentation;
 use App\Models\Experience;
 use App\Models\Media;
@@ -18,6 +19,7 @@ use App\Models\SkillCategory;
 use App\Models\Technology;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -44,6 +46,9 @@ final class PortfolioController extends Controller
             ->where('type', SkillType::Analysis)
             ->first();
 
+        $hardSkillTiers = $this->buildSkillPyramidTiers($hardSkillCategory);
+        $softSkillTiers = $this->buildSkillPyramidTiers($softSkillCategory);
+
         $projects = Project::published()
             ->ordered()
             ->with(['technologies', 'media'])
@@ -61,6 +66,10 @@ final class PortfolioController extends Controller
             ->with(['highlights', 'technologies', 'attachments' => fn ($q) => $q->visible()])
             ->get();
 
+        $certifications = Certification::published()
+            ->ordered()
+            ->get();
+
         $settings = SiteSetting::all()->pluck('value', 'key');
 
         return view('portfolio.index', compact(
@@ -69,9 +78,12 @@ final class PortfolioController extends Controller
             'hardSkillCategory',
             'softSkillCategory',
             'analysisSkillCategory',
+            'hardSkillTiers',
+            'softSkillTiers',
             'projects',
             'internships',
             'organizations',
+            'certifications',
             'settings',
         ));
     }
@@ -92,11 +104,20 @@ final class PortfolioController extends Controller
         return view('portfolio.project', compact('project', 'settings'));
     }
 
-    public function experience(int $id): View
+    public function experience(string $slug): View|RedirectResponse
     {
+        // Backward compatibility: If numeric ID was requested, redirect 301 to the canonical slug URL
+        if (is_numeric($slug)) {
+            $expById = Experience::published()->find((int) $slug);
+            if ($expById && ! empty($expById->slug)) {
+                return redirect()->route('portfolio.experience.show', $expById->slug, 301);
+            }
+        }
+
         $experience = Experience::published()
+            ->where('slug', $slug)
             ->with(['highlights', 'technologies', 'attachments' => fn ($q) => $q->visible(), 'media'])
-            ->findOrFail($id);
+            ->firstOrFail();
 
         $settings = SiteSetting::all()->pluck('value', 'key');
 
@@ -312,8 +333,9 @@ final class PortfolioController extends Controller
     {
         $projects = Project::published()->orderBy('updated_at', 'desc')->get();
         $documentations = Documentation::published()->orderBy('updated_at', 'desc')->get();
+        $experiences = Experience::published()->orderBy('updated_at', 'desc')->get();
 
-        $content = view('portfolio.sitemap', compact('projects', 'documentations'))->render();
+        $content = view('portfolio.sitemap', compact('projects', 'documentations', 'experiences'))->render();
 
         return response($content, 200, [
             'Content-Type' => 'application/xml',
@@ -325,5 +347,127 @@ final class PortfolioController extends Controller
         $createMessage->execute($request->toData());
 
         return back()->with('success', 'Terima kasih! Pesan Anda telah terkirim dan akan segera saya balas.');
+    }
+
+    /**
+     * Build dynamic skill pyramid tiers from a skill category.
+     *
+     * @return Collection<int, array{index: int, label: string, avg_level: ?int, skills: Collection, color: array{from: string, to: string, text: string, bg: string, border: string, icon: string}}>
+     */
+    private function buildSkillPyramidTiers(?SkillCategory $category): Collection
+    {
+        if (! $category || $category->skills->isEmpty()) {
+            return collect();
+        }
+
+        $skills = $category->skills;
+
+        $hasLabels = $skills->pluck('level_label')->filter()->isNotEmpty();
+
+        $grouped = $skills->groupBy(function ($skill) use ($hasLabels) {
+            if ($hasLabels && ! empty($skill->level_label)) {
+                return trim($skill->level_label);
+            }
+
+            $lvl = $skill->level ?? 75;
+            if ($lvl >= 92) {
+                return 'Expert';
+            }
+            if ($lvl >= 85) {
+                return 'Advanced';
+            }
+            if ($lvl >= 75) {
+                return 'Intermediate';
+            }
+
+            return 'Basic';
+        });
+
+        $sorted = $grouped->sortByDesc(function ($group) {
+            $avg = $group->avg('level');
+            if ($avg !== null && $avg > 0) {
+                return $avg;
+            }
+
+            return -($group->min('sort_order') ?? 0);
+        });
+
+        $palette = [
+            ['from' => '#4F46E5', 'to' => '#6366F1', 'text' => '#4F46E5', 'bg' => 'rgba(79, 70, 229, 0.1)', 'border' => '#4F46E5', 'icon' => 'bi-trophy-fill'],
+            ['from' => '#0284C7', 'to' => '#0EA5E9', 'text' => '#0284C7', 'bg' => 'rgba(2, 132, 199, 0.1)', 'border' => '#0284C7', 'icon' => 'bi-gear-wide-connected'],
+            ['from' => '#059669', 'to' => '#10B981', 'text' => '#059669', 'bg' => 'rgba(5, 150, 105, 0.1)', 'border' => '#059669', 'icon' => 'bi-layers-fill'],
+            ['from' => '#D97706', 'to' => '#F59E0B', 'text' => '#D97706', 'bg' => 'rgba(217, 119, 6, 0.1)', 'border' => '#D97706', 'icon' => 'bi-lightning-charge-fill'],
+            ['from' => '#E11D48', 'to' => '#F43F5E', 'text' => '#E11D48', 'bg' => 'rgba(225, 29, 72, 0.1)', 'border' => '#E11D48', 'icon' => 'bi-star-fill'],
+            ['from' => '#7C3AED', 'to' => '#8B5CF6', 'text' => '#7C3AED', 'bg' => 'rgba(124, 58, 237, 0.1)', 'border' => '#7C3AED', 'icon' => 'bi-award-fill'],
+        ];
+
+        $tierIndex = 0;
+
+        return $sorted->map(function ($tierSkills, $tierLabel) use (&$tierIndex, $palette) {
+            $color = $palette[$tierIndex % count($palette)];
+            $avgLevel = $tierSkills->avg('level');
+            $tierIndex++;
+
+            $tierSkillsSorted = $tierSkills->sortByDesc('level');
+            $cleanNames = $tierSkillsSorted->map(function ($s) {
+                $name = $s->name;
+                $name = str_replace(
+                    [' & Query Optimization', ' & Clean Architecture', ' & Responsive UI'],
+                    ['', '', ''],
+                    $name
+                );
+
+                return Str::limit(trim($name), 16);
+            });
+
+            if ($tierSkillsSorted->count() > 2) {
+                $summary = '('.$cleanNames->take(2)->implode(', ').', dll)';
+            } else {
+                $summary = '('.$cleanNames->implode(', ').')';
+            }
+
+            return [
+                'index' => $tierIndex - 1,
+                'label' => $tierLabel,
+                'avg_level' => $avgLevel ? (int) round($avgLevel) : null,
+                'summary' => $summary,
+                'skills' => $tierSkillsSorted,
+                'color' => $color,
+            ];
+        })->values();
+    }
+
+    public function downloadCertificationFile(string $slug, int $index = 0): StreamedResponse
+    {
+        $certification = Certification::published()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $files = $certification->getFiles();
+        if (! isset($files[$index]) || ! Storage::disk('public')->exists($files[$index])) {
+            abort(404, 'Berkas dokumen sertifikasi tidak ditemukan.');
+        }
+
+        $filePath = $files[$index];
+        $filename = $certification->getDownloadFilename($index, 'file');
+
+        return Storage::disk('public')->download($filePath, $filename);
+    }
+
+    public function downloadCertificationImage(string $slug, int $index = 0): StreamedResponse
+    {
+        $certification = Certification::published()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $images = $certification->getImages();
+        if (! isset($images[$index]) || ! Storage::disk('public')->exists($images[$index])) {
+            abort(404, 'Berkas gambar sertifikasi tidak ditemukan.');
+        }
+
+        $filePath = $images[$index];
+        $filename = $certification->getDownloadFilename($index, 'image');
+
+        return Storage::disk('public')->download($filePath, $filename);
     }
 }

@@ -71,87 +71,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Project Slider: Responsive (2 on desktop, 1 on mobile, smooth scroll & snap)
-    const initProjectSlider = () => {
-        const track = document.getElementById('projectSliderTrack');
+    // Responsive 2-Container Slider: (Ala Gambar 2: Max 2 Container pada Desktop, 1 pada Mobile)
+    const initTwoColSlider = (track) => {
         if (!track) return;
 
-        const container = track.closest('.project-slider-container');
-        if (!container) return;
-
-        const prevBtns = container.querySelectorAll('.project-nav-prev, .project-btn-prev');
-        const nextBtns = container.querySelectorAll('.project-nav-next, .project-btn-next');
-        const indicatorPills = container.querySelectorAll('.project-indicator-pill');
-        const counterCurrent = document.getElementById('projectCounterCurrent');
-        const items = track.querySelectorAll('.project-slide-item');
+        const targetId = '#' + track.id;
+        const prevBtns = document.querySelectorAll(`[data-target="${targetId}"].btn-slider-prev, [data-target="${targetId}"].project-nav-prev, .project-btn-prev`);
+        const nextBtns = document.querySelectorAll(`[data-target="${targetId}"].btn-slider-next, [data-target="${targetId}"].project-nav-next, .project-btn-next`);
+        const items = track.querySelectorAll('.slider-item-2col, .slider-item-3col, .project-slide-item, .internship-slide-item, .organization-slide-item, .certification-slide-item');
         const totalItems = items.length;
 
         if (totalItems === 0) return;
 
         const getStep = () => {
             const firstItem = items[0];
-            if (!firstItem) return 320;
+            if (!firstItem) return 360;
             const style = window.getComputedStyle(track);
             const gap = parseFloat(style.gap) || 24;
             return firstItem.offsetWidth + gap;
         };
 
-        const isDesktop = () => window.innerWidth >= 992;
-
         const updateControls = () => {
-            const step = getStep();
             const maxScroll = track.scrollWidth - track.clientWidth;
-            const scrollLeft = track.scrollLeft;
+            const hasOverflow = maxScroll > 8;
 
-            // Check if there is overflow on current screen width
-            const hasOverflow = maxScroll > 10;
             prevBtns.forEach(btn => {
-                btn.style.display = hasOverflow ? '' : 'none';
+                btn.style.opacity = hasOverflow ? '1' : '0.4';
+                btn.style.pointerEvents = hasOverflow ? 'auto' : 'none';
             });
             nextBtns.forEach(btn => {
-                btn.style.display = hasOverflow ? '' : 'none';
+                btn.style.opacity = hasOverflow ? '1' : '0.4';
+                btn.style.pointerEvents = hasOverflow ? 'auto' : 'none';
             });
-
-            const indicatorsContainer = container.querySelector('#projectIndicators');
-            if (indicatorsContainer) {
-                indicatorsContainer.style.display = hasOverflow ? '' : 'none';
-            }
-
-            const hintBadge = container.querySelector('.project-slider-hint');
-            if (hintBadge) {
-                hintBadge.style.display = hasOverflow ? '' : 'none';
-            }
-
-            if (!hasOverflow) return;
-
-            // Calculate active index
-            let activeIndex = Math.round(scrollLeft / step);
-            if (activeIndex < 0) activeIndex = 0;
-            if (activeIndex >= totalItems) activeIndex = totalItems - 1;
-
-            if (maxScroll > 0 && scrollLeft >= maxScroll - 15) {
-                activeIndex = totalItems - 1;
-            }
-
-            // Update indicator pills
-            indicatorPills.forEach((pill, idx) => {
-                pill.classList.toggle('active', idx === activeIndex);
-            });
-
-            // Update counter display
-            if (counterCurrent) {
-                if (isDesktop() && totalItems >= 2) {
-                    const startNum = Math.min(activeIndex + 1, Math.max(1, totalItems - 1));
-                    const endNum = Math.min(startNum + 1, totalItems);
-                    if (startNum === endNum) {
-                        counterCurrent.textContent = `${startNum}`;
-                    } else {
-                        counterCurrent.textContent = `${startNum}-${endNum}`;
-                    }
-                } else {
-                    counterCurrent.textContent = `${activeIndex + 1}`;
-                }
-            }
         };
 
         // Prev buttons
@@ -178,15 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     track.scrollBy({ left: step, behavior: 'smooth' });
                 }
-            });
-        });
-
-        // Indicator pill click
-        indicatorPills.forEach((pill, idx) => {
-            pill.addEventListener('click', (e) => {
-                e.preventDefault();
-                const step = getStep();
-                track.scrollTo({ left: idx * step, behavior: 'smooth' });
             });
         });
 
@@ -253,7 +195,56 @@ document.addEventListener('DOMContentLoaded', () => {
         updateControls();
     };
 
-    initProjectSlider();
+    // Initialize all sliders (2-container & 3-container tracks)
+    document.querySelectorAll('.slider-track-2col, .slider-track-3col, #projectSliderTrack, #internshipSliderTrack, #organizationSliderTrack, #experienceSliderTrack, #certificationSliderTrack').forEach(track => {
+        initTwoColSlider(track);
+    });
+
+    // Bento Experience Filter (Magang & Organisasi)
+    const filterButtons = document.querySelectorAll('.bento-filter-btn');
+    const expTrack = document.getElementById('experienceSliderTrack');
+    if (filterButtons.length && expTrack) {
+        const applyFilter = (filter) => {
+            filterButtons.forEach(btn => {
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            const items = expTrack.querySelectorAll('.experience-slide-item');
+            items.forEach(item => {
+                if (filter === 'all' || item.dataset.category === filter) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            expTrack.scrollTo({ left: 0, behavior: 'smooth' });
+        };
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                applyFilter(btn.dataset.filter);
+            });
+        });
+
+        // Hash Navigation on Load or Click
+        const checkHash = () => {
+            const hash = window.location.hash;
+            if (hash === '#magang') {
+                applyFilter('magang');
+            } else if (hash === '#organisasi') {
+                applyFilter('organisasi');
+            }
+        };
+
+        checkHash();
+        window.addEventListener('hashchange', checkHash);
+    }
 
     // Image Viewer / Lightbox & Download
     const initImageViewer = () => {
@@ -343,4 +334,28 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     initImageViewer();
+
+    // ==========================================
+    // Dynamic Skill Pyramid Diagram Hover Synchronization
+    // ==========================================
+    const initSkillPyramid = () => {
+        document.querySelectorAll('[data-target-tier]').forEach(el => {
+            const targetId = el.getAttribute('data-target-tier');
+            if (!targetId) return;
+
+            el.addEventListener('mouseenter', () => {
+                document.querySelectorAll(`[data-target-tier="${targetId}"]`).forEach(sibling => {
+                    sibling.classList.add('is-active');
+                });
+            });
+
+            el.addEventListener('mouseleave', () => {
+                document.querySelectorAll(`[data-target-tier="${targetId}"]`).forEach(sibling => {
+                    sibling.classList.remove('is-active');
+                });
+            });
+        });
+    };
+
+    initSkillPyramid();
 });

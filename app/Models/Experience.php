@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Experience extends Model
 {
@@ -21,6 +22,7 @@ class Experience extends Model
     protected $fillable = [
         'type',
         'position',
+        'slug',
         'organization_name',
         'location',
         'start_date',
@@ -32,6 +34,51 @@ class Experience extends Model
         'status',
         'sort_order',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $experience): void {
+            if (empty($experience->slug)) {
+                $experience->slug = static::generateUniqueSlug(
+                    $experience->position ?? '',
+                    $experience->organization_name ?? ''
+                );
+            }
+        });
+
+        static::updating(function (self $experience): void {
+            if (empty($experience->slug)) {
+                $experience->slug = static::generateUniqueSlug(
+                    $experience->position ?? '',
+                    $experience->organization_name ?? '',
+                    $experience->id
+                );
+            }
+        });
+    }
+
+    public static function generateUniqueSlug(string $position, string $organization, ?int $ignoreId = null): string
+    {
+        $baseSlug = Str::slug(trim($position.' '.$organization));
+        if (empty($baseSlug)) {
+            $baseSlug = 'pengalaman';
+        }
+
+        $slug = $baseSlug;
+        $counter = 1;
+
+        while (static::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+            $counter++;
+            $slug = "{$baseSlug}-{$counter}";
+        }
+
+        return $slug;
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 
     protected function casts(): array
     {
