@@ -60,9 +60,9 @@
                                     <span class="badge bg-dark text-white rounded-pill px-2.5 py-1 small fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.03em;">
                                         DOKUMEN SPESIFIKASI (PDF)
                                     </span>
-                                    <h5 class="font-heading mb-0 mt-1 text-dark text-truncate fs-6 fw-bold" title="{{ $firstFile['name'] }}" style="max-width: 100%;">
+                                    <!-- <h5 class="font-heading mb-0 mt-1 text-dark text-truncate fs-6 fw-bold" title="{{ $firstFile['name'] }}" style="max-width: 100%;">
                                         {{ $firstFile['name'] }}
-                                    </h5>
+                                    </h5> -->
                                 </div>
                             </div>
                             <div class="d-flex align-items-center gap-2 flex-shrink-0 w-100 w-md-auto">
@@ -70,11 +70,11 @@
                                    target="_blank" 
                                    rel="noopener noreferrer" 
                                    class="btn-bento-primary py-2 px-3 text-nowrap flex-grow-1 flex-md-grow-0 justify-content-center text-center">
-                                    <i class="bi bi-box-arrow-up-right me-1"></i> Buka Layar Penuh
+                                    <i class="bi bi-box-arrow-up-right me-1"></i>
                                 </a>
                                 <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" 
                                    class="btn-bento-amber py-2 px-3 text-nowrap flex-grow-1 flex-md-grow-0 justify-content-center text-center">
-                                    <i class="bi bi-download me-1"></i> Unduh PDF
+                                    <i class="bi bi-download me-1"></i>
                                 </a>
                             </div>
                         </div>
