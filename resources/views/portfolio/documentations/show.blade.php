@@ -50,29 +50,48 @@
 
                 <!-- Jika Berkas Utama adalah PDF: Embed Pratinjau Dokumen -->
                 @if($isPdf)
-                    <div class="p-3 p-md-4 rounded-4 mb-4" style="background-color: #F8FAFD; border: 1px solid rgba(10, 27, 61, 0.08);">
-                        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="badge bg-danger text-white rounded-circle p-3 fs-3 shadow-sm">
+                    <div class="pdf-preview-box p-3 p-sm-4 mb-4">
+                        <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-3 mb-3">
+                            <div class="d-flex align-items-center gap-2.5 gap-sm-3 min-w-0 w-100">
+                                <span class="badge bg-danger text-white pdf-icon-badge">
                                     <i class="bi bi-file-earmark-pdf"></i>
                                 </span>
-                                <div>
-                                    <span class="badge bg-dark text-white rounded-pill px-2 py-1 small">DOKUMEN SPESIFIKASI (PDF)</span>
-                                    <h5 class="font-heading mb-0 mt-1 text-dark">{{ $firstFile['name'] }}</h5>
+                                <div class="min-w-0 flex-grow-1">
+                                    <span class="badge bg-dark text-white rounded-pill px-2.5 py-1 small fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.03em;">
+                                        DOKUMEN SPESIFIKASI (PDF)
+                                    </span>
+                                    <h5 class="font-heading mb-0 mt-1 text-dark text-break fs-6 fs-sm-5 fw-bold" title="{{ $firstFile['name'] }}">
+                                        {{ $firstFile['name'] }}
+                                    </h5>
                                 </div>
                             </div>
-                            <div class="d-flex flex-wrap gap-2">
-                                <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" target="_blank" rel="noopener noreferrer" class="btn-bento-primary py-2 px-3 fs-6">
-                                    <i class="bi bi-box-arrow-up-right"></i> Buka Layar Penuh
+                            <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-lg-auto flex-shrink-0">
+                                <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" target="_blank" rel="noopener noreferrer" class="btn-bento-primary py-2 px-3 fs-6 w-100 w-sm-auto justify-content-center text-center">
+                                    <i class="bi bi-box-arrow-up-right me-1"></i> Buka Layar Penuh
                                 </a>
-                                <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" class="btn-bento-amber py-2 px-3 fs-6">
-                                    <i class="bi bi-download"></i> Unduh PDF
+                                <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" class="btn-bento-amber py-2 px-3 fs-6 w-100 w-sm-auto justify-content-center text-center">
+                                    <i class="bi bi-download me-1"></i> Unduh PDF
                                 </a>
                             </div>
                         </div>
 
-                        <div class="rounded-3 overflow-hidden bg-white shadow-sm border" style="height: 600px; border-color: rgba(10, 27, 61, 0.08) !important;">
-                            <iframe src="{{ route('portfolio.documentations.preview', $documentation->slug) }}" class="w-100 h-100 border-0" title="Pratinjau PDF {{ $documentation->title }}"></iframe>
+                        <div class="rounded-3 overflow-hidden bg-white shadow-sm border pdf-viewer-frame position-relative" style="border-color: rgba(10, 27, 61, 0.08) !important;">
+                            <iframe src="{{ route('portfolio.documentations.preview', $documentation->slug) }}" 
+                                    class="w-100 h-100 border-0" 
+                                    title="Pratinjau PDF {{ $documentation->title }}"
+                                    loading="lazy"></iframe>
+                        </div>
+
+                        <!-- Mobile-Friendly Helper Bar -->
+                        <div class="d-flex align-items-center justify-content-between pt-2 px-1 text-muted small mt-1">
+                            <span class="d-flex align-items-center gap-1.5" style="font-size: 0.78rem;">
+                                <i class="bi bi-info-circle text-primary"></i>
+                                <span class="d-none d-sm-inline">Pratinjau dokumen interaktif. Gunakan "Buka Layar Penuh" untuk navigasi &amp; zoom lebih leluasa.</span>
+                                <span class="d-sm-none">Ketuk "Layar Penuh" untuk membaca lebih leluasa.</span>
+                            </span>
+                            <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" target="_blank" rel="noopener noreferrer" class="text-primary text-decoration-none fw-bold small flex-shrink-0 d-sm-none" style="font-size: 0.78rem;">
+                                Buka <i class="bi bi-arrow-up-right"></i>
+                            </a>
                         </div>
                     </div>
                 @elseif($previewUrl)

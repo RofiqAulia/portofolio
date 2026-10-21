@@ -1952,6 +1952,46 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     }
 }
 
+// PDF Viewer Stage (Mobile-First Responsive Embed)
+.pdf-preview-box {
+    background-color: #F8FAFD;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    border-radius: 20px;
+}
+
+.pdf-icon-badge {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    font-size: 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+
+    @media (min-width: 576px) {
+        width: 52px;
+        height: 52px;
+        min-width: 52px;
+        font-size: 1.5rem;
+    }
+}
+
+.pdf-viewer-frame {
+    height: clamp(380px, 55vh, 460px);
+    transition: height 0.3s ease;
+
+    @media (min-width: 768px) {
+        height: clamp(520px, 65vh, 640px);
+    }
+
+    @media (min-width: 1200px) {
+        height: clamp(620px, 75vh, 760px);
+    }
+}
+
 // Blueprint Vault Callout Card in Skills section (Modern Indigo Gradient)
 .blueprint-vault-card {
     background: linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4338CA 100%);
