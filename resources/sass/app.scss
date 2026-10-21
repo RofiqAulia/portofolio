@@ -1704,27 +1704,34 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     }
 }
 
-// 3-Column Slider Items (Desktop: Max 3 container, Tablet: 2 container, Mobile: 1 container)
+// 3-Column Slider Items (Desktop: Max 3 container, Tablet: 2 container, Mobile: Peek 88%)
 .slider-item-3col,
 .certification-slide-item {
-    // Mobile (< 640px): Exactly 1 card per view (100% width)
-    flex: 0 0 100%;
-    max-width: 100%;
-    min-width: 100%;
-    width: 100%;
+    // Mobile (< 576px): Peek effect (88% width) so users intuitively know it is scrollable/swipeable
+    flex: 0 0 88%;
+    max-width: 88%;
+    min-width: 88%;
+    width: 88%;
     scroll-snap-align: start;
     display: flex;
 
-    // Tablet (640px - 1024px): Exactly 2 cards per view (50%)
-    @media (min-width: 640px) and (max-width: 1024px) {
+    @media (min-width: 576px) and (max-width: 767.98px) {
+        flex: 0 0 75%;
+        max-width: 75%;
+        min-width: 75%;
+        width: 75%;
+    }
+
+    // Tablet (768px - 1199.98px): Exactly 2 cards per view (50%)
+    @media (min-width: 768px) and (max-width: 1199.98px) {
         flex: 0 0 calc(50% - 0.75rem);
         max-width: calc(50% - 0.75rem);
         min-width: calc(50% - 0.75rem);
         width: calc(50% - 0.75rem);
     }
 
-    // Desktop (> 1024px): Exactly 3 cards per view (Max 3 Container!)
-    @media (min-width: 1024.02px) {
+    // Desktop (>= 1200px): Exactly 3 cards per view (Max 3 Container!)
+    @media (min-width: 1200px) {
         flex: 0 0 calc((100% - 3rem) / 3);
         max-width: calc((100% - 3rem) / 3);
         min-width: calc((100% - 3rem) / 3);

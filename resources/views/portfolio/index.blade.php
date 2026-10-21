@@ -604,34 +604,41 @@
     </section>
 
     <!-- 8. DOKUMENTASI PENGHARGAAN & SERTIFIKASI (KREDENSIAL, HKI, PRESTASI & SERTIFIKASI RESMI) -->
-    <section id="sertifikasi" class="py-5 inspo-section">
-        <!-- Anchors for smooth navigation -->
-        <span id="penghargaan" style="display: block; position: relative; top: -100px; visibility: hidden;"></span>
-        <span id="penghargaan-sertifikasi" style="display: block; position: relative; top: -100px; visibility: hidden;"></span>
+    <section id="sertifikasi" class="py-5 inspo-section position-relative" style="scroll-margin-top: 100px;">
+        <!-- Anchors for smooth backward-compatible navigation without dirty inline styles -->
+        <span id="penghargaan" class="position-absolute" style="top: -100px; left: 0;"></span>
+        <span id="penghargaan-sertifikasi" class="position-absolute" style="top: -100px; left: 0;"></span>
 
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3 mb-4 pb-2">
             <div>
                 <span class="inspo-section-pill">KREDENSIAL &amp; PRESTASI</span>
                 <h2 class="inspo-header-title mb-1">Dokumentasi Penghargaan &amp; Sertifikasi</h2>
-                <p class="inspo-header-subtitle">Bukti kredensial resmi, hak cipta karya cipta (HKI), lisensi kompetensi, dan apresiasi capaian profesional.</p>
+                <p class="inspo-header-subtitle mb-0">Bukti kredensial resmi, hak cipta karya cipta (HKI), lisensi kompetensi, dan apresiasi capaian profesional.</p>
             </div>
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center justify-content-between justify-content-sm-end gap-2 w-100 w-lg-auto pt-1 pt-lg-0">
+                @if(!$certifications->isEmpty())
+                    <span class="badge bg-light text-muted border rounded-pill px-3 py-2 small fw-bold d-sm-none">
+                        {{ $certifications->count() }} Kredensial
+                    </span>
+                @endif
                 <a href="{{ route('portfolio.documentations.index') }}" class="btn-inspo-header py-2 px-3 fs-6 d-none d-sm-inline-flex me-1">
                     <i class="bi bi-folder2-open me-1"></i> Buka Blueprint Lab
                 </a>
-                <button type="button" class="btn-slider-nav btn-slider-prev" data-target="#certificationSliderTrack" aria-label="Geser ke kiri" title="Geser ke kiri">
-                    <i class="bi bi-chevron-left"></i>
-                </button>
-                <button type="button" class="btn-slider-nav btn-slider-next" data-target="#certificationSliderTrack" aria-label="Geser ke kanan" title="Geser ke kanan">
-                    <i class="bi bi-chevron-right"></i>
-                </button>
+                <div class="d-flex align-items-center gap-2 ms-auto ms-sm-0">
+                    <button type="button" class="btn-slider-nav btn-slider-prev" data-target="#certificationSliderTrack" aria-label="Geser ke kiri" title="Geser ke kiri">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button type="button" class="btn-slider-nav btn-slider-next" data-target="#certificationSliderTrack" aria-label="Geser ke kanan" title="Geser ke kanan">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
             </div>
         </div>
 
         @if($certifications->isEmpty())
             <div class="row justify-content-center">
                 <div class="col-12 text-center py-5">
-                    <div class="p-4 bg-white rounded-4 border text-muted">
+                    <div class="p-4 p-md-5 bg-white rounded-4 border text-muted">
                         <i class="bi bi-award fs-1 d-block mb-2 text-secondary opacity-50"></i>
                         Belum ada data penghargaan &amp; sertifikasi yang dipublikasikan.
                     </div>

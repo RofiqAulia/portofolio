@@ -1,6 +1,6 @@
 @props(['certification'])
 
-<div class="inspo-card h-100 p-4 bg-white d-flex flex-column w-100 position-relative">
+<div class="inspo-card h-100 p-3 p-sm-4 bg-white d-flex flex-column w-100 position-relative">
     {{-- 1. Header: Logo Circle Stage + Category Badge & Year --}}
     <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
         <div class="d-flex align-items-center gap-3 min-w-0">
