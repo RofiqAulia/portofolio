@@ -51,25 +51,29 @@
                 <!-- Jika Berkas Utama adalah PDF: Embed Pratinjau Dokumen -->
                 @if($isPdf)
                     <div class="pdf-preview-box p-3 p-sm-4 mb-4">
-                        <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-3 mb-3">
-                            <div class="d-flex align-items-center gap-2.5 gap-sm-3 min-w-0 w-100">
-                                <span class="badge bg-danger text-white pdf-icon-badge">
+                        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 mb-3">
+                            <div class="d-flex align-items-center gap-2.5 gap-sm-3 min-w-0 flex-grow-1">
+                                <span class="badge bg-danger text-white pdf-icon-badge shadow-sm">
                                     <i class="bi bi-file-earmark-pdf"></i>
                                 </span>
                                 <div class="min-w-0 flex-grow-1">
                                     <span class="badge bg-dark text-white rounded-pill px-2.5 py-1 small fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.03em;">
                                         DOKUMEN SPESIFIKASI (PDF)
                                     </span>
-                                    <h5 class="font-heading mb-0 mt-1 text-dark text-break fs-6 fs-sm-5 fw-bold" title="{{ $firstFile['name'] }}">
+                                    <h5 class="font-heading mb-0 mt-1 text-dark text-truncate fs-6 fw-bold" title="{{ $firstFile['name'] }}" style="max-width: 100%;">
                                         {{ $firstFile['name'] }}
                                     </h5>
                                 </div>
                             </div>
-                            <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-lg-auto flex-shrink-0">
-                                <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" target="_blank" rel="noopener noreferrer" class="btn-bento-primary py-2 px-3 fs-6 w-100 w-sm-auto justify-content-center text-center">
+                            <div class="d-flex align-items-center gap-2 flex-shrink-0 w-100 w-md-auto">
+                                <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer" 
+                                   class="btn-bento-primary py-2 px-3 text-nowrap flex-grow-1 flex-md-grow-0 justify-content-center text-center">
                                     <i class="bi bi-box-arrow-up-right me-1"></i> Buka Layar Penuh
                                 </a>
-                                <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" class="btn-bento-amber py-2 px-3 fs-6 w-100 w-sm-auto justify-content-center text-center">
+                                <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" 
+                                   class="btn-bento-amber py-2 px-3 text-nowrap flex-grow-1 flex-md-grow-0 justify-content-center text-center">
                                     <i class="bi bi-download me-1"></i> Unduh PDF
                                 </a>
                             </div>

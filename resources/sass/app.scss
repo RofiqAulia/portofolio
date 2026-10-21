@@ -1957,6 +1957,15 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     background-color: #F8FAFD;
     border: 1px solid rgba(10, 27, 61, 0.08);
     border-radius: 20px;
+    overflow: hidden;
+
+    .btn-bento-primary,
+    .btn-bento-amber {
+        padding: 0.5rem 1.15rem;
+        min-height: 40px;
+        font-size: 0.88rem;
+        letter-spacing: 0.01em;
+    }
 }
 
 .pdf-icon-badge {
