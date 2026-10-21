@@ -407,19 +407,21 @@
                 </div>
             </div>
 
-            <!-- Kolom 2: Analisis & Desain Sistem + Blueprint Lab Callout (Struktur Padat, Elegan, Seimbang) -->
+            <!-- Kolom 2: Analisis & Desain Sistem + Blueprint Lab Callout (Struktur Padat, Elegan, Seimbang & Mobile-First) -->
             <div class="col-lg-6 d-flex flex-column">
-                <div class="inspo-card p-4 bg-white h-100 d-flex flex-column justify-content-between">
+                <div class="inspo-card p-3 p-sm-4 bg-white h-100 d-flex flex-column justify-content-between">
                     <div>
                         <!-- Header Analisis & Desain Sistem -->
-                        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary bg-opacity-10 text-primary rounded-circle p-2 fs-6">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
+                            <div class="d-flex align-items-center gap-2 min-w-0">
+                                <span class="badge bg-primary bg-opacity-10 text-primary rounded-circle p-2 fs-6 flex-shrink-0">
                                     <i class="bi bi-diagram-3-fill"></i>
                                 </span>
-                                <h4 class="mb-0 font-heading fs-5">{{ $analysisSkillCategory->name ?? 'Analisis & Desain Sistem' }}</h4>
+                                <h4 class="mb-0 font-heading fs-6 fs-sm-5 fw-bold text-dark text-break">
+                                    {{ $analysisSkillCategory->name ?? 'Analisis & Desain Sistem' }}
+                                </h4>
                             </div>
-                            <span class="badge bg-light text-muted rounded-pill px-2.5 py-1 small fw-semibold">
+                            <span class="badge bg-light text-muted border border-secondary border-opacity-10 rounded-pill px-2.5 px-sm-3 py-1 small fw-semibold flex-shrink-0">
                                 Arsitektur &amp; Data
                             </span>
                         </div>
@@ -428,11 +430,11 @@
                         @if(!$analysisSkillCategory || $analysisSkillCategory->skills->isEmpty())
                             <p class="text-muted">Skill belum ditambahkan.</p>
                         @else
-                            <div class="d-flex flex-column gap-3 mb-3">
+                            <div class="d-flex flex-column gap-2.5 gap-sm-3 mb-3">
                                 @foreach($analysisSkillCategory->skills as $skill)
-                                    <div class="analysis-skill-card d-flex align-items-center justify-content-between gap-3">
-                                        <div class="d-flex align-items-center gap-3 min-w-0">
-                                            <div class="analysis-icon-box">
+                                    <div class="analysis-skill-card d-flex align-items-center justify-content-between gap-2 gap-sm-3">
+                                        <div class="d-flex align-items-center gap-2.5 gap-sm-3 min-w-0 flex-grow-1">
+                                            <div class="analysis-icon-box flex-shrink-0">
                                                 @if(str_contains(strtolower($skill->name), 'erd') || str_contains(strtolower($skill->name), 'database'))
                                                     <i class="bi bi-database-check"></i>
                                                 @elseif(str_contains(strtolower($skill->name), 'uml') || str_contains(strtolower($skill->name), 'flowchart'))
@@ -441,9 +443,11 @@
                                                     <i class="bi bi-layers-half"></i>
                                                 @endif
                                             </div>
-                                            <div class="min-w-0">
-                                                <div class="fw-bold text-dark text-truncate" style="font-size: 0.95rem; line-height: 1.35;">{{ $skill->name }}</div>
-                                                <div class="text-muted small text-truncate" style="font-size: 0.8rem; margin-top: 2px;">
+                                            <div class="min-w-0 flex-grow-1">
+                                                <div class="fw-bold text-dark text-break" style="font-size: clamp(0.85rem, 2vw, 0.95rem); line-height: 1.35;">
+                                                    {{ $skill->name }}
+                                                </div>
+                                                <div class="text-muted small text-break" style="font-size: clamp(0.74rem, 1.8vw, 0.8rem); margin-top: 2px; line-height: 1.35;">
                                                     @if(str_contains(strtolower($skill->name), 'erd') || str_contains(strtolower($skill->name), 'database'))
                                                         Normalisasi 3NF, Skema Relasi &amp; Efisiensi Query
                                                     @elseif(str_contains(strtolower($skill->name), 'uml') || str_contains(strtolower($skill->name), 'flowchart'))
@@ -456,7 +460,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-bold px-3 py-1.5 small flex-shrink-0" style="font-size: 0.82rem;">
+                                        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-bold px-2 px-sm-3 py-1 py-sm-1.5 small flex-shrink-0" style="font-size: clamp(0.72rem, 1.8vw, 0.82rem);">
                                             {{ $skill->level_label ?: 'Terverifikasi' }}
                                         </span>
                                     </div>
@@ -467,23 +471,23 @@
 
                     <!-- Modern Documentation & Blueprint Vault Callout (Tersambung Rapi di Bawah) -->
                     <div class="blueprint-vault-card p-3 p-sm-4 rounded-4 mt-2 position-relative overflow-hidden">
-                        <div class="d-flex align-items-center justify-content-between gap-2 mb-2 pb-1">
-                            <span class="blueprint-badge-pill">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2 pb-1">
+                            <span class="blueprint-badge-pill flex-shrink-0">
                                 <i class="bi bi-stars text-warning me-1"></i> REAL ARTIFACTS
                             </span>
-                            <span class="blueprint-badge-white">
+                            <span class="blueprint-badge-white flex-shrink-0">
                                 <i class="bi bi-folder2-open text-primary me-1"></i> BLUEPRINT LAB
                             </span>
                         </div>
-                        <h5 class="font-heading fs-6 fs-sm-5 mb-1.5 text-white">
+                        <h5 class="font-heading fs-6 fs-sm-5 mb-1.5 text-white text-break">
                             Intip Blueprint, ERD &amp; Alur Sistem Riil
                         </h5>
-                        <p class="text-white text-opacity-90 small mb-3 leading-tight" style="font-size: 0.85rem;">
+                        <p class="text-white text-opacity-90 small mb-3 lh-sm" style="font-size: clamp(0.8rem, 2vw, 0.85rem);">
                             Bukan cuma teori! Buka brankas dokumentasi arsitektur: diagram ERD 3NF, flowchart UML, dan berkas teknis yang siap ditinjau &amp; diunduh.
                         </p>
                         <a href="{{ route('portfolio.documentations.index') }}" class="btn-blueprint-cta">
                             <span>Buka Arsip Dokumentasi &amp; Blueprint</span>
-                            <i class="bi bi-arrow-right-short fs-4"></i>
+                            <i class="bi bi-arrow-right-short fs-4 flex-shrink-0"></i>
                         </a>
                     </div>
                 </div>

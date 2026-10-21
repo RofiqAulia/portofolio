@@ -1402,8 +1402,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     background: #F8FAFD;
     border: 1px solid rgba(10, 27, 61, 0.08);
     border-radius: 16px;
-    padding: 0.85rem 1.15rem;
+    padding: 0.7rem 0.85rem;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+    @media (min-width: 576px) {
+        padding: 0.85rem 1.15rem;
+    }
 
     &:hover {
         transform: translateY(-2px);
@@ -1414,18 +1418,26 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .analysis-icon-box {
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
-    border-radius: 12px;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 10px;
     background: rgba(92, 70, 229, 0.1);
     color: #5C46E5;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     flex-shrink: 0;
     transition: all 0.25s ease;
+
+    @media (min-width: 576px) {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        border-radius: 12px;
+        font-size: 1.25rem;
+    }
 }
 
 .analysis-skill-card:hover .analysis-icon-box {
@@ -2005,13 +2017,18 @@ h1, h2, h3, h4, h5, h6, .font-heading {
         background-color: #FFFFFF !important;
         color: #1E1B4B !important;
         font-weight: 800;
-        font-size: 0.92rem;
+        font-size: 0.85rem;
         border-radius: 9999px;
-        padding: 0.75rem 1.4rem;
+        padding: 0.65rem 1rem;
         border: none !important;
         text-decoration: none;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+        @media (min-width: 576px) {
+            padding: 0.75rem 1.4rem;
+            font-size: 0.92rem;
+        }
 
         span {
             color: #1E1B4B !important;
