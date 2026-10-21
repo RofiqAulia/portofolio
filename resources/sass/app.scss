@@ -699,8 +699,14 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     box-shadow: 0 8px 24px rgba(10, 27, 61, 0.04);
 }
 
-// Interactive Pill Buttons (Modern Bento Design)
-.btn-genz, .btn-bento-primary {
+// Interactive Pill Buttons (Modern Bento Design System - Unified Architecture)
+.btn-genz,
+.btn-bento-primary,
+.btn-genz-secondary,
+.btn-bento-secondary,
+.btn-genz-yellow,
+.btn-bento-amber,
+.btn-bento-purple {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -709,25 +715,52 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     padding: 0.65rem 1.6rem;
     font-weight: 700;
     font-size: 0.95rem;
+    font-family: inherit;
+    line-height: 1.5;
     border-radius: 9999px;
-    border: none;
-    box-shadow: 0 6px 18px rgba(92, 70, 229, 0.3);
+    text-decoration: none !important;
+    cursor: pointer;
+    user-select: none;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    text-decoration: none;
-    background: linear-gradient(135deg, #5C46E5 0%, #4338CA 100%);
-    color: #FFFFFF !important;
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 26px rgba(92, 70, 229, 0.42);
-        color: #FFFFFF !important;
+        text-decoration: none !important;
     }
 
     &:active {
         transform: translateY(0);
     }
+
+    &:focus-visible {
+        outline: 2px solid #5C46E5;
+        outline-offset: 2px;
+    }
+
+    &:disabled,
+    &.disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        pointer-events: none;
+        transform: none !important;
+        box-shadow: none !important;
+    }
 }
 
+// Variant: Primary (Indigo Vibrant Gradient)
+.btn-genz, .btn-bento-primary {
+    border: none !important;
+    box-shadow: 0 6px 18px rgba(92, 70, 229, 0.3);
+    background: linear-gradient(135deg, #5C46E5 0%, #4338CA 100%);
+    color: #FFFFFF !important;
+
+    &:hover {
+        box-shadow: 0 10px 26px rgba(92, 70, 229, 0.42);
+        color: #FFFFFF !important;
+    }
+}
+
+// Variant: Secondary (Clean White Pill with Subtle Border - Perfectly Matched Theme)
 .btn-genz-secondary, .btn-bento-secondary {
     background: #FFFFFF !important;
     color: #0A1B3D !important;
@@ -738,20 +771,16 @@ h1, h2, h3, h4, h5, h6, .font-heading {
         background-color: #F8FAFD !important;
         color: #5C46E5 !important;
         border-color: #5C46E5 !important;
-        box-shadow: 0 6px 18px rgba(10, 27, 61, 0.08);
+        box-shadow: 0 6px 18px rgba(92, 70, 229, 0.14);
+    }
+
+    &:active {
+        background-color: #F1F5F9 !important;
     }
 }
 
+// Variant: Amber (Vibrant Warm Gold Gradient)
 .btn-genz-yellow, .btn-bento-amber {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    font-weight: 700;
-    font-size: 0.95rem;
-    border-radius: 9999px;
-    text-decoration: none;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
     color: #FFFFFF !important;
     border: none !important;
@@ -759,22 +788,13 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
     &:hover {
         background: linear-gradient(135deg, #EAB308 0%, #B45309 100%) !important;
-        transform: translateY(-2px);
         box-shadow: 0 10px 26px rgba(217, 119, 6, 0.42);
         color: #FFFFFF !important;
     }
 }
 
+// Variant: Purple (Violet Gradient)
 .btn-bento-purple {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    font-weight: 700;
-    font-size: 0.95rem;
-    border-radius: 9999px;
-    text-decoration: none;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%) !important;
     color: #FFFFFF !important;
     border: none !important;
@@ -782,7 +802,6 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
     &:hover {
         background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%) !important;
-        transform: translateY(-2px);
         box-shadow: 0 10px 26px rgba(109, 40, 217, 0.42);
         color: #FFFFFF !important;
     }
@@ -1960,7 +1979,8 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     overflow: hidden;
 
     .btn-bento-primary,
-    .btn-bento-amber {
+    .btn-bento-amber,
+    .btn-bento-secondary {
         padding: 0.5rem 1.15rem;
         min-height: 40px;
         font-size: 0.88rem;
