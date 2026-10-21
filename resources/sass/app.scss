@@ -826,6 +826,11 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     color: #334155;
 }
 
+// Flexbox & Layout Utilities (Ensure min-width: 0 works across all flex children)
+.min-w-0 {
+    min-width: 0 !important;
+}
+
 // Tech Stack Marquee (Brand Logo Ticker - Height 150px)
 .tech-brand-strip {
     height: 150px;
@@ -2203,6 +2208,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     border: 1px solid rgba(10, 27, 61, 0.08);
     box-shadow: 0 4px 20px rgba(10, 27, 61, 0.04);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
 
     &:hover {
         transform: translateY(-5px);

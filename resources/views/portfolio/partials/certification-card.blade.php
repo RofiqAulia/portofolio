@@ -2,8 +2,8 @@
 
 <div class="inspo-card h-100 p-3 p-sm-4 bg-white d-flex flex-column w-100 position-relative">
     {{-- 1. Header: Logo Circle Stage + Category Badge & Year --}}
-    <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
-        <div class="d-flex align-items-center gap-3 min-w-0">
+    <div class="d-flex align-items-center justify-content-between gap-2.5 mb-3 w-100">
+        <div class="d-flex align-items-center gap-2.5 gap-sm-3 min-w-0 flex-grow-1" style="overflow: hidden;">
             {{-- Circular Logo / Crest Stage --}}
             <div class="cert-logo-circle flex-shrink-0" style="background-color: {{ $certification->getCategoryBadgeStyle()['bg'] }}; border-color: {{ $certification->getCategoryBadgeStyle()['border'] }};">
                 @if($certification->getLogoUrl())
@@ -16,21 +16,21 @@
                 @endif
             </div>
 
-            <div class="min-w-0">
+            <div class="min-w-0 flex-grow-1" style="overflow: hidden;">
                 {{-- Category Badge (Guaranteed 100% High Contrast & Visible) --}}
                 <span class="{{ $certification->getCategoryBadgeClass() }} mb-1 d-inline-flex align-items-center">
                     <i class="bi {{ $certification->getCategoryIcon() }}"></i> {{ $certification->category }}
                 </span>
                 @if($certification->issuer)
-                    <div class="text-muted small fw-medium text-truncate" style="font-size: 0.8rem;" title="{{ $certification->issuer }}">
-                        <i class="bi bi-buildings me-1 opacity-75"></i> {{ $certification->issuer }}
+                    <div class="text-dark small fw-medium text-truncate" style="font-size: 0.8rem; color: #000000 !important; max-width: 100%;" title="{{ $certification->issuer }}">
+                        <i class="bi bi-buildings me-1 text-primary"></i> {{ $certification->issuer }}
                     </div>
                 @endif
             </div>
         </div>
 
         @if($certification->issued_year)
-            <span class="badge bg-light text-muted border rounded-pill px-2.5 py-1 small fw-bold flex-shrink-0">
+            <span class="badge bg-white text-dark border rounded-pill px-2.5 py-1 small fw-bold flex-shrink-0" style="color: #000000 !important; border-color: rgba(10, 27, 61, 0.15) !important;">
                 {{ $certification->issued_year }}
             </span>
         @endif

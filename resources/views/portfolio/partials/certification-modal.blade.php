@@ -11,20 +11,20 @@
                             <i class="bi {{ $certification->getCategoryIcon() }} me-1"></i> {{ $certification->category }}
                         </span>
                         @if($certification->issued_year)
-                            <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2 py-1 small">
+                            <span class="badge bg-white text-dark border rounded-pill px-2.5 py-1 small fw-bold" style="color: #000000 !important; border-color: rgba(10, 27, 61, 0.15) !important;">
                                 {{ $certification->issued_year }}
                             </span>
                         @endif
-                        <span class="badge bg-light text-dark border rounded-pill px-2 py-1 small">
+                        <span class="badge bg-white text-dark border rounded-pill px-2.5 py-1 small fw-bold" style="color: #000000 !important; border-color: rgba(10, 27, 61, 0.15) !important;">
                             <i class="bi bi-patch-check-fill text-primary me-1"></i> {{ $certification->status_label ?: 'Terverifikasi' }}
                         </span>
                     </div>
-                    <h5 class="modal-title font-heading fs-5 text-dark mb-0" id="certModalLabel-{{ $certification->id }}">
+                    <h5 class="modal-title font-heading fs-5 text-dark mb-0 fw-bold" id="certModalLabel-{{ $certification->id }}">
                         {{ $certification->title }}
                     </h5>
                     @if($certification->issuer)
-                        <div class="small text-muted mt-1">
-                            <i class="bi bi-buildings me-1"></i> Penerbit: <strong>{{ $certification->issuer }}</strong>
+                        <div class="small mt-1" style="color: #000000 !important;">
+                            <i class="bi bi-buildings me-1 text-primary"></i> Penerbit: <strong style="color: #000000 !important;">{{ $certification->issuer }}</strong>
                         </div>
                     @endif
                 </div>
@@ -109,7 +109,7 @@
                         <h6 class="fw-bold mb-2 text-dark">
                             <i class="bi bi-info-circle text-primary me-1"></i> Keterangan Capaian
                         </h6>
-                        <div class="p-3 bg-light rounded-3 text-secondary" style="line-height: 1.65; font-size: 0.95rem;">
+                        <div class="p-3 bg-light rounded-3 border fw-medium" style="line-height: 1.65; font-size: 0.95rem; color: #000000 !important; border-color: rgba(10, 27, 61, 0.1) !important;">
                             {{ $certification->description }}
                         </div>
                     </div>
@@ -164,8 +164,8 @@
                     <div class="p-3 bg-light bg-opacity-75 rounded-3 d-flex align-items-center justify-content-between flex-wrap gap-2 mt-3 border">
                         <div>
                             @if($certification->credential_id)
-                                <div class="small text-muted">Nomor Registrasi / Kredensial:</div>
-                                <div class="font-monospace fw-bold text-dark">{{ $certification->credential_id }}</div>
+                                <div class="small fw-semibold" style="color: #000000 !important;">Nomor Registrasi / Kredensial:</div>
+                                <div class="font-monospace fw-bold" style="color: #000000 !important;">{{ $certification->credential_id }}</div>
                             @endif
                         </div>
 
