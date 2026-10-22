@@ -65,7 +65,7 @@
                                     </h5> -->
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center gap-2 flex-shrink-0 w-100 w-md-auto">
+                            <!-- <div class="d-flex align-items-center gap-2 flex-shrink-0 w-100 w-md-auto">
                                 <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" 
                                    target="_blank" 
                                    rel="noopener noreferrer" 
@@ -76,7 +76,7 @@
                                    class="btn-bento-amber py-2 px-3 text-nowrap flex-grow-1 flex-md-grow-0 justify-content-center text-center">
                                     <i class="bi bi-download me-1"></i>
                                 </a>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="rounded-3 overflow-hidden bg-white shadow-sm border pdf-viewer-frame position-relative" style="border-color: rgba(10, 27, 61, 0.08) !important;">
