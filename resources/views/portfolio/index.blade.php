@@ -621,9 +621,9 @@
                         {{ $certifications->count() }} Kredensial
                     </span>
                 @endif
-                <a href="{{ route('portfolio.documentations.index') }}" class="btn-inspo-header py-2 px-3 fs-6 d-none d-sm-inline-flex me-1">
+                <!-- <a href="{{ route('portfolio.documentations.index') }}" class="btn-inspo-header py-2 px-3 fs-6 d-none d-sm-inline-flex me-1">
                     <i class="bi bi-folder2-open me-1"></i> Buka Blueprint Lab
-                </a>
+                </a> -->
                 <div class="d-flex align-items-center gap-2 ms-auto ms-sm-0">
                     <button type="button" class="btn-slider-nav btn-slider-prev" data-target="#certificationSliderTrack" aria-label="Geser ke kiri" title="Geser ke kiri">
                         <i class="bi bi-chevron-left"></i>
