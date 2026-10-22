@@ -48,7 +48,7 @@
                  loading="lazy">
             @if($certification->getImageCount() > 1)
                 <span class="position-absolute bottom-0 end-0 m-2 badge bg-dark bg-opacity-75 text-white rounded-pill px-2 py-1 small">
-                    <!-- <i class="bi bi-images me-1"></i> {{ $certification->getImageCount() }} Foto -->
+                    <i class="bi bi-images me-1"></i> {{ $certification->getImageCount() }} Foto
                 </span>
             @endif
         </div>
@@ -67,22 +67,6 @@
     <p class="small mb-3 flex-grow-1" style="color: #000000 !important; line-height: 1.6;">
         {{ $certification->description }}
     </p>
-
-    {{-- 4. Media badges indicator (if any files or photos) --}}
-    @if($certification->hasFiles() || $certification->hasImages())
-        <div class="d-flex flex-wrap gap-1 mb-3 pt-2 border-top border-light">
-            @if($certification->hasImages())
-                <span class="badge bg-light text-secondary border rounded-pill px-2 py-1 small">
-                    <i class="bi bi-image-fill text-primary me-1"></i> {{ $certification->getImageCount() }} Foto
-                </span>
-            @endif
-            @if($certification->hasFiles())
-                <span class="badge bg-light text-secondary border rounded-pill px-2 py-1 small">
-                    <i class="bi bi-file-earmark-arrow-down-fill text-danger me-1"></i> {{ $certification->getFileCount() }} Dokumen
-                </span>
-            @endif
-        </div>
-    @endif
 
     {{-- 5. Footer Actions --}}
     <div class="pt-3 mt-auto border-top d-flex align-items-center justify-content-between gap-2 flex-wrap">
