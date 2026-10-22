@@ -48,7 +48,7 @@
                  loading="lazy">
             @if($certification->getImageCount() > 1)
                 <span class="position-absolute bottom-0 end-0 m-2 badge bg-dark bg-opacity-75 text-white rounded-pill px-2 py-1 small">
-                    <i class="bi bi-images me-1"></i> {{ $certification->getImageCount() }} Foto
+                    <!-- <i class="bi bi-images me-1"></i> {{ $certification->getImageCount() }} Foto -->
                 </span>
             @endif
         </div>
