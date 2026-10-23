@@ -24,3 +24,24 @@ Route::get('/sitemap.xml', [PortfolioController::class, 'sitemap'])->name('portf
 Route::post('/kontak', [PortfolioController::class, 'sendMessage'])
     ->middleware('throttle:5,1')
     ->name('portfolio.contact.send');
+
+// Fallback for legacy images previously cached by Google crawler (e.g. ppa.jpg)
+Route::get('/images/{file}', function (string $file) {
+    $fallbackFile = public_path('images/'.$file);
+    if (file_exists($fallbackFile)) {
+        return response()->file($fallbackFile, [
+            'Content-Type' => str_ends_with($file, '.png') ? 'image/png' : 'image/jpeg',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+        ]);
+    }
+
+    $faviconPng = public_path('favicon.png');
+    if (file_exists($faviconPng)) {
+        return response()->file($faviconPng, [
+            'Content-Type' => 'image/png',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+        ]);
+    }
+
+    return redirect(asset('favicon.ico'), 301);
+})->where('file', '.*');
