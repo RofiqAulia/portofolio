@@ -4,9 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Portofolio M Rofiq Aulia')</title>
-    <link rel="icon" type="image/png" href="{{ !empty($profile->photo_path) ? asset('storage/' . $profile->photo_path) : asset('favicon.png') }}">
+    <!-- Favicon & Mobile Touch Icons (Google Search & Multi-Platform Standard) -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('icon-192.png') }}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('icon-512.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
-    <link rel="apple-touch-icon" href="{{ !empty($profile->photo_path) ? asset('storage/' . $profile->photo_path) : asset('favicon.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+    <meta name="theme-color" content="#2F5BFF">
+
     <meta name="description" content="@yield('meta_description', $settings['site_description'] ?? 'Portofolio M. Rofiq Aulia, Sarjana Terapan Teknik Informatika.')">
     <meta name="keywords" content="@yield('meta_keywords', $settings['meta_keywords'] ?? 'Portofolio Software Engineer, System Analyst Indonesia, Business Analyst Fresh Graduate, Web Developer PHP Laravel')">
     <meta name="author" content="{{ $settings['author_name'] ?? 'M. Rofiq Aulia' }}">
@@ -22,42 +32,64 @@
     <meta property="og:description" content="@yield('meta_description', $settings['site_description'] ?? 'Portofolio M. Rofiq Aulia, Sarjana Terapan Teknik Informatika.')">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:site_name" content="{{ $profile->full_name ?? 'M. Rofiq Aulia' }}">
-    @if(!empty($profile->photo_path))
-        <meta property="og:image" content="{{ asset('storage/' . $profile->photo_path) }}">
-    @endif
+    <meta property="og:image" content="{{ !empty($profile->photo_path) ? asset('storage/' . $profile->photo_path) : asset('icon-512.png') }}">
+    <meta property="og:image:secure_url" content="{{ !empty($profile->photo_path) ? asset('storage/' . $profile->photo_path) : asset('icon-512.png') }}">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="500">
+    <meta property="og:image:height" content="500">
+    <meta property="og:image:alt" content="{{ $profile->full_name ?? 'M. Rofiq Aulia' }} - Foto Profil">
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('title', 'Portofolio Professional')">
     <meta name="twitter:description" content="@yield('meta_description', $settings['site_description'] ?? 'Portofolio M. Rofiq Aulia')">
-    @if(!empty($profile->photo_path))
-        <meta name="twitter:image" content="{{ asset('storage/' . $profile->photo_path) }}">
-    @endif
+    <meta name="twitter:image" content="{{ !empty($profile->photo_path) ? asset('storage/' . $profile->photo_path) : asset('icon-512.png') }}">
 
-    <!-- Structured Data (JSON-LD Schema) for Google Rich Snippets -->
+    <!-- Structured Data (JSON-LD Schema) for Google Rich Snippets & Site Identity -->
     @php
+        $photoUrl = !empty($profile->photo_path) ? asset('storage/' . $profile->photo_path) : asset('icon-512.png');
         $schemaData = [
             '@context' => 'https://schema.org',
-            '@type' => 'Person',
-            'name' => $profile->full_name ?? 'M. Rofiq Aulia',
-            'jobTitle' => $profile->headline ?? 'System Analyst & Software Engineer',
-            'url' => url('/'),
-            'sameAs' => [
-                'https://www.linkedin.com/in/mrofiqaulia/',
-                'https://www.instagram.com/rofiqsyfhdytllah/',
-                'https://github.com/RofiqAulia/',
-            ],
-            'knowsAbout' => [
-                'System Analysis',
-                'Business Analysis',
-                'PHP',
-                'Laravel',
-                'MySQL',
-                'Object-Oriented Programming',
-                'SOLID Principles',
-                'RESTful API',
-                'Continuous Improvement',
-                'Data Analysis',
+            '@graph' => [
+                [
+                    '@type' => 'WebSite',
+                    '@id' => url('/') . '#website',
+                    'url' => url('/'),
+                    'name' => 'Portofolio M Rofiq Aulia',
+                    'alternateName' => ['Portofolio M. Rofiq Aulia', 'Rofiq.dev'],
+                    'publisher' => [
+                        '@id' => url('/') . '#person',
+                    ],
+                ],
+                [
+                    '@type' => 'Person',
+                    '@id' => url('/') . '#person',
+                    'name' => $profile->full_name ?? 'M. Rofiq Aulia',
+                    'jobTitle' => $profile->headline ?? 'System Analyst & Software Engineer',
+                    'url' => url('/'),
+                    'image' => [
+                        '@type' => 'ImageObject',
+                        'url' => $photoUrl,
+                        'caption' => $profile->full_name ?? 'M. Rofiq Aulia',
+                    ],
+                    'sameAs' => [
+                        'https://www.linkedin.com/in/mrofiqaulia/',
+                        'https://www.instagram.com/rofiqsyfhdytllah/',
+                        'https://github.com/RofiqAulia/',
+                    ],
+                    'knowsAbout' => [
+                        'System Analysis',
+                        'Business Analysis',
+                        'PHP',
+                        'Laravel',
+                        'MySQL',
+                        'Object-Oriented Programming',
+                        'SOLID Principles',
+                        'RESTful API',
+                        'Continuous Improvement',
+                        'Data Analysis',
+                    ],
+                ],
             ],
         ];
     @endphp

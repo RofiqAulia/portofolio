@@ -3,12 +3,14 @@
         {{-- 1. Prominent BULAT (Circular) Logo Stage --}}
         <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
             <div class="d-flex align-items-center gap-3">
-                <div class="bento-logo-circle flex-shrink-0">
+                <div class="bento-logo-circle flex-shrink-0" itemscope itemtype="https://schema.org/Organization">
                     @if($experience->cover_path)
                         <img src="{{ asset('storage/' . $experience->cover_path) }}" 
-                             alt="{{ $experience->organization_name }}" 
+                             itemprop="logo"
+                             alt="Logo Mitra {{ $experience->organization_name }}" 
                              class="bento-logo-img-circle"
                              loading="lazy">
+                        <meta itemprop="name" content="{{ $experience->organization_name }}">
                     @else
                         <i class="bi bi-buildings-fill text-warning fs-3"></i>
                     @endif

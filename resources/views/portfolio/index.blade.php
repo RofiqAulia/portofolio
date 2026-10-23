@@ -78,6 +78,7 @@
                             @if(!empty($profile->photo_path))
                                 <div class="hero-studio-photo-wrap position-relative overflow-hidden">
                                     <img src="{{ asset('storage/' . $profile->photo_path) }}" 
+                                         itemprop="image"
                                          alt="{{ $profile->full_name ?? 'M. Rofiq Aulia' }} - System Analyst & Software Engineer Indonesia" 
                                          class="img-fluid w-100 object-fit-cover hero-studio-photo" 
                                          style="height: 380px;"

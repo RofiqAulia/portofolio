@@ -33,6 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->passwordReset()
             ->profile()
             ->brandName('Portofolio Admin')
+            ->favicon(asset('favicon.ico'))
             ->colors([
                 'primary' => '#2F5BFF',
             ])
