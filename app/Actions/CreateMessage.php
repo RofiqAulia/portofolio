@@ -8,6 +8,7 @@ use App\Data\MessageData;
 use App\Enums\MessageStatus;
 use App\Models\Message;
 use App\Services\MessageNotificationService;
+use Illuminate\Support\Facades\Schema;
 
 final class CreateMessage
 {
@@ -17,30 +18,40 @@ final class CreateMessage
 
     public function execute(MessageData $data): Message
     {
-        $attachmentPath = null;
-        $attachmentName = null;
-        $attachmentMime = null;
-        $attachmentSize = null;
+        $uploadedAttachments = [];
 
-        if ($data->attachment !== null && $data->attachment->isValid()) {
-            $attachmentPath = $data->attachment->store('messages/attachments', 'public');
-            $attachmentName = $data->attachment->getClientOriginalName();
-            $attachmentMime = $data->attachment->getClientMimeType() ?: $data->attachment->getMimeType();
-            $attachmentSize = $data->attachment->getSize();
+        foreach ($data->allAttachments() as $file) {
+            if ($file->isValid()) {
+                $path = $file->store('messages/attachments', 'public');
+                $uploadedAttachments[] = [
+                    'path' => $path,
+                    'name' => $file->getClientOriginalName(),
+                    'mime' => $file->getClientMimeType() ?: $file->getMimeType(),
+                    'size' => $file->getSize(),
+                ];
+            }
         }
 
-        $message = Message::create([
+        $first = $uploadedAttachments[0] ?? null;
+
+        $attributes = [
             'name' => $data->name,
             'email' => $data->email,
             'subject' => $data->subject,
             'body' => $data->body,
-            'attachment_path' => $attachmentPath,
-            'attachment_name' => $attachmentName,
-            'attachment_mime' => $attachmentMime,
-            'attachment_size' => $attachmentSize,
+            'attachment_path' => $first['path'] ?? null,
+            'attachment_name' => $first['name'] ?? null,
+            'attachment_mime' => $first['mime'] ?? null,
+            'attachment_size' => $first['size'] ?? null,
             'status' => MessageStatus::New,
             'ip_address' => $data->ipAddress,
-        ]);
+        ];
+
+        if (Schema::hasColumn('messages', 'attachments')) {
+            $attributes['attachments'] = ! empty($uploadedAttachments) ? $uploadedAttachments : null;
+        }
+
+        $message = Message::create($attributes);
 
         $this->notificationService->sendNewMessageNotifications($message);
 

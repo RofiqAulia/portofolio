@@ -22,6 +22,7 @@ class Message extends Model
         'attachment_name',
         'attachment_mime',
         'attachment_size',
+        'attachments',
         'status',
         'ip_address',
         'read_at',
@@ -33,30 +34,101 @@ class Message extends Model
             'status' => MessageStatus::class,
             'read_at' => 'datetime',
             'attachment_size' => 'integer',
+            'attachments' => 'array',
         ];
+    }
+
+    /**
+     * @return array<int, array{path: string, name: string, mime: ?string, size: ?int}>
+     */
+    public function getAttachments(): array
+    {
+        if (is_array($this->attachments) && count($this->attachments) > 0) {
+            return array_values($this->attachments);
+        }
+
+        if (! empty($this->attachment_path)) {
+            return [
+                [
+                    'path' => $this->attachment_path,
+                    'name' => $this->attachment_name ?? basename($this->attachment_path),
+                    'mime' => $this->attachment_mime,
+                    'size' => $this->attachment_size,
+                ],
+            ];
+        }
+
+        return [];
     }
 
     public function hasAttachment(): bool
     {
-        return ! empty($this->attachment_path);
+        return count($this->getAttachments()) > 0;
     }
 
-    public function isImageAttachment(): bool
+    public function hasMultipleAttachments(): bool
     {
-        return $this->attachment_mime !== null && str_starts_with($this->attachment_mime, 'image/');
+        return count($this->getAttachments()) > 1;
     }
 
-    public function formattedAttachmentSize(): string
+    public function isImageAttachment(?int $index = 0): bool
     {
-        if (! $this->attachment_size) {
+        $attachments = $this->getAttachments();
+        $target = $attachments[$index] ?? null;
+
+        if (! $target) {
+            return false;
+        }
+
+        $mime = $target['mime'] ?? '';
+
+        return str_starts_with((string) $mime, 'image/');
+    }
+
+    public function totalAttachmentSize(): int
+    {
+        return (int) array_sum(array_column($this->getAttachments(), 'size'));
+    }
+
+    public function formattedAttachmentSize(?int $index = null): string
+    {
+        if ($index !== null) {
+            $attachments = $this->getAttachments();
+            $bytes = (int) ($attachments[$index]['size'] ?? 0);
+
+            return $this->formatBytes($bytes);
+        }
+
+        $total = $this->totalAttachmentSize();
+        if ($total <= 0 && $this->attachment_size) {
+            $total = (int) $this->attachment_size;
+        }
+
+        return $this->formatBytes($total);
+    }
+
+    public function getAttachmentDownloadUrl(int $index = 0): string
+    {
+        $token = substr(sha1($this->email.(string) $this->created_at), 0, 16);
+
+        return route('portfolio.messages.download-attachment', [
+            'message' => $this->id,
+            'index' => $index,
+            'token' => $token,
+        ]);
+    }
+
+    public function formatBytes(int $bytes): string
+    {
+        if ($bytes <= 0) {
             return '';
         }
 
-        if ($this->attachment_size >= 1048576) {
-            return round($this->attachment_size / 1048576, 1).' MB';
+        if ($bytes >= 1048576) {
+            return round($bytes / 1048576, 1).' MB';
         }
 
-        return round($this->attachment_size / 1024, 1).' KB';
+        return round($bytes / 1024, 1).' KB';
     }
 
     public function scopeNew(Builder $query): Builder

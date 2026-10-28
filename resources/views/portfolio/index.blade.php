@@ -728,16 +728,23 @@
                         </div>
 
                         <div>
-                            <label for="attachment" class="form-label fw-bold small text-uppercase text-dark d-flex flex-wrap align-items-center justify-content-between gap-1">
-                                <span><i class="bi bi-paperclip me-1 text-primary"></i> Lampiran Berkas / Gambar (Opsional)</span>
-                                <span class="text-muted text-lowercase fw-normal" style="font-size: 0.78rem;">PDF, DOC, ZIP, atau Gambar (Maks. 10 MB)</span>
+                            <label for="attachments" class="form-label fw-bold small text-uppercase text-dark d-flex flex-wrap align-items-center justify-content-between gap-1">
+                                <span><i class="bi bi-paperclip me-1 text-primary"></i> Lampiran Berkas / Gambar (Bisa Banyak File, Opsional)</span>
+                                <span class="text-muted text-lowercase fw-normal" style="font-size: 0.78rem;">Maks. 5 Berkas @ 10 MB</span>
                             </label>
-                            <input type="file" name="attachment" id="attachment" class="form-control form-control-modern py-2 px-3 @error('attachment') is-invalid @enderror" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar,.7z,.csv,image/*">
+                            <input type="file" name="attachments[]" id="attachments" multiple class="form-control form-control-modern py-2 px-3 @error('attachments') is-invalid @enderror @error('attachments.*') is-invalid @enderror @error('attachment') is-invalid @enderror" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar,.7z,.csv,image/*">
+                            <div id="attachments-file-list" class="mt-2 d-none"></div>
                             <div class="form-text small text-muted mt-1">
-                                <i class="bi bi-info-circle text-primary me-1"></i> Mendukung dokumen (PDF, Word, Excel, ZIP) atau semua format gambar (JPG, PNG, WebP, SVG).
+                                <i class="bi bi-info-circle text-primary me-1"></i> Mendukung dokumen (PDF, Word, Excel, ZIP) atau format gambar (JPG, PNG, WebP, SVG). Berkas otomatis terlampir di email dan dapat diunduh.
                             </div>
+                            @error('attachments')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                            @error('attachments.*')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                             @error('attachment')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -753,4 +760,63 @@
     </section>
 
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('attachments');
+        const preview = document.getElementById('attachments-file-list');
+
+        if (input && preview) {
+            input.addEventListener('change', function () {
+                preview.innerHTML = '';
+                if (this.files && this.files.length > 0) {
+                    preview.classList.remove('d-none');
+                    const container = document.createElement('div');
+                    container.className = 'd-flex flex-column gap-2 p-2 rounded-3 bg-light border';
+
+                    let totalBytes = 0;
+                    Array.from(this.files).forEach(function (file) {
+                        totalBytes += file.size;
+                        const sizeStr = file.size >= 1048576 
+                            ? (file.size / 1048576).toFixed(1) + ' MB' 
+                            : (file.size / 1024).toFixed(1) + ' KB';
+
+                        const item = document.createElement('div');
+                        item.className = 'd-flex align-items-center justify-content-between p-2 rounded bg-white border border-1 text-dark small';
+                        
+                        const left = document.createElement('div');
+                        left.className = 'd-flex align-items-center text-truncate me-2';
+                        left.innerHTML = '<i class="bi bi-file-earmark-check text-primary me-2 fs-6"></i>';
+                        
+                        const nameSpan = document.createElement('span');
+                        nameSpan.className = 'fw-semibold text-truncate';
+                        nameSpan.textContent = file.name;
+                        left.appendChild(nameSpan);
+
+                        const badge = document.createElement('span');
+                        badge.className = 'badge bg-secondary ms-2 shrink-0';
+                        badge.textContent = sizeStr;
+
+                        item.appendChild(left);
+                        item.appendChild(badge);
+                        container.appendChild(item);
+                    });
+
+                    const totalStr = totalBytes >= 1048576 
+                        ? (totalBytes / 1048576).toFixed(1) + ' MB' 
+                        : (totalBytes / 1024).toFixed(1) + ' KB';
+
+                    const footer = document.createElement('div');
+                    footer.className = 'small text-muted pt-1 ps-1';
+                    footer.innerHTML = '<i class="bi bi-check-circle-fill text-success me-1"></i> Terpilih <strong>' + input.files.length + ' berkas</strong> (Total: ' + totalStr + ')';
+                    container.appendChild(footer);
+
+                    preview.appendChild(container);
+                } else {
+                    preview.classList.add('d-none');
+                }
+            });
+        }
+    });
+</script>
 @endsection

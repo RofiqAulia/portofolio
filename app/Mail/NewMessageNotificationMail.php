@@ -48,18 +48,17 @@ class NewMessageNotificationMail extends Mailable
      */
     public function attachments(): array
     {
-        if (
-            $this->messageRecord->hasAttachment()
-            && $this->messageRecord->attachment_path
-            && Storage::disk('public')->exists($this->messageRecord->attachment_path)
-        ) {
-            return [
-                Attachment::fromStorageDisk('public', $this->messageRecord->attachment_path)
-                    ->as($this->messageRecord->attachment_name ?? 'lampiran')
-                    ->withMime($this->messageRecord->attachment_mime ?? 'application/octet-stream'),
-            ];
+        $attachments = [];
+
+        foreach ($this->messageRecord->getAttachments() as $item) {
+            $path = $item['path'] ?? null;
+            if ($path && Storage::disk('public')->exists($path)) {
+                $attachments[] = Attachment::fromStorageDisk('public', $path)
+                    ->as($item['name'] ?? basename($path))
+                    ->withMime($item['mime'] ?? 'application/octet-stream');
+            }
         }
 
-        return [];
+        return $attachments;
     }
 }

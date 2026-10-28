@@ -25,6 +25,9 @@ Route::post('/kontak', [PortfolioController::class, 'sendMessage'])
     ->middleware('throttle:5,1')
     ->name('portfolio.contact.send');
 
+Route::get('/pesan/{message}/lampiran/{index?}', [PortfolioController::class, 'downloadMessageAttachment'])
+    ->name('portfolio.messages.download-attachment');
+
 // Fallback for legacy images previously cached by Google crawler (e.g. ppa.jpg)
 Route::get('/images/{file}', function (string $file) {
     $fallbackFile = public_path('images/'.$file);

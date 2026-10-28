@@ -38,11 +38,27 @@ final class MessagesTable
                     ->label('Subjek')
                     ->searchable()
                     ->limit(40),
-                TextColumn::make('attachment_name')
+                TextColumn::make('attachments_info')
                     ->label('Lampiran')
-                    ->icon('heroicon-o-paper-clip')
+                    ->state(function (Message $record): ?string {
+                        $attachments = $record->getAttachments();
+                        $count = count($attachments);
+
+                        if ($count === 0) {
+                            return null;
+                        }
+
+                        if ($count === 1) {
+                            return $attachments[0]['name'] ?? '1 berkas';
+                        }
+
+                        return "{$count} berkas";
+                    })
+                    ->icon(fn ($state) => $state ? 'heroicon-o-paper-clip' : null)
+                    ->badge(fn (Message $record) => $record->hasMultipleAttachments())
+                    ->color('info')
                     ->placeholder('-')
-                    ->limit(20)
+                    ->limit(25)
                     ->toggleable(),
                 TextColumn::make('status')
                     ->label('Status')

@@ -12,6 +12,7 @@ use App\Models\Certification;
 use App\Models\Documentation;
 use App\Models\Experience;
 use App\Models\Media;
+use App\Models\Message;
 use App\Models\Profile;
 use App\Models\Project;
 use App\Models\SiteSetting;
@@ -469,5 +470,28 @@ final class PortfolioController extends Controller
         $filename = $certification->getDownloadFilename($index, 'image');
 
         return Storage::disk('public')->download($filePath, $filename);
+    }
+
+    public function downloadMessageAttachment(Request $request, Message $message, int $index = 0): StreamedResponse
+    {
+        $expectedToken = substr(sha1($message->email.(string) $message->created_at), 0, 16);
+        $isAuthorized = $request->hasValidSignature(false)
+            || $request->query('token') === $expectedToken
+            || auth()->check();
+
+        if (! $isAuthorized) {
+            abort(403, 'Tautan unduhan tidak valid atau sudah kedaluwarsa.');
+        }
+
+        $attachments = $message->getAttachments();
+        $target = $attachments[$index] ?? null;
+
+        if (! $target || empty($target['path']) || ! Storage::disk('public')->exists($target['path'])) {
+            abort(404, 'Berkas lampiran pesan tidak ditemukan.');
+        }
+
+        $filename = $target['name'] ?? basename($target['path']);
+
+        return Storage::disk('public')->download($target['path'], $filename);
     }
 }

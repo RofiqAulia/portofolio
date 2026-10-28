@@ -184,4 +184,101 @@ class ContactFormTest extends TestCase
                 && $mail->messageRecord->name === 'Budi Santoso';
         });
     }
+
+    public function test_user_can_submit_contact_form_with_multiple_attachments(): void
+    {
+        Storage::fake('public');
+        Mail::fake();
+
+        $pdf = UploadedFile::fake()->create('spesifikasi.pdf', 300, 'application/pdf');
+        $image = UploadedFile::fake()->image('desain.png', 400, 300);
+
+        $response = $this->post(route('portfolio.contact.send'), [
+            'name' => 'Klien Multi File',
+            'email' => 'multifile@example.com',
+            'subject' => 'Diskusi Proyek Multi Berkas',
+            'body' => 'Berikut kami lampirkan dua berkas penting untuk dianalisis.',
+            'attachments' => [$pdf, $image],
+            'company_website' => '',
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $message = Message::where('email', 'multifile@example.com')->first();
+        $this->assertNotNull($message);
+        $this->assertTrue($message->hasAttachment());
+        $this->assertTrue($message->hasMultipleAttachments());
+        $this->assertCount(2, $message->getAttachments());
+
+        $attachments = $message->getAttachments();
+        $this->assertEquals('spesifikasi.pdf', $attachments[0]['name']);
+        $this->assertEquals('desain.png', $attachments[1]['name']);
+
+        Storage::disk('public')->assertExists($attachments[0]['path']);
+        Storage::disk('public')->assertExists($attachments[1]['path']);
+
+        // Pastikan kedua email memiliki lampiran MIME
+        Mail::assertSent(NewMessageNotificationMail::class, function (NewMessageNotificationMail $mail) {
+            $attachments = $mail->attachments();
+
+            return count($attachments) === 2;
+        });
+
+        Mail::assertSent(MessageAutoReplyMail::class, function (MessageAutoReplyMail $mail) {
+            $attachments = $mail->attachments();
+
+            return count($attachments) === 2;
+        });
+    }
+
+    public function test_user_can_download_message_attachment_via_secure_url(): void
+    {
+        Storage::fake('public');
+
+        $file = UploadedFile::fake()->create('undangan.pdf', 100, 'application/pdf');
+
+        $this->post(route('portfolio.contact.send'), [
+            'name' => 'Klien Unduh Berkas',
+            'email' => 'unduh@example.com',
+            'subject' => 'Uji Coba Unduh Berkas',
+            'body' => 'Pesan pengujian untuk menguji URL unduhan berkas lampiran.',
+            'attachments' => [$file],
+            'company_website' => '',
+        ]);
+
+        $message = Message::where('email', 'unduh@example.com')->firstOrFail();
+        $downloadUrl = $message->getAttachmentDownloadUrl(0);
+
+        $downloadResponse = $this->get($downloadUrl);
+
+        $downloadResponse->assertOk();
+        $downloadResponse->assertDownload('undangan.pdf');
+    }
+
+    public function test_contact_form_rejects_more_than_5_attachments(): void
+    {
+        Storage::fake('public');
+
+        $files = [
+            UploadedFile::fake()->create('f1.pdf', 50, 'application/pdf'),
+            UploadedFile::fake()->create('f2.pdf', 50, 'application/pdf'),
+            UploadedFile::fake()->create('f3.pdf', 50, 'application/pdf'),
+            UploadedFile::fake()->create('f4.pdf', 50, 'application/pdf'),
+            UploadedFile::fake()->create('f5.pdf', 50, 'application/pdf'),
+            UploadedFile::fake()->create('f6.pdf', 50, 'application/pdf'),
+        ];
+
+        $response = $this->post(route('portfolio.contact.send'), [
+            'name' => 'Klien Terlalu Banyak Berkas',
+            'email' => 'toomany@example.com',
+            'subject' => 'Upload 6 Berkas Sekaligus',
+            'body' => 'Mencoba mengirim 6 berkas sekaligus padahal batasnya 5.',
+            'attachments' => $files,
+            'company_website' => '',
+        ]);
+
+        $response->assertSessionHasErrors(['attachments']);
+        $this->assertEquals(0, Message::where('email', 'toomany@example.com')->count());
+    }
 }

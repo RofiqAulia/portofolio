@@ -7,9 +7,11 @@ namespace App\Mail;
 use App\Models\Message;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class MessageAutoReplyMail extends Mailable
 {
@@ -37,10 +39,21 @@ class MessageAutoReplyMail extends Mailable
     }
 
     /**
-     * @return array<int, mixed>
+     * @return array<int, Attachment>
      */
     public function attachments(): array
     {
-        return [];
+        $attachments = [];
+
+        foreach ($this->messageRecord->getAttachments() as $item) {
+            $path = $item['path'] ?? null;
+            if ($path && Storage::disk('public')->exists($path)) {
+                $attachments[] = Attachment::fromStorageDisk('public', $path)
+                    ->as($item['name'] ?? basename($path))
+                    ->withMime($item['mime'] ?? 'application/octet-stream');
+            }
+        }
+
+        return $attachments;
     }
 }

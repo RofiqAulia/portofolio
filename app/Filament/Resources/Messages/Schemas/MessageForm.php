@@ -6,7 +6,7 @@ namespace App\Filament\Resources\Messages\Schemas;
 
 use App\Enums\MessageStatus;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -41,22 +41,12 @@ final class MessageForm
 
                 Section::make('Lampiran Berkas / Gambar')
                     ->schema([
-                        FileUpload::make('attachment_path')
-                            ->label('Berkas Lampiran')
-                            ->disk('public')
-                            ->downloadable()
-                            ->openable()
-                            ->disabled()
+                        Placeholder::make('attachments_view')
+                            ->label('Daftar Berkas')
+                            ->hiddenLabel()
+                            ->content(fn ($record) => view('filament.components.message-attachments', ['record' => $record]))
                             ->columnSpanFull(),
-                        TextInput::make('attachment_name')
-                            ->label('Nama Berkas Asli')
-                            ->disabled(),
-                        TextInput::make('attachment_size')
-                            ->label('Ukuran Berkas')
-                            ->formatStateUsing(fn ($record) => $record?->formattedAttachmentSize())
-                            ->disabled(),
                     ])
-                    ->columns(2)
                     ->visible(fn ($record) => $record && $record->hasAttachment()),
 
                 Section::make('Status Pengelolaan')
