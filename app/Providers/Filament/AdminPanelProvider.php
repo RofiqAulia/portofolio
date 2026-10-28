@@ -39,6 +39,8 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => '#2F5BFF',
             ])
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 fn () => view('filament.components.dashboard-styles')
