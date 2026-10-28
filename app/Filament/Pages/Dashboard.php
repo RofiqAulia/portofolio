@@ -20,4 +20,27 @@ class Dashboard extends BaseDashboard
     {
         return 2;
     }
+
+    public function filtersForm(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Section::make('Filter Periode Data')
+                    ->description('Filter data statistik dan grafik berdasarkan rentang tanggal')
+                    ->collapsible()
+                    ->collapsed(false)
+                    ->schema([
+                        DatePicker::make('startDate')
+                            ->label('Dari Tanggal')
+                            ->placeholder('Pilih tanggal awal...')
+                            ->maxDate(fn ($get) => $get('endDate') ?: now()),
+                        DatePicker::make('endDate')
+                            ->label('Sampai Tanggal')
+                            ->placeholder('Pilih tanggal akhir...')
+                            ->minDate(fn ($get) => $get('startDate'))
+                            ->maxDate(now()),
+                    ])
+                    ->columns(2),
+            ]);
+    }
 }

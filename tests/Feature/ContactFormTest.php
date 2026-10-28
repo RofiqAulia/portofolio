@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Enums\MessageStatus;
+use App\Mail\MessageAutoReplyMail;
+use App\Mail\NewMessageNotificationMail;
 use App\Models\Message;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -152,5 +155,33 @@ class ContactFormTest extends TestCase
         // Assert
         $response->assertSessionHasErrors(['company_website']);
         $this->assertEquals(0, Message::count());
+    }
+
+    public function test_contact_form_sends_mutual_notification_emails(): void
+    {
+        Mail::fake();
+
+        $response = $this->post(route('portfolio.contact.send'), [
+            'name' => 'Budi Santoso',
+            'email' => 'budi@example.com',
+            'subject' => 'Tawaran Kerjasama Website',
+            'body' => 'Halo, saya ingin mendiskusikan peluang kerjasama pengembangan website.',
+            'company_website' => '',
+        ]);
+
+        $response->assertRedirect();
+
+        // 1. Penerima (admin: mrofiqaulia@gmail.com) menerima notifikasi pesan baru
+        Mail::assertSent(NewMessageNotificationMail::class, function ($mail) {
+            return $mail->hasTo('mrofiqaulia@gmail.com')
+                && $mail->messageRecord->name === 'Budi Santoso'
+                && $mail->messageRecord->subject === 'Tawaran Kerjasama Website';
+        });
+
+        // 2. Pengirim (budi@example.com) menerima auto-reply konfirmasi penerimaan pesan
+        Mail::assertSent(MessageAutoReplyMail::class, function ($mail) {
+            return $mail->hasTo('budi@example.com')
+                && $mail->messageRecord->name === 'Budi Santoso';
+        });
     }
 }

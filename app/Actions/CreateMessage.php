@@ -7,9 +7,14 @@ namespace App\Actions;
 use App\Data\MessageData;
 use App\Enums\MessageStatus;
 use App\Models\Message;
+use App\Services\MessageNotificationService;
 
 final class CreateMessage
 {
+    public function __construct(
+        private readonly MessageNotificationService $notificationService,
+    ) {}
+
     public function execute(MessageData $data): Message
     {
         $attachmentPath = null;
@@ -24,7 +29,7 @@ final class CreateMessage
             $attachmentSize = $data->attachment->getSize();
         }
 
-        return Message::create([
+        $message = Message::create([
             'name' => $data->name,
             'email' => $data->email,
             'subject' => $data->subject,
@@ -36,5 +41,9 @@ final class CreateMessage
             'status' => MessageStatus::New,
             'ip_address' => $data->ipAddress,
         ]);
+
+        $this->notificationService->sendNewMessageNotifications($message);
+
+        return $message;
     }
 }
