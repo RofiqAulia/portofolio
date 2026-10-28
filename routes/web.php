@@ -25,6 +25,10 @@ Route::post('/kontak', [PortfolioController::class, 'sendMessage'])
     ->middleware('throttle:5,1')
     ->name('portfolio.contact.send');
 
+Route::post('/kontak/verifikasi-wa', [PortfolioController::class, 'verifyWhatsApp'])
+    ->middleware('throttle:30,1')
+    ->name('portfolio.contact.verify-wa');
+
 Route::get('/pesan/{message}/lampiran/{index?}', [PortfolioController::class, 'downloadMessageAttachment'])
     ->name('portfolio.messages.download-attachment');
 

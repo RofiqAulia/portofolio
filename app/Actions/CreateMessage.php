@@ -6,17 +6,20 @@ namespace App\Actions;
 
 use App\Data\MessageData;
 use App\Enums\MessageStatus;
+use App\Jobs\SendMessageNotificationsJob;
 use App\Models\Message;
 use App\Services\MessageNotificationService;
 use Illuminate\Support\Facades\Schema;
 
 final class CreateMessage
 {
+    private static ?bool $hasAttachmentsColumn = null;
+
     public function __construct(
         private readonly MessageNotificationService $notificationService,
     ) {}
 
-    public function execute(MessageData $data): Message
+    public function execute(MessageData $data, bool $syncNotifications = false): Message
     {
         $uploadedAttachments = [];
 
@@ -47,13 +50,21 @@ final class CreateMessage
             'ip_address' => $data->ipAddress,
         ];
 
-        if (Schema::hasColumn('messages', 'attachments')) {
+        if (self::$hasAttachmentsColumn === null) {
+            self::$hasAttachmentsColumn = Schema::hasColumn('messages', 'attachments');
+        }
+
+        if (self::$hasAttachmentsColumn) {
             $attributes['attachments'] = ! empty($uploadedAttachments) ? $uploadedAttachments : null;
         }
 
         $message = Message::create($attributes);
 
-        $this->notificationService->sendNewMessageNotifications($message);
+        if ($syncNotifications || app()->runningUnitTests()) {
+            $this->notificationService->sendNewMessageNotifications($message);
+        } else {
+            SendMessageNotificationsJob::dispatchAfterResponse($message);
+        }
 
         return $message;
     }

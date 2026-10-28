@@ -40,7 +40,7 @@
 
                     <!-- CTAs (Vibrant Bento Pill Buttons) -->
                     <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
-                        <a href="https://wa.me/6282228035426" target="_blank" rel="noopener noreferrer" class="btn-hero-purple">
+                        <a href="https://wa.me/6282228035426" target="_blank" rel="noopener noreferrer" class="btn-hero-purple js-wa-btn">
                             <span>Hire Me / Diskusi Proyek</span>
                             <i class="bi bi-arrow-right"></i>
                         </a>
@@ -688,8 +688,14 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('portfolio.contact.send') }}" method="POST" enctype="multipart/form-data" class="vstack gap-3">
+                    <form id="contact-form" action="{{ route('portfolio.contact.send') }}" method="POST" enctype="multipart/form-data" class="vstack gap-3">
                         @csrf
+
+                        <!-- Token Google reCAPTCHA v3 -->
+                        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
+                        @error('recaptcha_token')
+                            <div class="alert modern-alert-danger p-2 small mb-2 text-danger rounded-3">{{ $message }}</div>
+                        @enderror
 
                         <!-- Honeypot anti-spam (invisible field) -->
                         <div style="display: none !important;">
@@ -814,6 +820,39 @@
                     preview.appendChild(container);
                 } else {
                     preview.classList.add('d-none');
+                }
+            });
+        }
+
+        // reCAPTCHA v3 Interceptor untuk Formulir Kontak
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function (e) {
+                if (window.recaptchaSiteKey && typeof grecaptcha !== 'undefined') {
+                    const tokenInput = document.getElementById('recaptcha_token');
+                    if (tokenInput && !tokenInput.value) {
+                        e.preventDefault();
+                        const submitBtn = contactForm.querySelector('button[type="submit"]');
+                        const originalHtml = submitBtn ? submitBtn.innerHTML : '';
+                        if (submitBtn) {
+                            submitBtn.disabled = true;
+                            submitBtn.innerHTML = '<span>Verifikasi Keamanan...</span> <i class="bi bi-shield-check ms-2"></i>';
+                        }
+
+                        grecaptcha.ready(function () {
+                            grecaptcha.execute(window.recaptchaSiteKey, { action: 'contact_form' }).then(function (token) {
+                                tokenInput.value = token;
+                                contactForm.submit();
+                            }).catch(function (error) {
+                                console.warn('reCAPTCHA error:', error);
+                                if (submitBtn) {
+                                    submitBtn.disabled = false;
+                                    submitBtn.innerHTML = originalHtml;
+                                }
+                                contactForm.submit();
+                            });
+                        });
+                    }
                 }
             });
         }

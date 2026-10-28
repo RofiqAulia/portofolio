@@ -47,6 +47,10 @@ class AdminPanelProvider extends PanelProvider
             )
             ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+                fn () => view('filament.components.login-recaptcha')
+            )
+            ->renderHook(
+                PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
                 fn () => view('filament.components.login-credentials')
             )
             ->renderHook(

@@ -38,11 +38,19 @@ class MessageAutoReplyMail extends Mailable
         );
     }
 
+    public const MAX_ATTACHMENT_BYTES = 15728640; // 15 MB (Batas aman Gmail SMTP)
+
     /**
      * @return array<int, Attachment>
      */
     public function attachments(): array
     {
+        // Jika total berkas melebihi 15 MB, jangan membebani socket SMTP agar tidak timeout/ditolak Gmail (limit 25MB).
+        // Berkas tetap dapat diunduh langsung via tombol unduh di badan email.
+        if ($this->messageRecord->totalAttachmentSize() > self::MAX_ATTACHMENT_BYTES) {
+            return [];
+        }
+
         $attachments = [];
 
         foreach ($this->messageRecord->getAttachments() as $item) {

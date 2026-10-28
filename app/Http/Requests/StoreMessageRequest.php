@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Data\MessageData;
+use App\Rules\RecaptchaV3Rule;
+use App\Services\RecaptchaService;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -15,12 +17,23 @@ final class StoreMessageRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        if ($this->missing('recaptcha_token') && $this->filled('g-recaptcha-response')) {
+            $this->merge([
+                'recaptcha_token' => $this->input('g-recaptcha-response'),
+            ]);
+        }
+    }
+
     /**
      * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        return [
+        $recaptchaService = app(RecaptchaService::class);
+
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'subject' => ['nullable', 'string', 'max:255'],
@@ -39,6 +52,12 @@ final class StoreMessageRequest extends FormRequest
             ],
             'company_website' => ['nullable', 'max:0'], // Honeypot field: must be empty
         ];
+
+        if ($recaptchaService->isEnabled()) {
+            $rules['recaptcha_token'] = ['required', 'string', new RecaptchaV3Rule('contact_form')];
+        }
+
+        return $rules;
     }
 
     /**
@@ -61,6 +80,7 @@ final class StoreMessageRequest extends FormRequest
             'attachment.mimes' => 'Format berkas harus berupa dokumen (PDF, Word, Excel, ZIP) atau gambar (JPG, PNG, WebP, SVG).',
             'attachment.max' => 'Ukuran berkas lampiran maksimal 10 MB.',
             'company_website.max' => 'Terdeteksi spam bot.',
+            'recaptcha_token.required' => 'Verifikasi keamanan reCAPTCHA wajib diselesaikan.',
         ];
     }
 

@@ -152,7 +152,7 @@
                                 <i class="bi bi-file-earmark-arrow-down"></i> Unduh CV
                             </a>
                         @endif
-                        <a href="https://wa.me/6282228035426" target="_blank" rel="noopener noreferrer" class="btn-inspo-header py-2 px-3 fs-6">
+                        <a href="https://wa.me/6282228035426" target="_blank" rel="noopener noreferrer" class="btn-inspo-header py-2 px-3 fs-6 js-wa-btn">
                             Hire Me <i class="bi bi-whatsapp"></i>
                         </a>
                     </div>
@@ -229,5 +229,72 @@
     </footer>
 
     @include('portfolio.partials.image-modal')
+
+    @php
+        $recaptchaService = app(\App\Services\RecaptchaService::class);
+    @endphp
+
+    @if($recaptchaService->isEnabled())
+        <script src="https://www.google.com/recaptcha/api.js?render={{ $recaptchaService->getSiteKey() }}"></script>
+        <script>
+            window.recaptchaSiteKey = "{{ $recaptchaService->getSiteKey() }}";
+        </script>
+    @endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Global WhatsApp protection with reCAPTCHA v3
+            document.addEventListener('click', function (e) {
+                const waBtn = e.target.closest('.js-wa-btn');
+                if (!waBtn) return;
+
+                if (window.recaptchaSiteKey && typeof grecaptcha !== 'undefined') {
+                    e.preventDefault();
+                    const defaultUrl = waBtn.getAttribute('href');
+                    const originalContent = waBtn.innerHTML;
+
+                    waBtn.style.pointerEvents = 'none';
+                    waBtn.style.opacity = '0.7';
+
+                    grecaptcha.ready(function () {
+                        grecaptcha.execute(window.recaptchaSiteKey, { action: 'whatsapp_click' }).then(function (token) {
+                            fetch("{{ route('portfolio.contact.verify-wa') }}", {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({ recaptcha_token: token })
+                            })
+                            .then(function (res) { return res.json(); })
+                            .then(function (data) {
+                                waBtn.style.pointerEvents = '';
+                                waBtn.style.opacity = '';
+                                waBtn.innerHTML = originalContent;
+
+                                if (data.success && data.target_url) {
+                                    window.open(data.target_url, '_blank', 'noopener,noreferrer');
+                                } else {
+                                    alert(data.message || 'Verifikasi keamanan reCAPTCHA tidak berhasil.');
+                                }
+                            })
+                            .catch(function () {
+                                waBtn.style.pointerEvents = '';
+                                waBtn.style.opacity = '';
+                                waBtn.innerHTML = originalContent;
+                                window.open(defaultUrl, '_blank', 'noopener,noreferrer');
+                            });
+                        }).catch(function () {
+                            waBtn.style.pointerEvents = '';
+                            waBtn.style.opacity = '';
+                            waBtn.innerHTML = originalContent;
+                            window.open(defaultUrl, '_blank', 'noopener,noreferrer');
+                        });
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

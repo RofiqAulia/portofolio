@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\CreateMessage;
+use App\Enums\ExperienceType;
 use App\Enums\ProjectStatus;
 use App\Enums\SkillType;
 use App\Http\Requests\StoreMessageRequest;
@@ -18,6 +19,8 @@ use App\Models\Project;
 use App\Models\SiteSetting;
 use App\Models\SkillCategory;
 use App\Models\Technology;
+use App\Services\RecaptchaService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -35,17 +38,14 @@ final class PortfolioController extends Controller
 
         $technologies = Technology::orderBy('name')->get();
 
-        $hardSkillCategory = SkillCategory::with(['skills' => fn ($q) => $q->visible()->ordered()])
-            ->where('type', SkillType::Hard)
-            ->first();
+        $skillCategories = SkillCategory::with(['skills' => fn ($q) => $q->visible()->ordered()])
+            ->whereIn('type', [SkillType::Hard, SkillType::Soft, SkillType::Analysis])
+            ->get()
+            ->keyBy(fn (SkillCategory $c) => $c->type instanceof SkillType ? $c->type->value : (string) $c->type);
 
-        $softSkillCategory = SkillCategory::with(['skills' => fn ($q) => $q->visible()->ordered()])
-            ->where('type', SkillType::Soft)
-            ->first();
-
-        $analysisSkillCategory = SkillCategory::with(['skills' => fn ($q) => $q->visible()->ordered()])
-            ->where('type', SkillType::Analysis)
-            ->first();
+        $hardSkillCategory = $skillCategories->get(SkillType::Hard->value);
+        $softSkillCategory = $skillCategories->get(SkillType::Soft->value);
+        $analysisSkillCategory = $skillCategories->get(SkillType::Analysis->value);
 
         $hardSkillTiers = $this->buildSkillPyramidTiers($hardSkillCategory);
         $softSkillTiers = $this->buildSkillPyramidTiers($softSkillCategory);
@@ -55,23 +55,19 @@ final class PortfolioController extends Controller
             ->with(['technologies', 'media'])
             ->get();
 
-        $internships = Experience::internships()
-            ->published()
+        $allExperiences = Experience::published()
             ->ordered()
             ->with(['highlights', 'technologies', 'attachments' => fn ($q) => $q->visible()])
             ->get();
 
-        $organizations = Experience::organizations()
-            ->published()
-            ->ordered()
-            ->with(['highlights', 'technologies', 'attachments' => fn ($q) => $q->visible()])
-            ->get();
+        $internships = $allExperiences->filter(fn (Experience $e) => $e->type === ExperienceType::Internship)->values();
+        $organizations = $allExperiences->filter(fn (Experience $e) => $e->type === ExperienceType::Organization)->values();
 
         $certifications = Certification::published()
             ->ordered()
             ->get();
 
-        $settings = SiteSetting::all()->pluck('value', 'key');
+        $settings = collect(SiteSetting::allKeyed());
 
         return view('portfolio.index', compact(
             'profile',
@@ -348,6 +344,30 @@ final class PortfolioController extends Controller
         $createMessage->execute($request->toData());
 
         return back()->with('success', 'Terima kasih! Pesan Anda telah terkirim dan akan segera saya balas.');
+    }
+
+    public function verifyWhatsApp(Request $request, RecaptchaService $recaptchaService): JsonResponse
+    {
+        if ($recaptchaService->isEnabled()) {
+            $token = is_string($request->input('recaptcha_token')) ? $request->input('recaptcha_token') : null;
+            $result = $recaptchaService->verify($token, 'whatsapp_click', $request->ip());
+
+            if (! $result['success']) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $result['error'] ?? 'Verifikasi keamanan reCAPTCHA gagal atau terdeteksi aktivitas bot.',
+                ], 422);
+            }
+        }
+
+        $profile = Profile::first();
+        $phone = $profile->phone ?? '6282228035426';
+        $cleanedPhone = preg_replace('/[^0-9]/', '', $phone) ?: '6282228035426';
+
+        return response()->json([
+            'success' => true,
+            'target_url' => 'https://wa.me/'.$cleanedPhone,
+        ]);
     }
 
     /**

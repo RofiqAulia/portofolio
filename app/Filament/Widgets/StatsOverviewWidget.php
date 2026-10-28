@@ -21,20 +21,23 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
         $startDate = $this->pageFilters['startDate'] ?? null;
         $endDate = $this->pageFilters['endDate'] ?? null;
 
+        // Ambil data view 6 bulan terakhir dalam 1 query tunggal yang di-cache di memori (menggantikan 16 query berulang)
+        $historyStart = now()->subMonths(5)->startOfMonth();
+        $recentViews = PageView::where('created_at', '>=', $historyStart)->get(['created_at']);
+
         // Daily stats
         $todayStart = now()->startOfDay();
-        $todayViews = PageView::where('created_at', '>=', $todayStart)->count();
-        $yesterdayViews = PageView::whereBetween('created_at', [
-            now()->subDay()->startOfDay(),
-            now()->subDay()->endOfDay(),
-        ])->count();
+        $todayEnd = now()->endOfDay();
+        $yesterdayStart = now()->subDay()->startOfDay();
+        $yesterdayEnd = now()->subDay()->endOfDay();
+
+        $todayViews = $recentViews->filter(fn ($v) => $v->created_at >= $todayStart && $v->created_at <= $todayEnd)->count();
+        $yesterdayViews = $recentViews->filter(fn ($v) => $v->created_at >= $yesterdayStart && $v->created_at <= $yesterdayEnd)->count();
         $diffDay = $todayViews - $yesterdayViews;
         $diffDaySign = $diffDay > 0 ? '+' : '';
 
         // 7-day sparkline for daily
-        $sevenDaysAgo = now()->subDays(6)->startOfDay();
-        $recentDaily = PageView::where('created_at', '>=', $sevenDaysAgo)
-            ->get(['created_at'])
+        $recentDaily = $recentViews->where('created_at', '>=', now()->subDays(6)->startOfDay())
             ->groupBy(fn ($item) => $item->created_at->format('Y-m-d'))
             ->map->count();
 
@@ -45,11 +48,12 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
         }
 
         // Weekly stats
-        $thisWeekViews = PageView::where('created_at', '>=', now()->startOfWeek())->count();
-        $lastWeekViews = PageView::whereBetween('created_at', [
-            now()->subWeek()->startOfWeek(),
-            now()->subWeek()->endOfWeek(),
-        ])->count();
+        $thisWeekStart = now()->startOfWeek();
+        $lastWeekStart = now()->subWeek()->startOfWeek();
+        $lastWeekEnd = now()->subWeek()->endOfWeek();
+
+        $thisWeekViews = $recentViews->filter(fn ($v) => $v->created_at >= $thisWeekStart)->count();
+        $lastWeekViews = $recentViews->filter(fn ($v) => $v->created_at >= $lastWeekStart && $v->created_at <= $lastWeekEnd)->count();
         $diffWeek = $thisWeekViews - $lastWeekViews;
         $diffWeekSign = $diffWeek > 0 ? '+' : '';
 
@@ -57,15 +61,16 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
         for ($w = 3; $w >= 0; $w--) {
             $start = now()->subWeeks($w)->startOfWeek();
             $end = now()->subWeeks($w)->endOfWeek();
-            $weeklySparkline[] = PageView::whereBetween('created_at', [$start, $end])->count();
+            $weeklySparkline[] = $recentViews->filter(fn ($v) => $v->created_at >= $start && $v->created_at <= $end)->count();
         }
 
         // Monthly stats
-        $thisMonthViews = PageView::where('created_at', '>=', now()->startOfMonth())->count();
-        $lastMonthViews = PageView::whereBetween('created_at', [
-            now()->subMonth()->startOfMonth(),
-            now()->subMonth()->endOfMonth(),
-        ])->count();
+        $thisMonthStart = now()->startOfMonth();
+        $lastMonthStart = now()->subMonth()->startOfMonth();
+        $lastMonthEnd = now()->subMonth()->endOfMonth();
+
+        $thisMonthViews = $recentViews->filter(fn ($v) => $v->created_at >= $thisMonthStart)->count();
+        $lastMonthViews = $recentViews->filter(fn ($v) => $v->created_at >= $lastMonthStart && $v->created_at <= $lastMonthEnd)->count();
         $diffMonth = $thisMonthViews - $lastMonthViews;
         $diffMonthSign = $diffMonth > 0 ? '+' : '';
 
@@ -73,7 +78,7 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
         for ($m = 5; $m >= 0; $m--) {
             $start = now()->subMonths($m)->startOfMonth();
             $end = now()->subMonths($m)->endOfMonth();
-            $monthlySparkline[] = PageView::whereBetween('created_at', [$start, $end])->count();
+            $monthlySparkline[] = $recentViews->filter(fn ($v) => $v->created_at >= $start && $v->created_at <= $end)->count();
         }
 
         // Blueprint & Documentation stats

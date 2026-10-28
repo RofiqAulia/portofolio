@@ -149,30 +149,8 @@
             <div class="message-box">{{ $messageRecord->body }}</div>
 
             @if($messageRecord->hasAttachment())
-                <div style="margin-top: 18px; margin-bottom: 18px;">
-                    <p style="font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 8px;">
-                        Berkas Lampiran ({{ count($messageRecord->getAttachments()) }} berkas):
-                    </p>
-                    @foreach($messageRecord->getAttachments() as $attachment)
-                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 8px; width: 100%;">
-                            <tr>
-                                <td style="padding: 10px 14px; font-size: 13px; color: #1e293b;">
-                                    📎 <strong>{{ $attachment['name'] }}</strong>
-                                    @if(!empty($attachment['size']))
-                                        <span style="color: #64748b; font-size: 12px; margin-left: 4px;">({{ $messageRecord->formatBytes((int) $attachment['size']) }})</span>
-                                    @endif
-                                </td>
-                                <td align="right" style="padding: 10px 14px; width: 90px; text-align: right;">
-                                    <a href="{{ $messageRecord->getAttachmentDownloadUrl($loop->index) }}" style="display: inline-block; padding: 6px 14px; background-color: #2F5BFF; color: #ffffff !important; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: 600; text-align: center;">
-                                        Unduh
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
-                    @endforeach
-                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">
-                        💡 <em>Berkas juga telah dilampirkan langsung pada email ini dan dapat dibuka dari baki lampiran di bagian bawah email Anda.</em>
-                    </div>
+                <div class="attachment-box">
+                    📎 <strong>Lampiran:</strong> Berkas telah dilampirkan langsung pada email ini (dapat dilihat dan diunduh di baki lampiran di bawah).
                 </div>
             @endif
 
