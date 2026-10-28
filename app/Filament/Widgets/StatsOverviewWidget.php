@@ -6,21 +6,15 @@ namespace App\Filament\Widgets;
 
 use App\Models\Documentation;
 use App\Models\PageView;
-use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget as BaseStatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatsOverviewWidget extends BaseStatsOverviewWidget
 {
-    use InteractsWithPageFilters;
-
     protected static ?int $sort = 1;
 
     protected function getStats(): array
     {
-        $startDate = $this->pageFilters['startDate'] ?? null;
-        $endDate = $this->pageFilters['endDate'] ?? null;
-
         // Ambil data view 6 bulan terakhir dalam 1 query tunggal yang di-cache di memori (menggantikan 16 query berulang)
         $historyStart = now()->subMonths(5)->startOfMonth();
         $recentViews = PageView::where('created_at', '>=', $historyStart)->get(['created_at']);
@@ -111,27 +105,6 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
             ->descriptionIcon($diffMonth >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
             ->color($diffMonth >= 0 ? 'success' : 'danger')
             ->chart($monthlySparkline);
-
-        if ($startDate || $endDate) {
-            $filteredViews = PageView::query()
-                ->when($startDate, fn ($q) => $q->whereDate('created_at', '>=', $startDate))
-                ->when($endDate, fn ($q) => $q->whereDate('created_at', '<=', $endDate))
-                ->count();
-
-            $dateLabel = trim(($startDate ? "dari {$startDate} " : '').($endDate ? "s/d {$endDate}" : ''));
-
-            $filteredStat = Stat::make('Kunjungan Terfilter', (string) $filteredViews)
-                ->description($dateLabel !== '' ? $dateLabel : 'Filter aktif')
-                ->descriptionIcon('heroicon-m-funnel')
-                ->color('info');
-
-            return [
-                $filteredStat,
-                $todayStat,
-                $monthStat,
-                $blueprintStat,
-            ];
-        }
 
         $weekStat = Stat::make('Pengunjung Minggu Ini', (string) $thisWeekViews)
             ->description("{$diffWeekSign}{$diffWeek} vs minggu lalu")

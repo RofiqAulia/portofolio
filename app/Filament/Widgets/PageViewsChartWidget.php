@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace App\Filament\Widgets;
 
 use App\Models\PageView;
-use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
-use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Illuminate\Contracts\Support\Htmlable;
 
 class PageViewsChartWidget extends ChartWidget
 {
-    use InteractsWithPageFilters;
-
     protected static ?int $sort = 2;
 
     protected int|string|array $columnSpan = 1;
@@ -24,13 +20,6 @@ class PageViewsChartWidget extends ChartWidget
 
     public function getHeading(): string|Htmlable|null
     {
-        $startDate = $this->pageFilters['startDate'] ?? null;
-        $endDate = $this->pageFilters['endDate'] ?? null;
-
-        if ($startDate || $endDate) {
-            return 'Grafik Kunjungan (Kustom)';
-        }
-
         return match ($this->filter) {
             'today' => 'Grafik Kunjungan (Hari Ini)',
             'week' => 'Grafik Kunjungan (Minggu Ini)',
@@ -56,13 +45,6 @@ class PageViewsChartWidget extends ChartWidget
 
     protected function getData(): array
     {
-        $startDateFilter = $this->pageFilters['startDate'] ?? null;
-        $endDateFilter = $this->pageFilters['endDate'] ?? null;
-
-        if ($startDateFilter || $endDateFilter) {
-            return $this->getCustomRangeData($startDateFilter, $endDateFilter);
-        }
-
         return match ($this->filter) {
             'today' => $this->getTodayData(),
             'week' => $this->getWeeklyData(),
@@ -154,51 +136,6 @@ class PageViewsChartWidget extends ChartWidget
         }
 
         return $this->formatChartData('Kunjungan Bulanan', $labels, $counts);
-    }
-
-    protected function getCustomRangeData(?string $start, ?string $end): array
-    {
-        $startDate = $start ? Carbon::parse($start)->startOfDay() : now()->subDays(29)->startOfDay();
-        $endDate = $end ? Carbon::parse($end)->endOfDay() : now()->endOfDay();
-
-        $diffInDays = max(1, (int) $startDate->diffInDays($endDate));
-
-        if ($diffInDays <= 1) {
-            $views = PageView::whereBetween('created_at', [$startDate, $endDate])
-                ->get(['created_at'])
-                ->groupBy(fn ($item) => $item->created_at->format('H:00'))
-                ->map->count();
-
-            $labels = [];
-            $counts = [];
-            for ($hour = 0; $hour < 24; $hour++) {
-                $label = sprintf('%02d:00', $hour);
-                $labels[] = $label;
-                $counts[] = $views->get($label, 0);
-            }
-
-            return $this->formatChartData('Kunjungan Terfilter', $labels, $counts);
-        }
-
-        $views = PageView::whereBetween('created_at', [$startDate, $endDate])
-            ->get(['created_at'])
-            ->groupBy(fn ($item) => $item->created_at->format('Y-m-d'))
-            ->map->count();
-
-        $labels = [];
-        $counts = [];
-
-        for ($i = 0; $i <= $diffInDays; $i++) {
-            $date = (clone $startDate)->addDays($i);
-            if ($date->greaterThan($endDate)) {
-                break;
-            }
-            $dateKey = $date->format('Y-m-d');
-            $labels[] = $date->translatedFormat('d M');
-            $counts[] = $views->get($dateKey, 0);
-        }
-
-        return $this->formatChartData('Kunjungan Terfilter', $labels, $counts);
     }
 
     protected function formatChartData(string $label, array $labels, array $counts): array

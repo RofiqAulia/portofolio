@@ -35,7 +35,6 @@ use App\Models\SkillCategory;
 use App\Models\Technology;
 use App\Models\User;
 use Filament\Facades\Filament;
-use Filament\Schemas\Schema;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -63,16 +62,14 @@ class DashboardAndBadgesTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('Dashboard');
-        $response->assertSee('Filter Periode Data');
+        $response->assertDontSee('Filter Periode Data');
     }
 
-    public function test_custom_dashboard_schema_has_filter_form_components(): void
+    public function test_custom_dashboard_has_columns_configured(): void
     {
         $page = new Dashboard;
-        $schema = Schema::make($page);
-        $configuredSchema = $page->filtersForm($schema);
 
-        $this->assertNotEmpty($configuredSchema->getComponents());
+        $this->assertEquals(2, $page->getColumns());
     }
 
     public function test_sidebar_navigation_badges_return_correct_counts(): void
