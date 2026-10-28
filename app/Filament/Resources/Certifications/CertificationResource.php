@@ -35,6 +35,11 @@ class CertificationResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Penghargaan & Sertifikasi';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::count();
+    }
+
     public static function form(Schema $schema): Schema
     {
         return CertificationForm::configure($schema);

@@ -3,14 +3,16 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\Login;
+use App\Filament\Pages\Dashboard;
+use App\Filament\Widgets\LatestBlueprintsWidget;
 use App\Filament\Widgets\LatestMessagesWidget;
 use App\Filament\Widgets\PageViewsChartWidget;
+use App\Filament\Widgets\PortfolioTrendChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\View\PanelsRenderHook;
@@ -38,6 +40,10 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => '#2F5BFF',
             ])
             ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn () => view('filament.components.dashboard-styles')
+            )
+            ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
                 fn () => view('filament.components.login-credentials')
             )
@@ -61,6 +67,8 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 StatsOverviewWidget::class,
                 PageViewsChartWidget::class,
+                PortfolioTrendChartWidget::class,
+                LatestBlueprintsWidget::class,
                 LatestMessagesWidget::class,
             ])
             ->middleware([

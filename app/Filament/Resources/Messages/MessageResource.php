@@ -39,14 +39,12 @@ class MessageResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $count = Message::where('status', MessageStatus::New)->count();
-
-        return $count > 0 ? (string) $count : null;
+        return (string) static::getModel()::count();
     }
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return 'danger';
+        return Message::where('status', MessageStatus::New)->count() > 0 ? 'danger' : 'gray';
     }
 
     public static function form(Schema $schema): Schema

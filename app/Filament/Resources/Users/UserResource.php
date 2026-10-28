@@ -31,6 +31,11 @@ class UserResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Pengguna';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::count();
+    }
+
     public static function form(Schema $schema): Schema
     {
         return UserForm::configure($schema);

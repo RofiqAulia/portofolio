@@ -34,6 +34,11 @@ class ExperienceResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Pengalaman';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::count();
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ExperienceForm::configure($schema);

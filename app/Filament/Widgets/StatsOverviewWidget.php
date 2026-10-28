@@ -4,44 +4,141 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets;
 
-use App\Enums\MessageStatus;
-use App\Enums\ProjectStatus;
-use App\Models\Experience;
-use App\Models\Message;
+use App\Models\Documentation;
 use App\Models\PageView;
-use App\Models\Project;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget as BaseStatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatsOverviewWidget extends BaseStatsOverviewWidget
 {
+    use InteractsWithPageFilters;
+
     protected static ?int $sort = 1;
 
     protected function getStats(): array
     {
-        $monthlyViews = PageView::where('created_at', '>=', now()->startOfMonth())->count();
-        $publishedProjects = Project::where('status', ProjectStatus::Published)->count();
-        $newMessages = Message::where('status', MessageStatus::New)->count();
-        $totalDrafts = Project::where('status', ProjectStatus::Draft)->count()
-            + Experience::where('status', ProjectStatus::Draft)->count();
+        $startDate = $this->pageFilters['startDate'] ?? null;
+        $endDate = $this->pageFilters['endDate'] ?? null;
+
+        // Daily stats
+        $todayStart = now()->startOfDay();
+        $todayViews = PageView::where('created_at', '>=', $todayStart)->count();
+        $yesterdayViews = PageView::whereBetween('created_at', [
+            now()->subDay()->startOfDay(),
+            now()->subDay()->endOfDay(),
+        ])->count();
+        $diffDay = $todayViews - $yesterdayViews;
+        $diffDaySign = $diffDay > 0 ? '+' : '';
+
+        // 7-day sparkline for daily
+        $sevenDaysAgo = now()->subDays(6)->startOfDay();
+        $recentDaily = PageView::where('created_at', '>=', $sevenDaysAgo)
+            ->get(['created_at'])
+            ->groupBy(fn ($item) => $item->created_at->format('Y-m-d'))
+            ->map->count();
+
+        $daySparkline = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $key = now()->subDays($i)->format('Y-m-d');
+            $daySparkline[] = $recentDaily->get($key, 0);
+        }
+
+        // Weekly stats
+        $thisWeekViews = PageView::where('created_at', '>=', now()->startOfWeek())->count();
+        $lastWeekViews = PageView::whereBetween('created_at', [
+            now()->subWeek()->startOfWeek(),
+            now()->subWeek()->endOfWeek(),
+        ])->count();
+        $diffWeek = $thisWeekViews - $lastWeekViews;
+        $diffWeekSign = $diffWeek > 0 ? '+' : '';
+
+        $weeklySparkline = [];
+        for ($w = 3; $w >= 0; $w--) {
+            $start = now()->subWeeks($w)->startOfWeek();
+            $end = now()->subWeeks($w)->endOfWeek();
+            $weeklySparkline[] = PageView::whereBetween('created_at', [$start, $end])->count();
+        }
+
+        // Monthly stats
+        $thisMonthViews = PageView::where('created_at', '>=', now()->startOfMonth())->count();
+        $lastMonthViews = PageView::whereBetween('created_at', [
+            now()->subMonth()->startOfMonth(),
+            now()->subMonth()->endOfMonth(),
+        ])->count();
+        $diffMonth = $thisMonthViews - $lastMonthViews;
+        $diffMonthSign = $diffMonth > 0 ? '+' : '';
+
+        $monthlySparkline = [];
+        for ($m = 5; $m >= 0; $m--) {
+            $start = now()->subMonths($m)->startOfMonth();
+            $end = now()->subMonths($m)->endOfMonth();
+            $monthlySparkline[] = PageView::whereBetween('created_at', [$start, $end])->count();
+        }
+
+        // Blueprint & Documentation stats
+        $totalBlueprints = Documentation::count();
+        $publishedBlueprints = Documentation::where('is_published', true)->count();
+        $archBlueprints = Documentation::where('category', 'like', '%Arsitektur%')->count();
+        $blueprintDesc = "{$publishedBlueprints} terbit".($archBlueprints > 0 ? " • {$archBlueprints} arsitektur" : '');
+
+        $blueprintSparkline = [];
+        for ($m = 5; $m >= 0; $m--) {
+            $start = now()->subMonths($m)->startOfMonth();
+            $end = now()->subMonths($m)->endOfMonth();
+            $blueprintSparkline[] = Documentation::whereBetween('created_at', [$start, $end])->count();
+        }
+
+        $blueprintStat = Stat::make('Blueprint & Dokumen', (string) $totalBlueprints)
+            ->description($blueprintDesc)
+            ->descriptionIcon('heroicon-m-document-text')
+            ->color('primary')
+            ->chart($blueprintSparkline);
+
+        $todayStat = Stat::make('Pengunjung Hari Ini', (string) $todayViews)
+            ->description("{$diffDaySign}{$diffDay} vs kemarin")
+            ->descriptionIcon($diffDay >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
+            ->color($diffDay >= 0 ? 'success' : 'danger')
+            ->chart($daySparkline);
+
+        $monthStat = Stat::make('Pengunjung Bulan Ini', (string) $thisMonthViews)
+            ->description("{$diffMonthSign}{$diffMonth} vs bulan lalu")
+            ->descriptionIcon($diffMonth >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
+            ->color($diffMonth >= 0 ? 'success' : 'danger')
+            ->chart($monthlySparkline);
+
+        if ($startDate || $endDate) {
+            $filteredViews = PageView::query()
+                ->when($startDate, fn ($q) => $q->whereDate('created_at', '>=', $startDate))
+                ->when($endDate, fn ($q) => $q->whereDate('created_at', '<=', $endDate))
+                ->count();
+
+            $dateLabel = trim(($startDate ? "dari {$startDate} " : '').($endDate ? "s/d {$endDate}" : ''));
+
+            $filteredStat = Stat::make('Kunjungan Terfilter', (string) $filteredViews)
+                ->description($dateLabel !== '' ? $dateLabel : 'Filter aktif')
+                ->descriptionIcon('heroicon-m-funnel')
+                ->color('info');
+
+            return [
+                $filteredStat,
+                $todayStat,
+                $monthStat,
+                $blueprintStat,
+            ];
+        }
+
+        $weekStat = Stat::make('Pengunjung Minggu Ini', (string) $thisWeekViews)
+            ->description("{$diffWeekSign}{$diffWeek} vs minggu lalu")
+            ->descriptionIcon($diffWeek >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
+            ->color($diffWeek >= 0 ? 'success' : 'danger')
+            ->chart($weeklySparkline);
 
         return [
-            Stat::make('Pengunjung Bulan Ini', (string) $monthlyViews)
-                ->description('Total page views bulan ini')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->color('success'),
-            Stat::make('Proyek Terbit', (string) $publishedProjects)
-                ->description('Proyek yang tampil ke publik')
-                ->descriptionIcon('heroicon-m-check-badge')
-                ->color('primary'),
-            Stat::make('Pesan Baru', (string) $newMessages)
-                ->description('Pesan belum dibaca')
-                ->descriptionIcon('heroicon-m-envelope')
-                ->color($newMessages > 0 ? 'danger' : 'gray'),
-            Stat::make('Draft Konten', (string) $totalDrafts)
-                ->description('Proyek & Pengalaman status draft')
-                ->descriptionIcon('heroicon-m-pencil-square')
-                ->color('warning'),
+            $todayStat,
+            $weekStat,
+            $monthStat,
+            $blueprintStat,
         ];
     }
 }

@@ -32,6 +32,11 @@ class ProfileResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Profil';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::count();
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ProfileForm::configure($schema);
