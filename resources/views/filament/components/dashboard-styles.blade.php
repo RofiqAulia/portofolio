@@ -84,4 +84,21 @@
         padding: 0.375rem 2rem 0.375rem 0.75rem !important;
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
     }
+
+    /* Message attachments card and icon constraints */
+    .fi-attachment-card svg {
+        width: 14px !important;
+        height: 14px !important;
+        max-width: 14px !important;
+        max-height: 14px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .fi-attachment-icon-wrapper svg {
+        width: 20px !important;
+        height: 20px !important;
+        max-width: 20px !important;
+        max-height: 20px !important;
+        flex-shrink: 0 !important;
+    }
 </style>
