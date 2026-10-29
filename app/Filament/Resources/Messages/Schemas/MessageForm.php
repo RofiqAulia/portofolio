@@ -20,6 +20,7 @@ final class MessageForm
         return $schema
             ->components([
                 Section::make('Status Pengelolaan')
+                    ->description('Kelola status pembacaan dan tindak lanjut pesan')
                     ->schema([
                         Select::make('status')
                             ->label('Status Pesan')
@@ -33,9 +34,15 @@ final class MessageForm
                         DateTimePicker::make('read_at')
                             ->label('Waktu Dibaca')
                             ->nullable(),
-                    ])->columns(2),
+                        DateTimePicker::make('created_at')
+                            ->label('Waktu Diterima')
+                            ->disabled(),
+                    ])
+                    ->columns(3)
+                    ->columnSpanFull(),
 
                 Section::make('Pesan Masuk')
+                    ->description('Informasi lengkap pengirim dan isi pesan kontak')
                     ->schema([
                         TextInput::make('name')
                             ->label('Nama Pengirim')
@@ -52,10 +59,14 @@ final class MessageForm
                         Textarea::make('body')
                             ->label('Isi Pesan')
                             ->rows(6)
+                            ->columnSpanFull()
                             ->disabled(),
-                    ])->columns(2),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull(),
 
                 Section::make('Lampiran Berkas / Gambar')
+                    ->description('Berkas atau dokumen yang diunggah oleh pengirim pesan')
                     ->schema([
                         Placeholder::make('attachments_view')
                             ->label('Daftar Berkas')
@@ -63,6 +74,7 @@ final class MessageForm
                             ->content(fn ($record) => view('filament.components.message-attachments', ['record' => $record]))
                             ->columnSpanFull(),
                     ])
+                    ->columnSpanFull()
                     ->visible(fn ($record) => $record && $record->hasAttachment()),
             ]);
     }
