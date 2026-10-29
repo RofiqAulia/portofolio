@@ -60,8 +60,12 @@ final class CreateMessage
 
         $message = Message::create($attributes);
 
+        // Selalu buat notifikasi in-app ke panel admin secara instan tanpa menunggu antrean
+        $this->notificationService->notifyAdminsInApp($message);
+
         if ($syncNotifications || app()->runningUnitTests()) {
-            $this->notificationService->sendNewMessageNotifications($message);
+            $this->notificationService->notifyReceiver($message);
+            $this->notificationService->notifySender($message);
         } else {
             SendMessageNotificationsJob::dispatchAfterResponse($message);
         }

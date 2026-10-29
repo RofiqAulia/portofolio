@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\MessageStatus;
+use App\Services\MessageNotificationService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,6 +37,29 @@ class Message extends Model
             'attachment_size' => 'integer',
             'attachments' => 'array',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::updating(function (Message $message): void {
+            if ($message->isDirty('status')) {
+                if (in_array($message->status, [MessageStatus::Read, MessageStatus::Replied], true) && $message->read_at === null) {
+                    $message->read_at = now();
+                } elseif ($message->status === MessageStatus::New) {
+                    $message->read_at = null;
+                }
+            }
+        });
+
+        static::updated(function (Message $message): void {
+            if ($message->wasChanged('status')) {
+                if (in_array($message->status, [MessageStatus::Read, MessageStatus::Replied, MessageStatus::Archived], true)) {
+                    app(MessageNotificationService::class)->markInAppNotificationAsRead($message);
+                } elseif ($message->status === MessageStatus::New) {
+                    app(MessageNotificationService::class)->markInAppNotificationAsUnread($message);
+                }
+            }
+        });
     }
 
     /**

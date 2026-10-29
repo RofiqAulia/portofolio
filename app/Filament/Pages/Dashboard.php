@@ -7,12 +7,18 @@ namespace App\Filament\Pages;
 use App\Filament\Widgets\PageViewsChartWidget;
 use App\Filament\Widgets\PortfolioTrendChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
+use App\Services\MessageNotificationService;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Widgets\Widget;
 
 class Dashboard extends BaseDashboard
 {
     protected static ?string $title = 'Dashboard';
+
+    public function mount(): void
+    {
+        app(MessageNotificationService::class)->syncUnreadInAppNotifications();
+    }
 
     public function getColumns(): int|array
     {

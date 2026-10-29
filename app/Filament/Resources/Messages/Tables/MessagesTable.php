@@ -8,6 +8,7 @@ use App\Enums\MessageStatus;
 use App\Mail\MessageReplyMail;
 use App\Models\Message;
 use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -19,6 +20,7 @@ use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
@@ -33,11 +35,13 @@ final class MessagesTable
                     ->label('Nama Pengirim')
                     ->searchable()
                     ->sortable()
+                    ->weight(fn (Message $record): string => $record->status === MessageStatus::New ? 'bold' : 'normal')
                     ->description(fn ($record) => $record->email),
                 TextColumn::make('subject')
                     ->label('Subjek')
                     ->searchable()
-                    ->limit(40),
+                    ->limit(40)
+                    ->weight(fn (Message $record): string => $record->status === MessageStatus::New ? 'bold' : 'normal'),
                 TextColumn::make('attachments_info')
                     ->label('Lampiran')
                     ->state(function (Message $record): ?string {
@@ -69,7 +73,19 @@ final class MessagesTable
                         'success' => MessageStatus::Replied->value,
                         'gray' => MessageStatus::Archived->value,
                     ])
+                    ->icons([
+                        'heroicon-m-envelope' => MessageStatus::New->value,
+                        'heroicon-m-envelope-open' => MessageStatus::Read->value,
+                        'heroicon-m-arrow-uturn-left' => MessageStatus::Replied->value,
+                        'heroicon-m-archive-box' => MessageStatus::Archived->value,
+                    ])
                     ->formatStateUsing(fn ($state) => $state instanceof MessageStatus ? $state->label() : ($state ?? '')),
+                TextColumn::make('read_at')
+                    ->label('Dibaca Pada')
+                    ->dateTime('d M Y H:i')
+                    ->placeholder('Belum dibaca')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Diterima')
                     ->dateTime('d M Y H:i')
@@ -100,6 +116,38 @@ final class MessagesTable
                         }
 
                         return $data;
+                    }),
+                Action::make('markAsRead')
+                    ->label('Tandai Dibaca')
+                    ->icon('heroicon-m-check-circle')
+                    ->color('info')
+                    ->visible(fn (Message $record): bool => $record->status === MessageStatus::New)
+                    ->action(function (Message $record): void {
+                        $record->update([
+                            'status' => MessageStatus::Read,
+                            'read_at' => now(),
+                        ]);
+
+                        Notification::make()
+                            ->title('Pesan ditandai telah dibaca')
+                            ->success()
+                            ->send();
+                    }),
+                Action::make('markAsUnread')
+                    ->label('Tandai Belum Dibaca')
+                    ->icon('heroicon-m-envelope')
+                    ->color('gray')
+                    ->visible(fn (Message $record): bool => $record->status === MessageStatus::Read)
+                    ->action(function (Message $record): void {
+                        $record->update([
+                            'status' => MessageStatus::New,
+                            'read_at' => null,
+                        ]);
+
+                        Notification::make()
+                            ->title('Pesan ditandai belum dibaca')
+                            ->info()
+                            ->send();
                     }),
                 Action::make('reply')
                     ->label('Balas Email')
@@ -159,6 +207,44 @@ final class MessagesTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    BulkAction::make('markAsRead')
+                        ->label('Tandai Telah Dibaca')
+                        ->icon('heroicon-m-check-circle')
+                        ->color('info')
+                        ->action(function (Collection $records): void {
+                            $records->each(function (Message $record): void {
+                                if ($record->status === MessageStatus::New) {
+                                    $record->update([
+                                        'status' => MessageStatus::Read,
+                                        'read_at' => now(),
+                                    ]);
+                                }
+                            });
+
+                            Notification::make()
+                                ->title('Pesan terpilih ditandai telah dibaca')
+                                ->success()
+                                ->send();
+                        }),
+                    BulkAction::make('markAsUnread')
+                        ->label('Tandai Belum Dibaca')
+                        ->icon('heroicon-m-envelope')
+                        ->color('gray')
+                        ->action(function (Collection $records): void {
+                            $records->each(function (Message $record): void {
+                                if ($record->status === MessageStatus::Read) {
+                                    $record->update([
+                                        'status' => MessageStatus::New,
+                                        'read_at' => null,
+                                    ]);
+                                }
+                            });
+
+                            Notification::make()
+                                ->title('Pesan terpilih ditandai belum dibaca')
+                                ->info()
+                                ->send();
+                        }),
                     DeleteBulkAction::make(),
                 ]),
             ]);

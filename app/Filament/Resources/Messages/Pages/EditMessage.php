@@ -25,9 +25,63 @@ class EditMessage extends EditRecord
 
     protected static string $resource = MessageResource::class;
 
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        /** @var Message $record */
+        $record = $this->getRecord();
+
+        if ($record->status === MessageStatus::New) {
+            $record->update([
+                'status' => MessageStatus::Read,
+                'read_at' => now(),
+            ]);
+
+            $data['status'] = MessageStatus::Read->value;
+            $data['read_at'] = now()->toDateTimeString();
+        }
+
+        return $data;
+    }
+
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('markAsRead')
+                ->label('Tandai Telah Dibaca')
+                ->icon('heroicon-m-check-circle')
+                ->color('info')
+                ->visible(fn (Message $record): bool => $record->status === MessageStatus::New)
+                ->action(function (Message $record): void {
+                    $record->update([
+                        'status' => MessageStatus::Read,
+                        'read_at' => now(),
+                    ]);
+
+                    $this->fillForm();
+
+                    Notification::make()
+                        ->title('Pesan ditandai telah dibaca')
+                        ->success()
+                        ->send();
+                }),
+            Action::make('markAsUnread')
+                ->label('Tandai Belum Dibaca')
+                ->icon('heroicon-m-envelope')
+                ->color('gray')
+                ->visible(fn (Message $record): bool => $record->status === MessageStatus::Read)
+                ->action(function (Message $record): void {
+                    $record->update([
+                        'status' => MessageStatus::New,
+                        'read_at' => null,
+                    ]);
+
+                    $this->fillForm();
+
+                    Notification::make()
+                        ->title('Pesan ditandai belum dibaca')
+                        ->info()
+                        ->send();
+                }),
             Action::make('reply')
                 ->label('Balas Email')
                 ->icon('heroicon-m-arrow-uturn-left')

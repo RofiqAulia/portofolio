@@ -34,6 +34,7 @@ use App\Models\Project;
 use App\Models\SkillCategory;
 use App\Models\Technology;
 use App\Models\User;
+use App\Services\MessageNotificationService;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -102,6 +103,47 @@ class DashboardAndBadgesTest extends TestCase
         $this->assertSame('danger', MessageResource::getNavigationBadgeColor());
         $this->assertSame('1', UserResource::getNavigationBadge());
         $this->assertSame('1', ProfileResource::getNavigationBadge());
+    }
+
+    public function test_message_navigation_badge_only_counts_unread_messages(): void
+    {
+        Message::factory()->count(2)->create(['status' => MessageStatus::New]);
+        Message::factory()->count(3)->create(['status' => MessageStatus::Read]);
+        Message::factory()->count(1)->create(['status' => MessageStatus::Replied]);
+
+        $this->assertSame('2', MessageResource::getNavigationBadge());
+
+        Message::where('status', MessageStatus::New)->update(['status' => MessageStatus::Read]);
+
+        $this->assertNull(MessageResource::getNavigationBadge());
+    }
+
+    public function test_message_read_and_unread_status_syncs_with_notifications(): void
+    {
+        $message = Message::factory()->create(['status' => MessageStatus::New]);
+        $notificationService = app(MessageNotificationService::class);
+        $notificationService->notifyAdminsInApp($message);
+
+        $this->assertDatabaseHas('notifications', [
+            'notifiable_id' => $this->admin->id,
+            'read_at' => null,
+        ]);
+
+        $message->update(['status' => MessageStatus::Read]);
+
+        $this->assertNotNull($message->fresh()->read_at);
+        $this->assertDatabaseMissing('notifications', [
+            'notifiable_id' => $this->admin->id,
+            'read_at' => null,
+        ]);
+
+        $message->update(['status' => MessageStatus::New]);
+
+        $this->assertNull($message->fresh()->read_at);
+        $this->assertDatabaseHas('notifications', [
+            'notifiable_id' => $this->admin->id,
+            'read_at' => null,
+        ]);
     }
 
     public function test_stats_overview_widget_returns_daily_weekly_monthly_and_blueprint_stats(): void
