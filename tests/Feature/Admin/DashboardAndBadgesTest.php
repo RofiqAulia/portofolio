@@ -172,6 +172,33 @@ class DashboardAndBadgesTest extends TestCase
         $this->assertEquals(0, Message::where('status', MessageStatus::New)->count());
     }
 
+    public function test_individual_notification_can_be_marked_as_read_and_unread_via_events(): void
+    {
+        Message::query()->delete();
+        $this->admin->notifications()->delete();
+
+        $message = Message::factory()->create([
+            'name' => 'Ahmad Dahlan',
+            'subject' => 'Konsultasi Arsitektur',
+            'status' => MessageStatus::New,
+        ]);
+
+        $this->actingAs($this->admin);
+
+        $component = Livewire::test(DatabaseNotifications::class);
+        $notification = $this->admin->notifications()->firstOrFail();
+
+        // Panggil markNotificationAsRead
+        $component->call('markNotificationAsRead', $notification->id);
+        $this->assertNotNull($notification->fresh()->read_at);
+        $this->assertSame(MessageStatus::Read, $message->fresh()->status);
+
+        // Panggil markNotificationAsUnread
+        $component->call('markNotificationAsUnread', $notification->id);
+        $this->assertNull($notification->fresh()->read_at);
+        $this->assertSame(MessageStatus::New, $message->fresh()->status);
+    }
+
     public function test_stats_overview_widget_returns_daily_weekly_monthly_and_blueprint_stats(): void
     {
         PageView::factory()->create(['created_at' => now()]);
