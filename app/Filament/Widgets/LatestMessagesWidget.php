@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class LatestMessagesWidget extends TableWidget
 {
+    protected static bool $isDiscovered = false;
+
     protected static ?int $sort = 5;
 
     protected static ?string $heading = 'Pesan Masuk Terbaru';

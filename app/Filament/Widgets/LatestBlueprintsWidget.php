@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class LatestBlueprintsWidget extends TableWidget
 {
+    protected static bool $isDiscovered = false;
+
     protected static ?int $sort = 4;
 
     protected static ?string $heading = 'Dokumentasi & Blueprint Terbaru';

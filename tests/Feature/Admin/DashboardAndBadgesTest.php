@@ -63,6 +63,8 @@ class DashboardAndBadgesTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Dashboard');
         $response->assertDontSee('Filter Periode Data');
+        $response->assertDontSee('Dokumentasi & Blueprint Terbaru');
+        $response->assertDontSee('Pesan Masuk Terbaru');
     }
 
     public function test_custom_dashboard_has_columns_configured(): void
@@ -70,6 +72,11 @@ class DashboardAndBadgesTest extends TestCase
         $page = new Dashboard;
 
         $this->assertEquals(2, $page->getColumns());
+        $this->assertSame([
+            StatsOverviewWidget::class,
+            PageViewsChartWidget::class,
+            PortfolioTrendChartWidget::class,
+        ], $page->getWidgets());
     }
 
     public function test_sidebar_navigation_badges_return_correct_counts(): void
@@ -168,7 +175,7 @@ class DashboardAndBadgesTest extends TestCase
             ->assertSee('E-Commerce Cloud');
     }
 
-    public function test_admin_panel_registers_all_five_widgets(): void
+    public function test_admin_panel_registers_active_widgets_and_excludes_blueprint_and_messages_from_dashboard(): void
     {
         $panel = Filament::getPanel('admin');
         $widgets = $panel->getWidgets();
@@ -176,7 +183,7 @@ class DashboardAndBadgesTest extends TestCase
         $this->assertContains(StatsOverviewWidget::class, $widgets);
         $this->assertContains(PageViewsChartWidget::class, $widgets);
         $this->assertContains(PortfolioTrendChartWidget::class, $widgets);
-        $this->assertContains(LatestBlueprintsWidget::class, $widgets);
-        $this->assertContains(LatestMessagesWidget::class, $widgets);
+        $this->assertNotContains(LatestBlueprintsWidget::class, $widgets);
+        $this->assertNotContains(LatestMessagesWidget::class, $widgets);
     }
 }

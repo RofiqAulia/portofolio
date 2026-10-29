@@ -4,8 +4,6 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\Dashboard;
-use App\Filament\Widgets\LatestBlueprintsWidget;
-use App\Filament\Widgets\LatestMessagesWidget;
 use App\Filament\Widgets\PageViewsChartWidget;
 use App\Filament\Widgets\PortfolioTrendChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
@@ -74,8 +72,6 @@ class AdminPanelProvider extends PanelProvider
                 StatsOverviewWidget::class,
                 PageViewsChartWidget::class,
                 PortfolioTrendChartWidget::class,
-                LatestBlueprintsWidget::class,
-                LatestMessagesWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
