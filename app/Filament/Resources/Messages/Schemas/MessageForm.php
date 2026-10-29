@@ -19,6 +19,22 @@ final class MessageForm
     {
         return $schema
             ->components([
+                Section::make('Status Pengelolaan')
+                    ->schema([
+                        Select::make('status')
+                            ->label('Status Pesan')
+                            ->options([
+                                MessageStatus::New->value => MessageStatus::New->label(),
+                                MessageStatus::Read->value => MessageStatus::Read->label(),
+                                MessageStatus::Replied->value => MessageStatus::Replied->label(),
+                                MessageStatus::Archived->value => MessageStatus::Archived->label(),
+                            ])
+                            ->required(),
+                        DateTimePicker::make('read_at')
+                            ->label('Waktu Dibaca')
+                            ->nullable(),
+                    ])->columns(2),
+
                 Section::make('Pesan Masuk')
                     ->schema([
                         TextInput::make('name')
@@ -48,22 +64,6 @@ final class MessageForm
                             ->columnSpanFull(),
                     ])
                     ->visible(fn ($record) => $record && $record->hasAttachment()),
-
-                Section::make('Status Pengelolaan')
-                    ->schema([
-                        Select::make('status')
-                            ->label('Status Pesan')
-                            ->options([
-                                MessageStatus::New->value => MessageStatus::New->label(),
-                                MessageStatus::Read->value => MessageStatus::Read->label(),
-                                MessageStatus::Replied->value => MessageStatus::Replied->label(),
-                                MessageStatus::Archived->value => MessageStatus::Archived->label(),
-                            ])
-                            ->required(),
-                        DateTimePicker::make('read_at')
-                            ->label('Waktu Dibaca')
-                            ->nullable(),
-                    ])->columns(2),
             ]);
     }
 }
