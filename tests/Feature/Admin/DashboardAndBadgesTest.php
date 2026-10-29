@@ -9,6 +9,7 @@ use App\Enums\ExperienceType;
 use App\Enums\MessageStatus;
 use App\Enums\ProjectStatus;
 use App\Enums\UserRole;
+use App\Filament\Livewire\DatabaseNotifications;
 use App\Filament\Pages\Dashboard;
 use App\Filament\Resources\Certifications\CertificationResource;
 use App\Filament\Resources\Documentations\DocumentationResource;
@@ -144,6 +145,28 @@ class DashboardAndBadgesTest extends TestCase
             'notifiable_id' => $this->admin->id,
             'read_at' => null,
         ]);
+    }
+
+    public function test_database_notifications_component_shows_unread_messages_count_and_content(): void
+    {
+        Message::factory()->create([
+            'name' => 'Budi Santoso',
+            'subject' => 'Proyek Fintech Cloud',
+            'status' => MessageStatus::New,
+        ]);
+
+        $this->actingAs($this->admin);
+
+        $component = Livewire::test(DatabaseNotifications::class);
+        $this->assertEquals(1, $component->instance()->getUnreadNotificationsCount());
+        $component->assertSee('Budi Santoso');
+        $component->assertSee('Proyek Fintech Cloud');
+        $component->assertSee('Buka Pesan');
+        $component->assertSee('Tandai Dibaca');
+
+        $component->call('markAllNotificationsAsRead');
+        $this->assertEquals(0, $component->instance()->getUnreadNotificationsCount());
+        $this->assertEquals(0, Message::where('status', MessageStatus::New)->count());
     }
 
     public function test_stats_overview_widget_returns_daily_weekly_monthly_and_blueprint_stats(): void

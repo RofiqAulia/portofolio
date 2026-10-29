@@ -119,29 +119,88 @@ class MessageNotificationService
     }
 
     /**
-     * Sinkronkan notifikasi in-app untuk pesan berstatus New yang belum memiliki record notifikasi di database.
+     * Sinkronkan notifikasi in-app untuk seluruh pesan berstatus New ke seluruh user admin.
      */
     public function syncUnreadInAppNotifications(): int
     {
         try {
-            $unreadMessages = Message::where('status', MessageStatus::New)->get();
+            $admins = User::where('role', UserRole::Admin)->get();
 
-            if ($unreadMessages->isEmpty()) {
+            if ($admins->isEmpty()) {
                 return 0;
             }
 
-            $syncedCount = 0;
-
-            foreach ($unreadMessages as $message) {
-                $this->notifyAdminsInApp($message);
-                $syncedCount++;
+            foreach ($admins as $admin) {
+                $this->syncUnreadInAppNotificationsForUser($admin);
             }
 
-            return $syncedCount;
+            return Message::where('status', MessageStatus::New)->count();
         } catch (Throwable $e) {
             Log::warning('Gagal menyinkronkan notifikasi pesan in-app: '.$e->getMessage());
 
             return 0;
+        }
+    }
+
+    /**
+     * Sinkronkan notifikasi in-app khusus untuk user tertentu.
+     */
+    public function syncUnreadInAppNotificationsForUser(User $user): void
+    {
+        try {
+            // 1. Ambil seluruh pesan berstatus New (belum dibaca)
+            $unreadMessages = Message::where('status', MessageStatus::New)
+                ->orderBy('created_at', 'asc')
+                ->get();
+
+            foreach ($unreadMessages as $message) {
+                $url = MessageResource::getUrl('edit', ['record' => $message]);
+
+                $existingNotification = $user->notifications()
+                    ->where('data->format', 'filament')
+                    ->where(function ($query) use ($url, $message) {
+                        $query->where('data', 'like', "%{$url}%")
+                            ->orWhere('data', 'like', "%/admin/messages/{$message->id}/edit%");
+                    })
+                    ->first();
+
+                if (! $existingNotification) {
+                    FilamentNotification::make()
+                        ->title("Pesan Kontak: {$message->name}")
+                        ->body($message->subject)
+                        ->icon('heroicon-o-envelope')
+                        ->iconColor('danger')
+                        ->actions([
+                            Action::make('view')
+                                ->button()
+                                ->label('Buka Pesan')
+                                ->url($url)
+                                ->markAsRead(),
+                            Action::make('markAsRead')
+                                ->button()
+                                ->label('Tandai Dibaca')
+                                ->color('gray')
+                                ->markAsRead(),
+                        ])
+                        ->sendToDatabase($user, isEventDispatched: false);
+                } elseif ($existingNotification->read_at !== null) {
+                    $existingNotification->update(['read_at' => null]);
+                }
+            }
+
+            // 2. Untuk pesan yang sudah dibaca / dibalas / diarsipkan, tandai notifikasi terkait sebagai telah dibaca
+            $readMessageIds = Message::where('status', '!=', MessageStatus::New)->pluck('id');
+            foreach ($readMessageIds as $id) {
+                $user->unreadNotifications()
+                    ->where('data->format', 'filament')
+                    ->where('data', 'like', "%/admin/messages/{$id}/edit%")
+                    ->update(['read_at' => now()]);
+            }
+        } catch (Throwable $e) {
+            Log::warning('Gagal menyinkronkan notifikasi pesan in-app untuk user: '.$e->getMessage(), [
+                'user_id' => $user->id,
+                'exception' => $e,
+            ]);
         }
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Livewire\DatabaseNotifications;
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\Dashboard;
 use App\Filament\Widgets\PageViewsChartWidget;
@@ -37,7 +38,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => '#2F5BFF',
             ])
-            ->databaseNotifications()
+            ->databaseNotifications(livewireComponent: DatabaseNotifications::class, isLazy: false)
             ->databaseNotificationsPolling('30s')
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
