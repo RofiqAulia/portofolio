@@ -12,7 +12,7 @@ use App\Mail\NewMessageNotificationMail;
 use App\Models\Message;
 use App\Models\SiteSetting;
 use App\Models\User;
-use Filament\Notifications\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification as FilamentNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -79,11 +79,16 @@ class MessageNotificationService
                 return;
             }
 
+            $actionViewName = 'view_message_'.$message->id;
+            $actionMarkName = 'mark_read_'.$message->id;
             $url = MessageResource::getUrl('edit', ['record' => $message]);
 
             foreach ($admins as $admin) {
                 $alreadyExists = $admin->notifications()
-                    ->where('data', 'like', "%{$url}%")
+                    ->where(function ($query) use ($message) {
+                        $query->where('data', 'like', '%view_message_'.$message->id.'%')
+                            ->orWhere('data', 'like', '%messages%'.$message->id.'%edit%');
+                    })
                     ->exists();
 
                 if ($alreadyExists) {
@@ -91,17 +96,18 @@ class MessageNotificationService
                 }
 
                 $notification = FilamentNotification::make()
-                    ->title('Pesan Kontak Baru Masuk')
-                    ->body("{$message->name}: {$message->subject}")
+                    ->title('Pesan Kontak: '.$message->name)
+                    ->body($message->subject)
                     ->icon('heroicon-o-envelope')
                     ->iconColor('danger')
+                    ->viewData(['message_id' => $message->id])
                     ->actions([
-                        Action::make('view')
+                        Action::make($actionViewName)
                             ->button()
                             ->label('Buka Pesan')
                             ->url($url)
                             ->markAsRead(),
-                        Action::make('markAsRead')
+                        Action::make($actionMarkName)
                             ->button()
                             ->label('Tandai Dibaca')
                             ->color('gray')
@@ -113,7 +119,10 @@ class MessageNotificationService
                 $admin->notifyNow($notification->toDatabase());
 
                 $admin->notifications()
-                    ->where('data', 'like', "%{$url}%")
+                    ->where(function ($query) use ($message) {
+                        $query->where('data', 'like', '%view_message_'.$message->id.'%')
+                            ->orWhere('data', 'like', '%messages%'.$message->id.'%edit%');
+                    })
                     ->update([
                         'created_at' => $message->created_at,
                         'updated_at' => $message->created_at,
@@ -163,14 +172,26 @@ class MessageNotificationService
                 ->get();
 
             foreach ($unreadMessages as $message) {
+                $actionViewName = 'view_message_'.$message->id;
+                $actionMarkName = 'mark_read_'.$message->id;
                 $url = MessageResource::getUrl('edit', ['record' => $message]);
 
-                $existingNotification = $user->notifications()
-                    ->where(function ($query) use ($url, $message) {
-                        $query->where('data', 'like', "%{$url}%")
-                            ->orWhere('data', 'like', "%/admin/messages/{$message->id}/edit%");
+                // Ambil notifikasi yang sudah ada untuk pesan ini
+                $matchingNotifications = $user->notifications()
+                    ->where(function ($query) use ($message) {
+                        $query->where('data', 'like', '%view_message_'.$message->id.'%')
+                            ->orWhere('data', 'like', '%messages%'.$message->id.'%edit%');
                     })
-                    ->first();
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+                // Bersihkan duplikat jika pernah terbentuk sebelumnya
+                if ($matchingNotifications->count() > 1) {
+                    $matchingNotifications->slice(1)->each->delete();
+                    $matchingNotifications = $matchingNotifications->take(1);
+                }
+
+                $existingNotification = $matchingNotifications->first();
 
                 if (! $existingNotification) {
                     $notification = FilamentNotification::make()
@@ -178,13 +199,14 @@ class MessageNotificationService
                         ->body($message->subject)
                         ->icon('heroicon-o-envelope')
                         ->iconColor('danger')
+                        ->viewData(['message_id' => $message->id])
                         ->actions([
-                            Action::make('view')
+                            Action::make($actionViewName)
                                 ->button()
                                 ->label('Buka Pesan')
                                 ->url($url)
                                 ->markAsRead(),
-                            Action::make('markAsRead')
+                            Action::make($actionMarkName)
                                 ->button()
                                 ->label('Tandai Dibaca')
                                 ->color('gray')
@@ -195,7 +217,10 @@ class MessageNotificationService
                     $user->notifyNow($notification->toDatabase());
 
                     $user->notifications()
-                        ->where('data', 'like', "%{$url}%")
+                        ->where(function ($query) use ($message) {
+                            $query->where('data', 'like', '%view_message_'.$message->id.'%')
+                                ->orWhere('data', 'like', '%messages%'.$message->id.'%edit%');
+                        })
                         ->update([
                             'created_at' => $message->created_at,
                             'updated_at' => $message->created_at,
@@ -209,7 +234,10 @@ class MessageNotificationService
             $readMessageIds = Message::where('status', '!=', MessageStatus::New)->pluck('id');
             foreach ($readMessageIds as $id) {
                 $user->unreadNotifications()
-                    ->where('data', 'like', "%/admin/messages/{$id}/edit%")
+                    ->where(function ($query) use ($id) {
+                        $query->where('data', 'like', '%view_message_'.$id.'%')
+                            ->orWhere('data', 'like', '%messages%'.$id.'%edit%');
+                    })
                     ->update(['read_at' => now()]);
             }
         } catch (Throwable $e) {
@@ -226,12 +254,12 @@ class MessageNotificationService
     public function markInAppNotificationAsRead(Message $message): void
     {
         try {
-            $url = MessageResource::getUrl('edit', ['record' => $message]);
-
             DB::table('notifications')
-                ->where('data->format', 'filament')
                 ->whereNull('read_at')
-                ->where('data', 'like', "%{$url}%")
+                ->where(function ($query) use ($message) {
+                    $query->where('data', 'like', '%view_message_'.$message->id.'%')
+                        ->orWhere('data', 'like', '%messages%'.$message->id.'%edit%');
+                })
                 ->update(['read_at' => now()]);
         } catch (Throwable $e) {
             Log::warning('Gagal menandai notifikasi database sebagai telah dibaca: '.$e->getMessage());
@@ -244,12 +272,12 @@ class MessageNotificationService
     public function markInAppNotificationAsUnread(Message $message): void
     {
         try {
-            $url = MessageResource::getUrl('edit', ['record' => $message]);
-
             DB::table('notifications')
-                ->where('data->format', 'filament')
                 ->whereNotNull('read_at')
-                ->where('data', 'like', "%{$url}%")
+                ->where(function ($query) use ($message) {
+                    $query->where('data', 'like', '%view_message_'.$message->id.'%')
+                        ->orWhere('data', 'like', '%messages%'.$message->id.'%edit%');
+                })
                 ->update(['read_at' => null]);
         } catch (Throwable $e) {
             Log::warning('Gagal menandai notifikasi database sebagai belum dibaca: '.$e->getMessage());

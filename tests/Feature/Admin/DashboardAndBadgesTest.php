@@ -149,6 +149,9 @@ class DashboardAndBadgesTest extends TestCase
 
     public function test_database_notifications_component_shows_unread_messages_count_and_content(): void
     {
+        Message::query()->delete();
+        $this->admin->notifications()->delete();
+
         Message::factory()->create([
             'name' => 'Budi Santoso',
             'subject' => 'Proyek Fintech Cloud',
@@ -250,5 +253,27 @@ class DashboardAndBadgesTest extends TestCase
         $this->assertContains(PortfolioTrendChartWidget::class, $widgets);
         $this->assertNotContains(LatestBlueprintsWidget::class, $widgets);
         $this->assertNotContains(LatestMessagesWidget::class, $widgets);
+    }
+
+    public function test_sync_message_notifications_command_syncs_unread_messages(): void
+    {
+        Message::query()->delete();
+        $this->admin->notifications()->delete();
+
+        Message::factory()->create([
+            'name' => 'Siti Aminah',
+            'subject' => 'Tawaran Kerjasama',
+            'status' => MessageStatus::New,
+        ]);
+
+        $this->artisan('messages:sync-notifications')
+            ->expectsOutput('Menyinkronkan notifikasi pesan belum dibaca...')
+            ->expectsOutput('Berhasil memproses 1 pesan belum dibaca.')
+            ->assertSuccessful();
+
+        $this->assertDatabaseHas('notifications', [
+            'notifiable_id' => $this->admin->id,
+            'read_at' => null,
+        ]);
     }
 }

@@ -15,6 +15,8 @@ use Livewire\Attributes\On;
 
 class DatabaseNotifications extends BasePanelDatabaseNotifications
 {
+    protected bool $hasSynced = false;
+
     public function mount(): void
     {
         $this->syncMessages();
@@ -61,9 +63,9 @@ class DatabaseNotifications extends BasePanelDatabaseNotifications
         parent::markNotificationAsRead($id);
 
         $notification = $this->getNotificationsQuery()->where('id', $id)->first();
-        if ($notification && isset($notification->data['actions'][0]['url'])) {
-            $url = (string) $notification->data['actions'][0]['url'];
-            if (preg_match('#/admin/messages/(\d+)/edit#', $url, $matches)) {
+        if ($notification && ! empty($notification->data)) {
+            $dataStr = json_encode($notification->data);
+            if (is_string($dataStr) && preg_match('/(?:view_message_|messages[\\\/]+)(\d+)/', $dataStr, $matches)) {
                 Message::where('id', (int) $matches[1])
                     ->where('status', MessageStatus::New)
                     ->update([
@@ -80,9 +82,9 @@ class DatabaseNotifications extends BasePanelDatabaseNotifications
         parent::markNotificationAsUnread($id);
 
         $notification = $this->getNotificationsQuery()->where('id', $id)->first();
-        if ($notification && isset($notification->data['actions'][0]['url'])) {
-            $url = (string) $notification->data['actions'][0]['url'];
-            if (preg_match('#/admin/messages/(\d+)/edit#', $url, $matches)) {
+        if ($notification && ! empty($notification->data)) {
+            $dataStr = json_encode($notification->data);
+            if (is_string($dataStr) && preg_match('/(?:view_message_|messages[\\\/]+)(\d+)/', $dataStr, $matches)) {
                 Message::where('id', (int) $matches[1])
                     ->where('status', MessageStatus::Read)
                     ->update([
@@ -95,10 +97,15 @@ class DatabaseNotifications extends BasePanelDatabaseNotifications
 
     protected function syncMessages(): void
     {
+        if ($this->hasSynced) {
+            return;
+        }
+
         $user = $this->getUser();
 
         if ($user instanceof User) {
             app(MessageNotificationService::class)->syncUnreadInAppNotificationsForUser($user);
+            $this->hasSynced = true;
         }
     }
 }
