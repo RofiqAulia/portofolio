@@ -19,12 +19,21 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use BackedEnum;
+use Illuminate\Database\Eloquent\Model;
 
 class AttachmentsRelationManager extends RelationManager
 {
     protected static string $relationship = 'attachments';
 
     protected static ?string $title = 'Lampiran & Berkas Bukti';
+
+    protected static string | BackedEnum | null $icon = 'heroicon-o-paper-clip';
+
+    public static function getBadge(Model $ownerRecord, string $pageClass): ?string
+    {
+        return (string) $ownerRecord->attachments()->count();
+    }
 
     public function form(Schema $schema): Schema
     {

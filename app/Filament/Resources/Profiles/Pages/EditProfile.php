@@ -13,6 +13,21 @@ class EditProfile extends EditRecord
 
     protected static string $resource = ProfileResource::class;
 
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'Identitas & Informasi Profil';
+    }
+
+    public function getContentTabIcon(): ?string
+    {
+        return 'heroicon-o-user';
+    }
+
     protected function getHeaderActions(): array
     {
         return [

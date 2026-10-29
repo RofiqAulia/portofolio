@@ -18,11 +18,14 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use BackedEnum;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class DocumentationsRelationManager extends RelationManager
@@ -31,58 +34,80 @@ class DocumentationsRelationManager extends RelationManager
 
     protected static ?string $title = 'Dokumentasi & Blueprint Arsitektur Terkait';
 
+    protected static string | BackedEnum | null $icon = 'heroicon-o-document-text';
+
+    public static function getBadge(Model $ownerRecord, string $pageClass): ?string
+    {
+        return (string) $ownerRecord->documentations()->count();
+    }
+
     public function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                Select::make('category')
-                    ->label('Kategori')
-                    ->options([
-                        'ERD & Database' => 'ERD & Database',
-                        'UML & Flowchart' => 'UML & Flowchart',
-                        'Arsitektur Sistem' => 'Arsitektur Sistem',
-                        'Software Design Pattern' => 'Software Design Pattern',
-                        'Dokumentasi API & SRS' => 'Dokumentasi API & SRS',
-                        'Panduan & SOP' => 'Panduan & SOP',
-                        'Lainnya' => 'Lainnya',
-                    ])
-                    ->default('ERD & Database')
-                    ->required()
-                    ->searchable()
-                    ->live()
-                    ->afterStateUpdated(function ($state, callable $set, callable $get, $livewire) {
-                        $project = $livewire->getOwnerRecord();
-                        $prefix = match ($state) {
-                            'ERD & Database' => 'Desain ERD & Skema Database',
-                            'UML & Flowchart' => 'Diagram UML & Sequence Alur',
-                            'Arsitektur Sistem' => 'Arsitektur Sistem & Blueprint',
-                            'Software Design Pattern' => 'Pola Desain & OOP Architecture',
-                            'Dokumentasi API & SRS' => 'Spesifikasi Sistem (SRS) & API',
-                            'Panduan & SOP' => 'Panduan Teknis & SOP Sistem',
-                            default => 'Dokumentasi Sistem',
-                        };
-                        $newTitle = "{$prefix} — {$project->title}";
-                        $set('title', $newTitle);
-                        $set('slug', Str::slug($newTitle));
-                    }),
+                Grid::make(2)->schema([
+                    Select::make('category')
+                        ->label('Kategori')
+                        ->options([
+                            'ERD & Database' => 'ERD & Database',
+                            'UML & Flowchart' => 'UML & Flowchart',
+                            'Arsitektur Sistem' => 'Arsitektur Sistem',
+                            'Software Design Pattern' => 'Software Design Pattern',
+                            'Dokumentasi API & SRS' => 'Dokumentasi API & SRS',
+                            'Panduan & SOP' => 'Panduan & SOP',
+                            'Lainnya' => 'Lainnya',
+                        ])
+                        ->default('ERD & Database')
+                        ->required()
+                        ->searchable()
+                        ->live()
+                        ->afterStateUpdated(function ($state, callable $set, callable $get, $livewire) {
+                            $project = $livewire->getOwnerRecord();
+                            $prefix = match ($state) {
+                                'ERD & Database' => 'Desain ERD & Skema Database',
+                                'UML & Flowchart' => 'Diagram UML & Sequence Alur',
+                                'Arsitektur Sistem' => 'Arsitektur Sistem & Blueprint',
+                                'Software Design Pattern' => 'Pola Desain & OOP Architecture',
+                                'Dokumentasi API & SRS' => 'Spesifikasi Sistem (SRS) & API',
+                                'Panduan & SOP' => 'Panduan Teknis & SOP Sistem',
+                                default => 'Dokumentasi Sistem',
+                            };
+                            $newTitle = "{$prefix} — {$project->title}";
+                            $set('title', $newTitle);
+                            $set('slug', Str::slug($newTitle));
+                        }),
 
-                TextInput::make('title')
-                    ->label('Judul Dokumentasi / Blueprint')
-                    ->default(fn ($livewire) => 'Desain ERD & Skema Database — '.($livewire->getOwnerRecord()?->title ?? 'Proyek'))
-                    ->required()
-                    ->maxLength(255)
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function (string $operation, $state, callable $set) {
-                        if ($operation === 'create') {
-                            $set('slug', Str::slug($state ?? ''));
-                        }
-                    }),
+                    Select::make('type')
+                        ->label('Tipe Artefak')
+                        ->options([
+                            DocumentationType::Image->value => 'Diagram / Gambar (PNG, JPG, SVG, WebP)',
+                            DocumentationType::Document->value => 'Dokumen / Berkas (PDF, DOCX, ZIP, XLS)',
+                            DocumentationType::Link->value => 'Tautan Eksternal (Figma, Miro, Drive, Whimsical)',
+                        ])
+                        ->default(DocumentationType::Image->value)
+                        ->required()
+                        ->live(),
+                ]),
 
-                TextInput::make('slug')
-                    ->label('Slug URL')
-                    ->default(fn ($livewire) => Str::slug('Desain ERD & Skema Database — '.($livewire->getOwnerRecord()?->title ?? 'Proyek')))
-                    ->required()
-                    ->maxLength(255),
+                Grid::make(2)->schema([
+                    TextInput::make('title')
+                        ->label('Judul Dokumentasi / Blueprint')
+                        ->default(fn ($livewire) => 'Desain ERD & Skema Database — '.($livewire->getOwnerRecord()?->title ?? 'Proyek'))
+                        ->required()
+                        ->maxLength(255)
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(function (string $operation, $state, callable $set) {
+                            if ($operation === 'create') {
+                                $set('slug', Str::slug($state ?? ''));
+                            }
+                        }),
+
+                    TextInput::make('slug')
+                        ->label('Slug URL')
+                        ->default(fn ($livewire) => Str::slug('Desain ERD & Skema Database — '.($livewire->getOwnerRecord()?->title ?? 'Proyek')))
+                        ->required()
+                        ->maxLength(255),
+                ]),
 
                 Textarea::make('summary')
                     ->label('Ringkasan Singkat')
@@ -94,46 +119,37 @@ class DocumentationsRelationManager extends RelationManager
                     ->label('Catatan Arsitektur & Spesifikasi')
                     ->nullable(),
 
-                Select::make('type')
-                    ->label('Tipe Artefak')
-                    ->options([
-                        DocumentationType::Image->value => 'Diagram / Gambar (PNG, JPG, SVG, WebP)',
-                        DocumentationType::Document->value => 'Dokumen / Berkas (PDF, DOCX, ZIP, XLS)',
-                        DocumentationType::Link->value => 'Tautan Eksternal (Figma, Miro, Drive, Whimsical)',
-                    ])
-                    ->default(DocumentationType::Image->value)
-                    ->required()
-                    ->live(),
+                Grid::make(2)->schema([
+                    FileUpload::make('file_path')
+                        ->label('Unggah Berkas / Diagram')
+                        ->helperText('Dapat memilih lebih dari 1 berkas (diagram, PDF, ZIP).')
+                        ->disk('public')
+                        ->directory('documentations/files')
+                        ->visibility('public')
+                        ->multiple()
+                        ->reorderable()
+                        ->appendFiles()
+                        ->openable()
+                        ->downloadable()
+                        ->maxSize(25600)
+                        ->acceptedFileTypes([
+                            'image/jpeg', 'image/png', 'image/webp', 'image/svg+xml',
+                            'application/pdf', 'application/msword',
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                            'application/zip', 'application/x-zip-compressed',
+                        ])
+                        ->nullable(),
 
-                FileUpload::make('file_path')
-                    ->label('Unggah Berkas / Diagram')
-                    ->helperText('Dapat mengunggah lebih dari 1 berkas (misal: beberapa gambar diagram ERD/UML, PDF spesifikasi, atau arsip ZIP).')
-                    ->disk('public')
-                    ->directory('documentations/files')
-                    ->visibility('public')
-                    ->multiple()
-                    ->reorderable()
-                    ->appendFiles()
-                    ->openable()
-                    ->downloadable()
-                    ->maxSize(25600)
-                    ->acceptedFileTypes([
-                        'image/jpeg', 'image/png', 'image/webp', 'image/svg+xml',
-                        'application/pdf', 'application/msword',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                        'application/zip', 'application/x-zip-compressed',
-                    ])
-                    ->nullable(),
-
-                FileUpload::make('preview_image_path')
-                    ->label('Gambar Sampul / Preview (Opsional)')
-                    ->image()
-                    ->imageEditor()
-                    ->disk('public')
-                    ->directory('documentations/previews')
-                    ->visibility('public')
-                    ->maxSize(10240)
-                    ->nullable(),
+                    FileUpload::make('preview_image_path')
+                        ->label('Gambar Sampul / Preview (Opsional)')
+                        ->image()
+                        ->imageEditor()
+                        ->disk('public')
+                        ->directory('documentations/previews')
+                        ->visibility('public')
+                        ->maxSize(10240)
+                        ->nullable(),
+                ]),
 
                 TextInput::make('external_url')
                     ->label('Tautan Luar (Figma / Miro / Whimsical / GitHub / Drive)')
@@ -141,22 +157,24 @@ class DocumentationsRelationManager extends RelationManager
                     ->placeholder('https://www.figma.com/file/...')
                     ->nullable(),
 
-                Toggle::make('is_published')
-                    ->label('Publikasikan')
-                    ->default(true),
+                Grid::make(4)->schema([
+                    Toggle::make('is_published')
+                        ->label('Publikasikan')
+                        ->default(true),
 
-                Toggle::make('is_featured')
-                    ->label('Unggulan')
-                    ->default(false),
+                    Toggle::make('is_featured')
+                        ->label('Unggulan')
+                        ->default(false),
 
-                TextInput::make('sort_order')
-                    ->label('Urutan')
-                    ->numeric()
-                    ->default(0),
+                    TextInput::make('sort_order')
+                        ->label('Urutan')
+                        ->numeric()
+                        ->default(0),
 
-                DateTimePicker::make('published_at')
-                    ->label('Waktu Publikasi')
-                    ->default(now()),
+                    DateTimePicker::make('published_at')
+                        ->label('Waktu Publikasi')
+                        ->default(now()),
+                ]),
             ]);
     }
 

@@ -15,6 +15,21 @@ class EditProject extends EditRecord
 
     protected static string $resource = ProjectResource::class;
 
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'Informasi & Media Proyek';
+    }
+
+    public function getContentTabIcon(): ?string
+    {
+        return 'heroicon-o-briefcase';
+    }
+
     protected function getHeaderActions(): array
     {
         return [

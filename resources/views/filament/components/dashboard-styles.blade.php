@@ -144,4 +144,48 @@
         transform: translateY(-1px);
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
     }
+
+    /* Modern Bravo Layout Refinements for Sections & Forms */
+    .fi-section {
+        border-radius: 0.875rem !important;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .fi-section-header {
+        padding-bottom: 0.75rem !important;
+    }
+
+    .fi-section-header-heading {
+        font-weight: 600 !important;
+        letter-spacing: -0.01em !important;
+    }
+
+    /* Form Tabs Pill Polish */
+    .fi-tabs {
+        gap: 0.5rem !important;
+        padding: 0.25rem !important;
+        border-radius: 0.75rem !important;
+    }
+
+    .fi-tabs-item {
+        border-radius: 0.625rem !important;
+        font-weight: 500 !important;
+        transition: all 0.15s ease-in-out !important;
+    }
+
+    /* Repeater Items Card Polish */
+    .fi-fo-repeater-item {
+        border-radius: 0.75rem !important;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .fi-fo-repeater-item:hover {
+        border-color: rgba(47, 91, 255, 0.3) !important;
+    }
+
+    /* Form actions bottom spacing & clean sticky behavior */
+    .fi-form-actions {
+        margin-top: 1.5rem !important;
+        padding-top: 1rem !important;
+    }
 </style>

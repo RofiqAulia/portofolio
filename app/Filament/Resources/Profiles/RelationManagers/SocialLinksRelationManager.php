@@ -16,12 +16,21 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use BackedEnum;
+use Illuminate\Database\Eloquent\Model;
 
 class SocialLinksRelationManager extends RelationManager
 {
     protected static string $relationship = 'socialLinks';
 
     protected static ?string $title = 'Tautan Media Sosial';
+
+    protected static string | BackedEnum | null $icon = 'heroicon-o-share';
+
+    public static function getBadge(Model $ownerRecord, string $pageClass): ?string
+    {
+        return (string) $ownerRecord->socialLinks()->count();
+    }
 
     public function form(Schema $schema): Schema
     {

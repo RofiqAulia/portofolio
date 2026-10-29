@@ -16,12 +16,21 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use BackedEnum;
+use Illuminate\Database\Eloquent\Model;
 
 class SkillsRelationManager extends RelationManager
 {
     protected static string $relationship = 'skills';
 
     protected static ?string $title = 'Daftar Skill';
+
+    protected static string | BackedEnum | null $icon = 'heroicon-o-wrench-screwdriver';
+
+    public static function getBadge(Model $ownerRecord, string $pageClass): ?string
+    {
+        return (string) $ownerRecord->skills()->count();
+    }
 
     public function form(Schema $schema): Schema
     {

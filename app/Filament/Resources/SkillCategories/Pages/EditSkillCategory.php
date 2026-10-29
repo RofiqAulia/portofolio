@@ -13,6 +13,21 @@ class EditSkillCategory extends EditRecord
 
     protected static string $resource = SkillCategoryResource::class;
 
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'Kategori Keahlian';
+    }
+
+    public function getContentTabIcon(): ?string
+    {
+        return 'heroicon-o-tag';
+    }
+
     protected function getHeaderActions(): array
     {
         return [

@@ -15,6 +15,21 @@ class EditExperience extends EditRecord
 
     protected static string $resource = ExperienceResource::class;
 
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'Detail Pengalaman';
+    }
+
+    public function getContentTabIcon(): ?string
+    {
+        return 'heroicon-o-briefcase';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
