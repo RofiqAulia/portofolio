@@ -83,7 +83,6 @@ class MessageNotificationService
 
             foreach ($admins as $admin) {
                 $alreadyExists = $admin->notifications()
-                    ->where('data->format', 'filament')
                     ->where('data', 'like', "%{$url}%")
                     ->exists();
 
@@ -91,7 +90,7 @@ class MessageNotificationService
                     continue;
                 }
 
-                FilamentNotification::make()
+                $notification = FilamentNotification::make()
                     ->title('Pesan Kontak Baru Masuk')
                     ->body("{$message->name}: {$message->subject}")
                     ->icon('heroicon-o-envelope')
@@ -107,8 +106,18 @@ class MessageNotificationService
                             ->label('Tandai Dibaca')
                             ->color('gray')
                             ->markAsRead(),
-                    ])
-                    ->sendToDatabase($admin, isEventDispatched: true);
+                    ]);
+
+                // Gunakan notifyNow agar langsung disimpan secara sinkron ke tabel notifications
+                // tanpa terdorong ke antrean ShouldQueue / jobs table
+                $admin->notifyNow($notification->toDatabase());
+
+                $admin->notifications()
+                    ->where('data', 'like', "%{$url}%")
+                    ->update([
+                        'created_at' => $message->created_at,
+                        'updated_at' => $message->created_at,
+                    ]);
             }
         } catch (Throwable $e) {
             Log::error('Gagal mengirim notifikasi in-app ke admin: '.$e->getMessage(), [
@@ -157,7 +166,6 @@ class MessageNotificationService
                 $url = MessageResource::getUrl('edit', ['record' => $message]);
 
                 $existingNotification = $user->notifications()
-                    ->where('data->format', 'filament')
                     ->where(function ($query) use ($url, $message) {
                         $query->where('data', 'like', "%{$url}%")
                             ->orWhere('data', 'like', "%/admin/messages/{$message->id}/edit%");
@@ -165,7 +173,7 @@ class MessageNotificationService
                     ->first();
 
                 if (! $existingNotification) {
-                    FilamentNotification::make()
+                    $notification = FilamentNotification::make()
                         ->title("Pesan Kontak: {$message->name}")
                         ->body($message->subject)
                         ->icon('heroicon-o-envelope')
@@ -181,8 +189,17 @@ class MessageNotificationService
                                 ->label('Tandai Dibaca')
                                 ->color('gray')
                                 ->markAsRead(),
-                        ])
-                        ->sendToDatabase($user, isEventDispatched: false);
+                        ]);
+
+                    // Gunakan notifyNow agar langsung disimpan secara sinkron ke tabel notifications
+                    $user->notifyNow($notification->toDatabase());
+
+                    $user->notifications()
+                        ->where('data', 'like', "%{$url}%")
+                        ->update([
+                            'created_at' => $message->created_at,
+                            'updated_at' => $message->created_at,
+                        ]);
                 } elseif ($existingNotification->read_at !== null) {
                     $existingNotification->update(['read_at' => null]);
                 }
@@ -192,7 +209,6 @@ class MessageNotificationService
             $readMessageIds = Message::where('status', '!=', MessageStatus::New)->pluck('id');
             foreach ($readMessageIds as $id) {
                 $user->unreadNotifications()
-                    ->where('data->format', 'filament')
                     ->where('data', 'like', "%/admin/messages/{$id}/edit%")
                     ->update(['read_at' => now()]);
             }

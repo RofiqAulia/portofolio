@@ -24,14 +24,25 @@ class DatabaseNotifications extends BasePanelDatabaseNotifications
     {
         $this->syncMessages();
 
-        return parent::getUnreadNotificationsCount();
+        return $this->getUnreadNotificationsQuery()->count();
+    }
+
+    public function getUnreadNotificationsQuery(): Builder|Relation
+    {
+        return $this->getNotificationsQuery()->whereNull('read_at');
     }
 
     public function getNotificationsQuery(): Builder|Relation
     {
         $this->syncMessages();
 
-        return parent::getNotificationsQuery();
+        $user = $this->getUser();
+
+        if (! $user) {
+            abort(401);
+        }
+
+        return $user->notifications();
     }
 
     public function markAllNotificationsAsRead(): void
