@@ -40,7 +40,7 @@
                         <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-3">
                             <div class="internship-logo-box flex-shrink-0" style="width: 104px; height: 104px; border-radius: 50%;">
                                 @if($experience->cover_path)
-                                    <img src="{{ asset('storage/' . $experience->cover_path) }}" alt="{{ $experience->organization_name }}" class="internship-logo-img" style="border-radius: 50%;">
+                                    <img src="{{ asset('storage/' . $experience->cover_path) }}" alt="{{ $experience->organization_name }}" class="internship-logo-img" width="104" height="104" style="border-radius: 50%;">
                                 @else
                                     <div class="d-flex align-items-center justify-content-center w-100 h-100 bg-light rounded-circle">
                                         <i class="bi bi-buildings-fill text-warning fs-1"></i>
@@ -57,7 +57,7 @@
                                     </span>
                                 </div>
                                 <h1 class="display-6 font-heading mb-1 text-dark fw-bold">{{ $experience->position }}</h1>
-                                <h4 class="text-warning-dark fw-bold mb-0 fs-5">{{ $experience->organization_name }}</h4>
+                                <h2 class="text-warning-dark fw-bold mb-0 fs-5">{{ $experience->organization_name }}</h2>
                             </div>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                         <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-3">
                             <div class="organization-crest-box flex-shrink-0" style="width: 104px; height: 104px; border-radius: 50%;">
                                 @if($experience->cover_path)
-                                    <img src="{{ asset('storage/' . $experience->cover_path) }}" alt="{{ $experience->organization_name }}" class="organization-crest-img" style="border-radius: 50%;">
+                                    <img src="{{ asset('storage/' . $experience->cover_path) }}" alt="{{ $experience->organization_name }}" class="organization-crest-img" width="104" height="104" style="border-radius: 50%;">
                                 @else
                                     <div class="d-flex align-items-center justify-content-center w-100 h-100 bg-light rounded-circle">
                                         <i class="bi bi-people-fill fs-1" style="color: #7C3AED;"></i>
@@ -83,7 +83,7 @@
                                     </span>
                                 </div>
                                 <h1 class="display-6 font-heading mb-1 text-dark fw-bold">{{ $experience->position }}</h1>
-                                <h4 class="fw-bold mb-0 fs-5" style="color: #7C3AED;">{{ $experience->organization_name }}</h4>
+                                <h2 class="fw-bold mb-0 fs-5" style="color: #7C3AED;">{{ $experience->organization_name }}</h2>
                             </div>
                         </div>
                     </div>
@@ -139,7 +139,7 @@
                         @foreach($experience->media as $item)
                             <div class="col-md-6">
                                 <div class="bento-detail-card p-2 bg-light">
-                                    <img src="{{ asset('storage/' . $item->path) }}" alt="{{ $item->caption }}" class="img-fluid rounded-3 w-100 object-fit-cover" style="height: 200px;">
+                                    <img src="{{ asset('storage/' . $item->path) }}" alt="{{ $item->caption }}" class="img-fluid rounded-3 w-100 object-fit-cover" width="300" height="200" loading="lazy" decoding="async" style="height: 200px;">
                                     @if($item->caption)
                                         <p class="small text-muted text-center mt-2 mb-1">{{ $item->caption }}</p>
                                     @endif

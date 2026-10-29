@@ -81,7 +81,9 @@
                                          itemprop="image"
                                          alt="{{ $profile->full_name ?? 'M. Rofiq Aulia' }} - System Analyst & Software Engineer Indonesia" 
                                          class="img-fluid w-100 object-fit-cover hero-studio-photo" 
-                                         style="height: 380px;"
+                                         width="480"
+                                         height="380"
+                                         fetchpriority="high"
                                          role="button"
                                          tabindex="0"
                                          aria-label="Lihat foto profil {{ $profile->full_name }}"
@@ -117,7 +119,7 @@
 
                             <div class="p-3 text-start bg-white">
                                 <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <h4 class="mb-0 font-heading fs-5 text-dark">{{ $profile->full_name ?? 'M. Rofiq Aulia' }}</h4>
+                                    <p class="mb-0 font-heading fs-5 text-dark fw-bold">{{ $profile->full_name ?? 'M. Rofiq Aulia' }}</p>
                                     <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill small px-2 py-1">
                                         <i class="bi bi-patch-check-fill text-primary"></i> Verified
                                     </span>
@@ -252,7 +254,7 @@
                         <p class="bento-desc">
                             Kontribusi aktif dan implementasi sistem skala enterprise pada lingkungan korporasi industri manufaktur berskala nasional.
                         </p>
-                        <a href="#magang" class="bento-link">
+                        <a href="#magang" class="bento-link" aria-label="Telusuri jejak magang industri">
                             <span>Telusuri Jejak Magang</span>
                             <i class="bi bi-arrow-up-right"></i>
                         </a>
@@ -281,7 +283,7 @@
                                 <i class="bi bi-person-fill"></i>
                             </div>
                             <div>
-                                <h6 class="mb-0 fw-bold">{{ $profile->quote_author ?? 'M. Rofiq Aulia' }}</h6>
+                                <p class="mb-0 fw-bold fs-6">{{ $profile->quote_author ?? 'M. Rofiq Aulia' }}</p>
                             </div>
                         </div>
                     </div>
@@ -295,11 +297,11 @@
                 <div class="bento-card bento-card-royal bento-card-blueprint">
                     <div class="bento-card-content">
                         <span class="bento-badge">ARSIP ARTIFAK</span>
-                        <h4 class="bento-card-heading">Blueprint & Diagram Lab</h4>
+                        <h3 class="bento-card-heading fs-4">Blueprint & Diagram Lab</h3>
                         <p class="bento-desc">
                             Bukan cuma teori! Buka brankas dokumentasi arsitektur: diagram ERD 3NF, flowchart proses bisnis & UML.
                         </p>
-                        <a href="{{ route('portfolio.documentations.index') }}" class="btn-bento-pill">
+                        <a href="{{ route('portfolio.documentations.index') }}" class="btn-bento-pill" aria-label="Buka arsip blueprint dan diagram lab">
                             <span>Buka Arsip Blueprint</span>
                             <i class="bi bi-folder2-open"></i>
                         </a>
@@ -339,11 +341,11 @@
                 <div class="bento-card bento-card-coral bento-card-sertifikasi">
                     <div class="bento-card-content">
                         <span class="bento-badge">PRESTASI &amp; KREDENSIAL</span>
-                        <h4 class="bento-card-heading">Penghargaan &amp; Sertifikasi</h4>
+                        <h3 class="bento-card-heading fs-4">Penghargaan &amp; Sertifikasi</h3>
                         <p class="bento-desc">
                             Dokumentasi resmi sertifikasi kompetensi magang industri, lisensi kepemimpinan, dan hak cipta karya (HKI).
                         </p>
-                        <a href="#sertifikasi" class="bento-link">
+                        <a href="#sertifikasi" class="bento-link" aria-label="Buka arsip penghargaan dan sertifikasi">
                             <span>Buka Arsip Sertifikasi</span>
                             <i class="bi bi-arrow-down-right"></i>
                         </a>
@@ -418,9 +420,9 @@
                                 <span class="badge bg-primary bg-opacity-10 text-primary rounded-circle p-2 fs-6 flex-shrink-0">
                                     <i class="bi bi-diagram-3-fill"></i>
                                 </span>
-                                <h4 class="mb-0 font-heading fs-6 fs-sm-5 fw-bold text-dark text-break">
+                                <h3 class="mb-0 font-heading fs-6 fs-sm-5 fw-bold text-dark text-break">
                                     {{ $analysisSkillCategory->name ?? 'Analisis & Desain Sistem' }}
-                                </h4>
+                                </h3>
                             </div>
                             <span class="badge bg-light text-muted border border-secondary border-opacity-10 rounded-pill px-2.5 px-sm-3 py-1 small fw-semibold flex-shrink-0">
                                 Arsitektur &amp; Data
@@ -480,9 +482,9 @@
                                 <i class="bi bi-folder2-open text-primary me-1"></i> BLUEPRINT LAB
                             </span>
                         </div>
-                        <h5 class="font-heading fs-6 fs-sm-5 mb-1.5 text-white text-break">
+                        <h4 class="font-heading fs-6 fs-sm-5 mb-1.5 text-white text-break">
                             Intip Blueprint, ERD &amp; Alur Sistem Riil
-                        </h5>
+                        </h4>
                         <p class="text-white text-opacity-90 small mb-3 lh-sm" style="font-size: clamp(0.8rem, 2vw, 0.85rem);">
                             Bukan cuma teori! Buka brankas dokumentasi arsitektur: diagram ERD 3NF, flowchart UML, dan berkas teknis yang siap ditinjau &amp; diunduh.
                         </p>
@@ -828,7 +830,7 @@
         const contactForm = document.getElementById('contact-form');
         if (contactForm) {
             contactForm.addEventListener('submit', function (e) {
-                if (window.recaptchaSiteKey && typeof grecaptcha !== 'undefined') {
+                if (window.recaptchaSiteKey) {
                     const tokenInput = document.getElementById('recaptcha_token');
                     if (tokenInput && !tokenInput.value) {
                         e.preventDefault();
@@ -839,19 +841,29 @@
                             submitBtn.innerHTML = '<span>Verifikasi Keamanan...</span> <i class="bi bi-shield-check ms-2"></i>';
                         }
 
-                        grecaptcha.ready(function () {
-                            grecaptcha.execute(window.recaptchaSiteKey, { action: 'contact_form' }).then(function (token) {
-                                tokenInput.value = token;
-                                contactForm.submit();
-                            }).catch(function (error) {
-                                console.warn('reCAPTCHA error:', error);
-                                if (submitBtn) {
-                                    submitBtn.disabled = false;
-                                    submitBtn.innerHTML = originalHtml;
+                        if (typeof window.ensureRecaptcha === 'function') {
+                            window.ensureRecaptcha(function () {
+                                if (typeof grecaptcha !== 'undefined' && grecaptcha.execute) {
+                                    grecaptcha.ready(function () {
+                                        grecaptcha.execute(window.recaptchaSiteKey, { action: 'contact_form' }).then(function (token) {
+                                            tokenInput.value = token;
+                                            contactForm.submit();
+                                        }).catch(function (error) {
+                                            console.warn('reCAPTCHA error:', error);
+                                            if (submitBtn) {
+                                                submitBtn.disabled = false;
+                                                submitBtn.innerHTML = originalHtml;
+                                            }
+                                            contactForm.submit();
+                                        });
+                                    });
+                                } else {
+                                    contactForm.submit();
                                 }
-                                contactForm.submit();
                             });
-                        });
+                        } else {
+                            contactForm.submit();
+                        }
                     }
                 }
             });

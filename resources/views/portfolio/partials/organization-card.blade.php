@@ -9,7 +9,10 @@
                              itemprop="logo"
                              alt="Logo Organisasi {{ $experience->organization_name }}" 
                              class="bento-logo-img-circle"
-                             loading="lazy">
+                             width="56"
+                             height="56"
+                             loading="lazy"
+                             decoding="async">
                         <meta itemprop="name" content="{{ $experience->organization_name }}">
                     @else
                         <i class="bi bi-people-fill text-purple fs-3" style="color: #7C3AED;"></i>
@@ -77,7 +80,9 @@
 
         {{-- 3. Action Footer --}}
         <div class="d-flex align-items-center justify-content-between gap-2 mt-auto pt-3 border-top border-white border-opacity-20">
-            <a href="{{ route('portfolio.experience.show', $experience->slug ?? $experience->id) }}" class="btn-bento-pill text-purple">
+            <a href="{{ route('portfolio.experience.show', $experience->slug ?? $experience->id) }}" 
+               class="btn-bento-pill text-purple"
+               aria-label="Telusuri Jejak Kepengurusan di {{ $experience->organization_name ?? $experience->company ?? 'Organisasi' }}">
                 <span>Jejak Kepengurusan</span>
                 <i class="bi bi-arrow-right"></i>
             </a>

@@ -10,7 +10,10 @@
                     <img src="{{ $certification->getLogoUrl() }}" 
                          alt="{{ $certification->issuer ?: $certification->title }}" 
                          class="w-100 h-100 object-fit-cover"
-                         loading="lazy">
+                         width="48"
+                         height="48"
+                         loading="lazy"
+                         decoding="async">
                 @else
                     <i class="bi {{ $certification->getCategoryIcon() }}" style="color: {{ $certification->getCategoryBadgeStyle()['text'] }};"></i>
                 @endif
@@ -45,7 +48,10 @@
             <img src="{{ $certification->getFirstImageUrl() }}" 
                  alt="{{ $certification->title }}" 
                  class="w-100 h-100 object-fit-cover transition-transform" 
-                 loading="lazy">
+                 width="400"
+                 height="140"
+                 loading="lazy"
+                 decoding="async">
             @if($certification->getImageCount() > 1)
                 <span class="position-absolute bottom-0 end-0 m-2 badge bg-dark bg-opacity-75 text-white rounded-pill px-2 py-1 small">
                     <i class="bi bi-images me-1"></i> {{ $certification->getImageCount() }} Foto

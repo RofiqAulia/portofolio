@@ -191,8 +191,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, true);
 
-        // Initial setup
-        updateControls();
+        // Initial setup deferred to prevent forced synchronous reflow during initial page parse
+        if ('requestAnimationFrame' in window) {
+            window.requestAnimationFrame(() => updateControls());
+        } else {
+            setTimeout(updateControls, 50);
+        }
     };
 
     // Initialize all sliders (2-container & 3-container tracks)

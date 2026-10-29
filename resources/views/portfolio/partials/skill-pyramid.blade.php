@@ -63,7 +63,7 @@
                         <line x1="118" y1="{{ $ymid }}" x2="{{ $centerX - $wmid - 6 }}" y2="{{ $ymid }}" stroke="{{ $c['from'] }}" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.65" />
                         <circle cx="{{ $centerX - $wmid - 6 }}" cy="{{ $ymid }}" r="3.5" fill="{{ $c['from'] }}" />
                         <rect x="8" y="{{ $ymid - 14 }}" width="110" height="28" rx="14" fill="{{ $c['bg'] }}" stroke="{{ $c['from'] }}" stroke-width="1.2" />
-                        <text x="63" y="{{ $ymid + 5 }}" text-anchor="middle" fill="{{ $c['from'] }}" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="11">
+                        <text x="63" y="{{ $ymid + 5 }}" text-anchor="middle" fill="{{ $c['text'] }}" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="11">
                             Tingkat {{ $tier['label'] }}
                         </text>
                     </g>
@@ -119,7 +119,7 @@
                          style="background-color: #FFFFFF; border-color: rgba(10, 27, 61, 0.08) !important;"
                          data-target-tier="tier-{{ $type }}-{{ $tier['index'] }}">
                         <span class="badge rounded-pill px-2.5 py-1 fw-bold small flex-shrink-0" 
-                              style="background-color: {{ $tier['color']['bg'] }}; color: {{ $tier['color']['from'] }}; border: 1px solid {{ $tier['color']['from'] }}; font-size: 0.78rem;">
+                              style="background-color: {{ $tier['color']['bg'] }}; color: {{ $tier['color']['text'] }}; border: 1px solid {{ $tier['color']['from'] }}; font-size: 0.78rem;">
                             Tingkat {{ $tier['label'] }}
                         </span>
                         <span class="small text-dark fw-semibold text-end text-truncate" style="max-width: 65%; font-size: 0.82rem;">

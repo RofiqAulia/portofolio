@@ -414,12 +414,12 @@ final class PortfolioController extends Controller
         });
 
         $palette = [
-            ['from' => '#4F46E5', 'to' => '#6366F1', 'text' => '#4F46E5', 'bg' => 'rgba(79, 70, 229, 0.1)', 'border' => '#4F46E5', 'icon' => 'bi-trophy-fill'],
-            ['from' => '#0284C7', 'to' => '#0EA5E9', 'text' => '#0284C7', 'bg' => 'rgba(2, 132, 199, 0.1)', 'border' => '#0284C7', 'icon' => 'bi-gear-wide-connected'],
-            ['from' => '#059669', 'to' => '#10B981', 'text' => '#059669', 'bg' => 'rgba(5, 150, 105, 0.1)', 'border' => '#059669', 'icon' => 'bi-layers-fill'],
-            ['from' => '#D97706', 'to' => '#F59E0B', 'text' => '#D97706', 'bg' => 'rgba(217, 119, 6, 0.1)', 'border' => '#D97706', 'icon' => 'bi-lightning-charge-fill'],
-            ['from' => '#E11D48', 'to' => '#F43F5E', 'text' => '#E11D48', 'bg' => 'rgba(225, 29, 72, 0.1)', 'border' => '#E11D48', 'icon' => 'bi-star-fill'],
-            ['from' => '#7C3AED', 'to' => '#8B5CF6', 'text' => '#7C3AED', 'bg' => 'rgba(124, 58, 237, 0.1)', 'border' => '#7C3AED', 'icon' => 'bi-award-fill'],
+            ['from' => '#4338CA', 'to' => '#4F46E5', 'text' => '#3730A3', 'bg' => 'rgba(67, 56, 202, 0.1)', 'border' => '#4338CA', 'icon' => 'bi-trophy-fill'],
+            ['from' => '#0369A1', 'to' => '#0284C7', 'text' => '#075985', 'bg' => 'rgba(3, 105, 161, 0.1)', 'border' => '#0369A1', 'icon' => 'bi-gear-wide-connected'],
+            ['from' => '#047857', 'to' => '#059669', 'text' => '#065F46', 'bg' => 'rgba(4, 120, 87, 0.1)', 'border' => '#047857', 'icon' => 'bi-layers-fill'],
+            ['from' => '#B45309', 'to' => '#D97706', 'text' => '#92400E', 'bg' => 'rgba(180, 83, 9, 0.1)', 'border' => '#B45309', 'icon' => 'bi-lightning-charge-fill'],
+            ['from' => '#BE123C', 'to' => '#E11D48', 'text' => '#9F1239', 'bg' => 'rgba(190, 18, 60, 0.1)', 'border' => '#BE123C', 'icon' => 'bi-star-fill'],
+            ['from' => '#6D28D9', 'to' => '#7C3AED', 'text' => '#5B21B6', 'bg' => 'rgba(109, 40, 217, 0.1)', 'border' => '#6D28D9', 'icon' => 'bi-award-fill'],
         ];
 
         $tierIndex = 0;

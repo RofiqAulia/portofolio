@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Portofolio M Rofiq Aulia')</title>
+    <!-- Google Fonts Preconnect & Optimized Asynchronous Font Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap">
+
+    @if(!empty($profile->photo_path))
+        <!-- Preload LCP Hero Image -->
+        <link rel="preload" as="image" href="{{ asset('storage/' . $profile->photo_path) }}" fetchpriority="high">
+    @endif
+
     <!-- Favicon & Mobile Touch Icons (Google Search & Multi-Platform Standard) -->
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('icon-192.png') }}?v=2">
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}?v=2">
@@ -187,7 +197,7 @@
                         <span class="inspo-brand-icon">
                             <i class="bi bi-code-slash"></i>
                         </span>
-                        <h4 class="mb-0 font-heading">{{ $profile->full_name ?? 'M. Rofiq Aulia' }}</h4>
+                        <span class="mb-0 font-heading fs-5 fw-bold text-dark">{{ $profile->full_name ?? 'M. Rofiq Aulia' }}</span>
                     </div>
                     <p class="text-muted mb-0 small">
                         {{ $settings['footer_copyright'] ?? '© 2026 M. Rofiq Aulia. All rights reserved.' }}
@@ -235,9 +245,64 @@
     @endphp
 
     @if($recaptchaService->isEnabled())
-        <script src="https://www.google.com/recaptcha/api.js?render={{ $recaptchaService->getSiteKey() }}"></script>
         <script>
             window.recaptchaSiteKey = "{{ $recaptchaService->getSiteKey() }}";
+            (function () {
+                let recaptchaLoaded = false;
+                let recaptchaLoading = false;
+                const recaptchaCallbacks = [];
+
+                window.ensureRecaptcha = function (callback) {
+                    if (recaptchaLoaded && typeof grecaptcha !== 'undefined' && grecaptcha.execute) {
+                        callback && callback();
+                        return;
+                    }
+                    if (callback) recaptchaCallbacks.push(callback);
+                    if (recaptchaLoading) return;
+                    recaptchaLoading = true;
+
+                    const script = document.createElement('script');
+                    script.src = "https://www.google.com/recaptcha/api.js?render=" + encodeURIComponent(window.recaptchaSiteKey);
+                    script.async = true;
+                    script.defer = true;
+                    script.onload = function () {
+                        if (typeof grecaptcha !== 'undefined') {
+                            grecaptcha.ready(function () {
+                                recaptchaLoaded = true;
+                                while (recaptchaCallbacks.length) {
+                                    const cb = recaptchaCallbacks.shift();
+                                    try { cb(); } catch (err) { console.error(err); }
+                                }
+                            });
+                        }
+                    };
+                    script.onerror = function () {
+                        recaptchaLoading = false;
+                        console.warn('reCAPTCHA script failed to load.');
+                        while (recaptchaCallbacks.length) {
+                            const cb = recaptchaCallbacks.shift();
+                            try { cb(); } catch (err) { console.error(err); }
+                        }
+                    };
+                    document.head.appendChild(script);
+                };
+
+                // Lazy load on first user interaction or idle to unblock FCP/LCP/TBT
+                const lazyEvents = ['scroll', 'mousemove', 'touchstart', 'click', 'keydown'];
+                const triggerLazy = function () {
+                    lazyEvents.forEach(evt => window.removeEventListener(evt, triggerLazy, { passive: true }));
+                    window.ensureRecaptcha();
+                };
+                lazyEvents.forEach(evt => window.addEventListener(evt, triggerLazy, { once: true, passive: true }));
+                setTimeout(function () {
+                    window.ensureRecaptcha();
+                }, 4000);
+            })();
+        </script>
+    @else
+        <script>
+            window.recaptchaSiteKey = null;
+            window.ensureRecaptcha = function (cb) { cb && cb(); };
         </script>
     @endif
 
@@ -248,7 +313,7 @@
                 const waBtn = e.target.closest('.js-wa-btn');
                 if (!waBtn) return;
 
-                if (window.recaptchaSiteKey && typeof grecaptcha !== 'undefined') {
+                if (window.recaptchaSiteKey) {
                     e.preventDefault();
                     const defaultUrl = waBtn.getAttribute('href');
                     const originalContent = waBtn.innerHTML;
@@ -256,41 +321,50 @@
                     waBtn.style.pointerEvents = 'none';
                     waBtn.style.opacity = '0.7';
 
-                    grecaptcha.ready(function () {
-                        grecaptcha.execute(window.recaptchaSiteKey, { action: 'whatsapp_click' }).then(function (token) {
-                            fetch("{{ route('portfolio.contact.verify-wa') }}", {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                    'Accept': 'application/json'
-                                },
-                                body: JSON.stringify({ recaptcha_token: token })
-                            })
-                            .then(function (res) { return res.json(); })
-                            .then(function (data) {
-                                waBtn.style.pointerEvents = '';
-                                waBtn.style.opacity = '';
-                                waBtn.innerHTML = originalContent;
+                    window.ensureRecaptcha(function () {
+                        if (typeof grecaptcha !== 'undefined' && grecaptcha.execute) {
+                            grecaptcha.ready(function () {
+                                grecaptcha.execute(window.recaptchaSiteKey, { action: 'whatsapp_click' }).then(function (token) {
+                                    fetch("{{ route('portfolio.contact.verify-wa') }}", {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                            'Accept': 'application/json'
+                                        },
+                                        body: JSON.stringify({ recaptcha_token: token })
+                                    })
+                                    .then(function (res) { return res.json(); })
+                                    .then(function (data) {
+                                        waBtn.style.pointerEvents = '';
+                                        waBtn.style.opacity = '';
+                                        waBtn.innerHTML = originalContent;
 
-                                if (data.success && data.target_url) {
-                                    window.open(data.target_url, '_blank', 'noopener,noreferrer');
-                                } else {
-                                    alert(data.message || 'Verifikasi keamanan reCAPTCHA tidak berhasil.');
-                                }
-                            })
-                            .catch(function () {
-                                waBtn.style.pointerEvents = '';
-                                waBtn.style.opacity = '';
-                                waBtn.innerHTML = originalContent;
-                                window.open(defaultUrl, '_blank', 'noopener,noreferrer');
+                                        if (data.success && data.target_url) {
+                                            window.open(data.target_url, '_blank', 'noopener,noreferrer');
+                                        } else {
+                                            alert(data.message || 'Verifikasi keamanan reCAPTCHA tidak berhasil.');
+                                        }
+                                    })
+                                    .catch(function () {
+                                        waBtn.style.pointerEvents = '';
+                                        waBtn.style.opacity = '';
+                                        waBtn.innerHTML = originalContent;
+                                        window.open(defaultUrl, '_blank', 'noopener,noreferrer');
+                                    });
+                                }).catch(function () {
+                                    waBtn.style.pointerEvents = '';
+                                    waBtn.style.opacity = '';
+                                    waBtn.innerHTML = originalContent;
+                                    window.open(defaultUrl, '_blank', 'noopener,noreferrer');
+                                });
                             });
-                        }).catch(function () {
+                        } else {
                             waBtn.style.pointerEvents = '';
                             waBtn.style.opacity = '';
                             waBtn.innerHTML = originalContent;
                             window.open(defaultUrl, '_blank', 'noopener,noreferrer');
-                        });
+                        }
                     });
                 }
             });

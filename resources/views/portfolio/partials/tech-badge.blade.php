@@ -57,7 +57,7 @@
 
 <div class="tech-brand-item" title="{{ $name }}">
     @if($logoUrl)
-        <img src="{{ $logoUrl }}" alt="{{ $name }}" class="tech-brand-logo" width="30" height="30" loading="lazy">
+        <img src="{{ $logoUrl }}" alt="{{ $name }}" class="tech-brand-logo" width="30" height="30" loading="lazy" decoding="async">
     @endif
     <span class="tech-brand-name">{{ $name }}</span>
 </div>
