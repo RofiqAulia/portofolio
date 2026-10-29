@@ -96,10 +96,10 @@ class MessageNotificationService
                 }
 
                 $notification = FilamentNotification::make()
-                    ->title('Pesan Kontak: '.$message->name)
+                    ->title('Pesan Kontak: '.$message->name.' • Belum Dibaca')
                     ->body($message->subject)
                     ->icon('heroicon-o-envelope')
-                    ->iconColor('danger')
+                    ->iconColor('gray')
                     ->viewData(['message_id' => $message->id])
                     ->actions([
                         Action::make($actionViewName)
@@ -195,10 +195,10 @@ class MessageNotificationService
 
                 if (! $existingNotification) {
                     $notification = FilamentNotification::make()
-                        ->title("Pesan Kontak: {$message->name}")
+                        ->title("Pesan Kontak: {$message->name} • Belum Dibaca")
                         ->body($message->subject)
                         ->icon('heroicon-o-envelope')
-                        ->iconColor('danger')
+                        ->iconColor('gray')
                         ->viewData(['message_id' => $message->id])
                         ->actions([
                             Action::make($actionViewName)

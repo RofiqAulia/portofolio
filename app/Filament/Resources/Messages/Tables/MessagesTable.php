@@ -68,18 +68,24 @@ final class MessagesTable
                     ->label('Status')
                     ->badge()
                     ->colors([
-                        'danger' => MessageStatus::New->value,
-                        'info' => MessageStatus::Read->value,
-                        'success' => MessageStatus::Replied->value,
-                        'gray' => MessageStatus::Archived->value,
+                        'gray' => MessageStatus::New->value,
+                        'success' => MessageStatus::Read->value,
+                        'info' => MessageStatus::Replied->value,
+                        'secondary' => MessageStatus::Archived->value,
                     ])
                     ->icons([
                         'heroicon-m-envelope' => MessageStatus::New->value,
-                        'heroicon-m-envelope-open' => MessageStatus::Read->value,
+                        'heroicon-m-check-circle' => MessageStatus::Read->value,
                         'heroicon-m-arrow-uturn-left' => MessageStatus::Replied->value,
                         'heroicon-m-archive-box' => MessageStatus::Archived->value,
                     ])
-                    ->formatStateUsing(fn ($state) => $state instanceof MessageStatus ? $state->label() : ($state ?? '')),
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        MessageStatus::New => 'Belum Dibaca',
+                        MessageStatus::Read => 'Sudah Dibaca',
+                        MessageStatus::Replied => 'Dibalas',
+                        MessageStatus::Archived => 'Diarsipkan',
+                        default => $state instanceof MessageStatus ? $state->label() : (string) $state,
+                    }),
                 TextColumn::make('read_at')
                     ->label('Dibaca Pada')
                     ->dateTime('d M Y H:i')
@@ -120,7 +126,7 @@ final class MessagesTable
                 Action::make('markAsRead')
                     ->label('Tandai Dibaca')
                     ->icon('heroicon-m-check-circle')
-                    ->color('info')
+                    ->color('success')
                     ->visible(fn (Message $record): bool => $record->status === MessageStatus::New)
                     ->action(function (Message $record): void {
                         $record->update([
@@ -210,7 +216,7 @@ final class MessagesTable
                     BulkAction::make('markAsRead')
                         ->label('Tandai Telah Dibaca')
                         ->icon('heroicon-m-check-circle')
-                        ->color('info')
+                        ->color('success')
                         ->action(function (Collection $records): void {
                             $records->each(function (Message $record): void {
                                 if ($record->status === MessageStatus::New) {

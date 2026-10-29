@@ -101,4 +101,47 @@
         max-height: 20px !important;
         flex-shrink: 0 !important;
     }
+
+    /* Database Notifications Slide-Over modern styling */
+    .fi-no-notifications .fi-no-notification {
+        border-radius: 0.75rem !important;
+        margin: 0.45rem 0.6rem !important;
+        transition: all 0.2s ease-in-out !important;
+        border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    }
+
+    .dark .fi-no-notifications .fi-no-notification {
+        border: 1px solid rgba(51, 65, 85, 0.7) !important;
+    }
+
+    /* Unread notification item: soft modern card with subtle slate accent */
+    .fi-no-notification-unread-ctn .fi-no-notification {
+        border-left: 4px solid #64748b !important;
+        background-color: rgba(248, 250, 252, 0.9) !important;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
+    }
+
+    .dark .fi-no-notification-unread-ctn .fi-no-notification {
+        border-left: 4px solid #94a3b8 !important;
+        background-color: rgba(30, 41, 59, 0.6) !important;
+    }
+
+    /* Read notification item: elegant muted card with emerald accent */
+    .fi-no-notification-read-ctn .fi-no-notification {
+        border-left: 4px solid #10b981 !important;
+        background-color: rgba(240, 253, 244, 0.35) !important;
+        opacity: 0.92;
+    }
+
+    .dark .fi-no-notification-read-ctn .fi-no-notification {
+        border-left: 4px solid #10b981 !important;
+        background-color: rgba(6, 78, 59, 0.15) !important;
+        opacity: 0.88;
+    }
+
+    .fi-no-notifications .fi-no-notification:hover {
+        opacity: 1 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+    }
 </style>

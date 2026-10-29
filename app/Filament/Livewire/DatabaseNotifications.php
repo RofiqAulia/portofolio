@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace App\Filament\Livewire;
 
 use App\Enums\MessageStatus;
+use App\Filament\Resources\Messages\MessageResource;
 use App\Models\Message;
 use App\Models\User;
 use App\Services\MessageNotificationService;
+use Filament\Actions\Action;
 use Filament\Livewire\DatabaseNotifications as BasePanelDatabaseNotifications;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Notifications\DatabaseNotification;
 use Livewire\Attributes\On;
 
 class DatabaseNotifications extends BasePanelDatabaseNotifications
@@ -45,6 +49,88 @@ class DatabaseNotifications extends BasePanelDatabaseNotifications
         }
 
         return $user->notifications();
+    }
+
+    public function getNotification(DatabaseNotification $notification): Notification
+    {
+        $filamentNotification = Notification::fromDatabase($notification)
+            ->date($this->formatNotificationDate($notification->getAttributeValue('created_at')));
+
+        $isUnread = $notification->unread();
+        $messageId = $this->extractMessageIdFromNotification($notification);
+        $url = $this->getNotificationMessageUrl($messageId);
+
+        $rawTitle = (string) ($notification->data['title'] ?? 'Pesan Kontak');
+        $cleanName = preg_replace('/^Pesan Kontak:\s*/i', '', $rawTitle);
+        $cleanName = trim((string) preg_replace('/\s*•\s*(Belum|Sudah|Telah)\s*Dibaca/i', '', (string) $cleanName));
+
+        if ($isUnread) {
+            // Tampilan PESAN BELUM DIBACA: Icon abu-abu netral, teks 'Belum Dibaca'
+            $filamentNotification
+                ->title("Pesan Kontak: {$cleanName} • Belum Dibaca")
+                ->icon('heroicon-o-envelope')
+                ->iconColor('gray');
+
+            $actions = [];
+            if ($url) {
+                $actions[] = Action::make('view_'.$notification->id)
+                    ->button()
+                    ->label('Buka Pesan')
+                    ->color('primary')
+                    ->size('xs')
+                    ->icon('heroicon-m-arrow-top-right-on-square')
+                    ->url($url)
+                    ->markAsRead();
+            }
+
+            $actions[] = Action::make('mark_as_read_'.$notification->id)
+                ->button()
+                ->label('Tandai Dibaca')
+                ->color('gray')
+                ->size('xs')
+                ->icon('heroicon-m-check')
+                ->action(fn () => $this->markNotificationAsRead($notification->id));
+
+            $filamentNotification->actions($actions);
+        } else {
+            // Tampilan PESAN SUDAH DIBACA: Icon centang hijau, teks 'Sudah Dibaca'
+            $filamentNotification
+                ->title("Pesan Kontak: {$cleanName} • Sudah Dibaca")
+                ->icon('heroicon-m-check-circle')
+                ->iconColor('success');
+
+            $actions = [];
+            if ($url) {
+                $actions[] = Action::make('view_'.$notification->id)
+                    ->button()
+                    ->label('Buka Pesan')
+                    ->color('gray')
+                    ->size('xs')
+                    ->icon('heroicon-m-arrow-top-right-on-square')
+                    ->url($url);
+            }
+
+            $actions[] = Action::make('mark_as_unread_'.$notification->id)
+                ->button()
+                ->label('Tandai Belum Dibaca')
+                ->color('gray')
+                ->size('xs')
+                ->icon('heroicon-m-envelope')
+                ->action(fn () => $this->markNotificationAsUnread($notification->id));
+
+            $filamentNotification->actions($actions);
+        }
+
+        return $filamentNotification;
+    }
+
+    protected function getNotificationMessageUrl(?int $messageId): ?string
+    {
+        if (! $messageId) {
+            return null;
+        }
+
+        return MessageResource::getUrl('edit', ['record' => $messageId]);
     }
 
     public function markAllNotificationsAsRead(): void

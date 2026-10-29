@@ -49,7 +49,7 @@ class EditMessage extends EditRecord
             Action::make('markAsRead')
                 ->label('Tandai Telah Dibaca')
                 ->icon('heroicon-m-check-circle')
-                ->color('info')
+                ->color('success')
                 ->visible(fn (Message $record): bool => $record->status === MessageStatus::New)
                 ->action(function (Message $record): void {
                     $record->update([
