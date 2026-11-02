@@ -8,22 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Cache;
 
 class Profile extends Model
 {
     use HasFactory;
-
-    protected static function booted(): void
-    {
-        static::saved(function () {
-            Cache::forget('portfolio_home_data');
-        });
-
-        static::deleted(function () {
-            Cache::forget('portfolio_home_data');
-        });
-    }
 
     protected $fillable = [
         'user_id',

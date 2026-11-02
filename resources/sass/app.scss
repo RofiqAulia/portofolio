@@ -52,33 +52,50 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     letter-spacing: -0.02em;
 }
 
-// Sticky Pill Navbar
+// Global Anchor Scroll Margin (Prevents sticky navbar overlap)
+section[id],
+[id].inspo-section,
+#tentang,
+#keahlian,
+#proyek,
+#pengalaman,
+#sertifikasi,
+#kontak,
+#magang,
+#organisasi,
+#overview {
+    scroll-margin-top: 105px !important;
+}
+
+// Sticky Island Navbar
 .pill-navbar-container {
     position: sticky;
-    top: 20px;
+    top: 0;
     z-index: 1030;
-    padding: 0 1rem;
-    transition: top 0.2s ease;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(180deg, rgba(248, 250, 253, 0.96) 0%, rgba(248, 250, 253, 0.82) 75%, rgba(248, 250, 253, 0) 100%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: all 0.25s ease;
 
     @media (max-width: 991.98px) {
-        top: 12px;
-        padding: 0 0.75rem;
+        padding: 0.5rem 0.75rem;
     }
 }
 
 .pill-navbar {
-    background: rgba(255, 255, 255, 0.90);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(10, 27, 61, 0.08);
     border-radius: 9999px;
-    box-shadow: 0 8px 32px rgba(10, 27, 61, 0.06);
-    padding: 0.55rem 1.4rem;
+    box-shadow: 0 10px 30px -5px rgba(10, 27, 61, 0.07), 0 0 0 1px rgba(255, 255, 255, 0.85) inset;
+    padding: 0.45rem 1.35rem;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
     @media (max-width: 991.98px) {
         width: 100%;
-        border-radius: 24px;
+        border-radius: 22px;
         padding: 0.6rem 1rem;
 
         .navbar-collapse {
@@ -114,15 +131,15 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .inspo-brand-icon {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: linear-gradient(135deg, #5C46E5 0%, #38BDF8 100%);
     color: #FFFFFF;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.05rem;
+    font-size: 1rem;
     box-shadow: 0 4px 14px rgba(92, 70, 229, 0.35);
     flex-shrink: 0;
 }
@@ -130,8 +147,8 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .nav-link-pill {
     color: #475569;
     font-weight: 600;
-    font-size: 0.92rem;
-    padding: 0.45rem 1rem !important;
+    font-size: 0.9rem;
+    padding: 0.42rem 0.95rem !important;
     border-radius: 9999px;
     transition: all 0.2s ease;
 
@@ -453,40 +470,50 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border-radius: 20px;
-    padding: 0.75rem 1.15rem;
+    border-radius: 9999px;
+    padding: 0.55rem 1rem;
     border: 1px solid rgba(255, 255, 255, 0.95);
-    box-shadow: 0 14px 32px rgba(10, 27, 61, 0.12);
+    box-shadow: 0 12px 28px rgba(10, 27, 61, 0.1);
     z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
 
     &:hover {
-        transform: translateY(-4px) scale(1.03);
-        box-shadow: 0 18px 40px rgba(10, 27, 61, 0.18);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 16px 36px rgba(10, 27, 61, 0.15);
     }
 }
 
-// Top Left Satellite: Sky Blue System Analyst
+// Top Left Satellite: Academic Merit Pill
 .hero-float-pill-1 {
-    top: 2rem;
-    left: -2.5rem;
+    top: 1.25rem;
+    left: -2rem;
 
     @media (max-width: 1199.98px) {
-        left: -1rem;
+        left: -0.5rem;
+    }
+
+    @media (max-width: 576px) {
+        display: none !important;
     }
 }
 
-// Middle Right Satellite: Rose Coral / Backend (Positioned safely above card bottom text)
+// Bottom Right Satellite: System Analyst & Backend Focus
 .hero-float-pill-2 {
-    top: 8rem;
-    right: -2.5rem;
+    bottom: 4.75rem;
+    right: -2rem;
 
     @media (max-width: 1199.98px) {
-        right: -1rem;
+        right: -0.5rem;
+    }
+
+    @media (max-width: 576px) {
+        display: none !important;
     }
 }
 
-// Mid-Lower Left Satellite: Amber Industrial (Positioned beside photo, NEVER overlapping bottom name text)
 .hero-float-pill-3 {
     top: 15rem;
     left: -2.5rem;
@@ -826,11 +853,10 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     min-width: 0 !important;
 }
 
-// Tech Stack Marquee (Brand Logo Ticker - Height 150px)
+// Tech Stack Marquee (Brand Logo Ticker - Modern Neo-Pill Architecture)
 .tech-brand-strip {
-    height: 150px;
-    min-height: 150px;
-    max-height: 150px;
+    height: auto;
+    min-height: 165px;
     box-sizing: border-box;
     width: 100vw;
     max-width: 100vw;
@@ -839,33 +865,31 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     right: 50%;
     margin-left: calc(-50vw + 50%);
     margin-right: calc(-50vw + 50%);
-    margin-top: 1.5rem;
-    margin-bottom: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 2.5rem;
+    padding: 1.75rem 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
     contain: paint layout;
     align-items: center;
-    overflow: hidden;
-    background-color: #FFFFFF;
-    border-top: 1px solid rgba(10, 27, 61, 0.05);
-    border-bottom: 1px solid rgba(10, 27, 61, 0.05);
+    background: linear-gradient(180deg, rgba(248, 250, 253, 0) 0%, rgba(235, 241, 250, 0.55) 50%, rgba(248, 250, 253, 0) 100%);
 }
 
 .tech-brand-header {
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
     width: 100%;
 }
 
 .tech-brand-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #111827;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #0A1B3D;
     margin: 0;
-    letter-spacing: -0.015em;
-    line-height: 1.2;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
 }
 
 .tech-brand-marquee {
@@ -874,10 +898,10 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     position: relative;
     display: flex;
     user-select: none;
-    --brand-gap: 3.5rem;
+    --brand-gap: 1.35rem;
     gap: var(--brand-gap);
-    mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 1) 4%, rgba(0, 0, 0, 1) 96%, transparent 100%);
-    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 1) 4%, rgba(0, 0, 0, 1) 96%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 1) 6%, rgba(0, 0, 0, 1) 94%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 1) 6%, rgba(0, 0, 0, 1) 94%, transparent 100%);
 
     &:hover .tech-brand-track {
         animation-play-state: paused;
@@ -890,7 +914,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     align-items: center;
     gap: var(--brand-gap);
     min-width: 100%;
-    animation: tech-brand-marquee-scroll 35s linear infinite;
+    animation: tech-brand-marquee-scroll 32s linear infinite;
     will-change: transform;
 }
 
@@ -906,33 +930,40 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .tech-brand-item {
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.65rem;
     white-space: nowrap;
     text-decoration: none;
-    color: #1e293b;
-    padding: 0.25rem 0.5rem;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+    color: #0A1B3D;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(10, 27, 61, 0.08);
+    border-radius: 9999px;
+    padding: 0.45rem 1.15rem;
+    box-shadow: 0 2px 8px rgba(10, 27, 61, 0.03);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: default;
     user-select: none;
     flex-shrink: 0;
 
     &:hover {
-        transform: translateY(-2px) scale(1.03);
+        transform: translateY(-2px);
+        border-color: rgba(92, 70, 229, 0.28);
+        box-shadow: 0 8px 18px rgba(92, 70, 229, 0.1);
+        color: #5C46E5;
     }
 
     .tech-brand-logo {
-        height: 32px;
-        width: 32px;
+        height: 28px;
+        width: 28px;
         aspect-ratio: 1 / 1;
         object-fit: contain;
         display: inline-block;
         flex-shrink: 0;
         vertical-align: middle;
-        border-radius: 4px;
+        border-radius: 6px;
     }
 
     .tech-brand-name {
-        font-size: 1.05rem;
+        font-size: 0.95rem;
         font-weight: 700;
         letter-spacing: -0.015em;
         color: #1e293b;
@@ -941,39 +972,38 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 @media (max-width: 768px) {
     .tech-brand-strip {
-        height: 135px;
-        min-height: 135px;
-        max-height: 135px;
+        min-height: 145px;
+        padding: 1.25rem 0;
     }
 
     .tech-brand-header {
-        margin-bottom: 0.65rem;
+        margin-bottom: 0.85rem;
     }
 
     .tech-brand-title {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
     }
 
     .tech-brand-marquee {
-        --brand-gap: 2.25rem;
+        --brand-gap: 1rem;
     }
 
     .tech-brand-track {
-        animation-duration: 25s;
+        animation-duration: 26s;
     }
 
     .tech-brand-item {
+        padding: 0.35rem 0.9rem;
         gap: 0.5rem;
 
         .tech-brand-logo {
-            height: 26px;
-            width: 26px;
+            height: 24px;
+            width: 24px;
             aspect-ratio: 1 / 1;
-            max-width: 34px;
         }
 
         .tech-brand-name {
-            font-size: 0.92rem;
+            font-size: 0.86rem;
         }
     }
 }

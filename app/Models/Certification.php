@@ -9,24 +9,12 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Certification extends Model
 {
     use HasFactory, SoftDeletes;
-
-    protected static function booted(): void
-    {
-        static::saved(function () {
-            Cache::forget('portfolio_home_data');
-        });
-
-        static::deleted(function () {
-            Cache::forget('portfolio_home_data');
-        });
-    }
 
     protected $fillable = [
         'title',

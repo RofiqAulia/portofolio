@@ -8,7 +8,7 @@
 <div class="container">
 
     <!-- 1. HERO BENTO MASTER STAGE -->
-    <section id="tentang" class="py-4 py-lg-5">
+    <section id="tentang" class="py-3 py-lg-4">
         <div class="hero-brand-stage position-relative overflow-hidden">
             <div class="row align-items-center gy-5 position-relative z-2">
                 {{-- Left Column: Copy & CTAs --}}
@@ -24,7 +24,7 @@
                             <i class="bi bi-geo-alt-fill text-danger"></i> {{ $profile->location ?? 'Malang, ID' }}
                         </span>
                         <span class="hero-pill-badge hero-pill-role d-none d-sm-inline-flex">
-                            <i class="bi bi-patch-check-fill text-primary"></i> System Analyst &amp; IT Business Analyst, Software Engineer
+                            <i class="bi bi-patch-check-fill text-primary"></i> System Analyst &amp; Software Engineer
                         </span>
                     </div>
 
@@ -34,7 +34,7 @@
                     </h1>
 
                     <!-- Subtitle / Tagline -->
-                    <p class="hero-stage-desc mb-4 pe-lg-4">
+                    <p class="hero-stage-desc mb-4 pe-lg-3">
                         {{ $profile->tagline ?? 'Fresh Graduate Sarjana Terapan Teknik Informatika Politeknik Negeri Malang (IPK 3.68/4.00) dengan pengalaman magang serta keterlibatan proyek nyata dalam pengembangan berbasis website seperti Analisis Sistem, Rekayasa Perangkat Lunak, dan Continuous Improvement. Berpengalaman menerjemahkan alur bisnis korporat menjadi arsitektur sistem enterprise yang terstruktur, efisien, dan siap berdampak nyata.' }}
                     </p>
 
@@ -56,23 +56,71 @@
                         @endif
                     </div>
 
-                    <!-- Sekilas Tentang Saya (Frosted Glass Bento Mini-Card) -->
-                    <div class="hero-stage-bio p-3 p-md-4">
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <span class="badge bg-primary bg-opacity-10 text-primary rounded-circle p-2">
-                                <i class="bi bi-person-lines-fill fs-6"></i>
-                            </span>
-                            <strong class="font-heading fs-6 text-dark">Sekilas Tentang Saya</strong>
+                    <!-- 3 Core Competency Bento Highlights -->
+                    <div class="hero-stage-bio p-3 p-md-3.5">
+                        <div class="row g-2.5 align-items-stretch">
+                            <div class="col-md-4">
+                                <div class="p-2.5 h-100 rounded-3 bg-white bg-opacity-80 border border-light-subtle d-flex flex-column justify-content-between">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="badge bg-primary bg-opacity-10 text-primary rounded-circle p-1.5 flex-shrink-0">
+                                            <i class="bi bi-diagram-3-fill"></i>
+                                        </span>
+                                        <strong class="text-dark small fw-bold">Analisis Sistem</strong>
+                                    </div>
+                                    <p class="text-muted mb-0" style="font-size: 0.78rem; line-height: 1.45;">BPMN, Flowchart, ERD 3NF &amp; Rekayasa Spesifikasi SRS</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-2.5 h-100 rounded-3 bg-white bg-opacity-80 border border-light-subtle d-flex flex-column justify-content-between">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="badge bg-success bg-opacity-10 text-success rounded-circle p-1.5 flex-shrink-0">
+                                            <i class="bi bi-code-slash"></i>
+                                        </span>
+                                        <strong class="text-dark small fw-bold">Rekayasa Web</strong>
+                                    </div>
+                                    <p class="text-muted mb-0" style="font-size: 0.78rem; line-height: 1.45;">PHP Laravel, MySQL, RESTful API &amp; Prinsip OOP/SOLID</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-2.5 h-100 rounded-3 bg-white bg-opacity-80 border border-light-subtle d-flex flex-column justify-content-between">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="badge bg-warning bg-opacity-15 text-warning-emphasis rounded-circle p-1.5 flex-shrink-0">
+                                            <i class="bi bi-patch-check-fill text-warning"></i>
+                                        </span>
+                                        <strong class="text-dark small fw-bold">Karya Cipta HKI</strong>
+                                    </div>
+                                    <p class="text-muted mb-0" style="font-size: 0.78rem; line-height: 1.45;">Sistem Terdaftar Resmi HKI &amp; Teruji di Industri Manufaktur</p>
+                                </div>
+                            </div>
                         </div>
-                        <p class="mb-0 text-muted small lh-base">
-                            {{ $profile->bio ?? 'Memiliki pengalaman serta terlibat nyata dalam proyek pengembangan perangkat lunak end-to-end dan optimasi proses bisnis di lingkungan korporat (Human Capital, Produksi, dan Manufaktur) dibidang digitalisasi. Memiliki rekam jejak dalam mengidentifikasi bottleneck non-produktif, seperti digitalisasi paperless program, serta merekayasa sistem enterprise termasuk sistem manajemen beasiswa terdaftar HKI untuk korporasi industri manufaktur berskala nasional. Menguasai analisis sistem & continuous improvement (BPMN, Flowchart, UI/UX Figma) serta rekayasa database dan backend berbasis PHP Laravel, MySQL, Bootstrap, Git, dan Deployment.' }}
-                        </p>
                     </div>
                 </div>
 
                 {{-- Right Column: Bento Studio Showcase (Profile & Staged Dev Gear) --}}
                 <div class="col-lg-6 col-xl-5 text-center">
                     <div class="hero-studio-stage position-relative d-inline-block w-100">
+                        <!-- Floating Pill 1: Top-Left (Academic Achievement) -->
+                        <div class="hero-float-pill hero-float-pill-1 d-none d-sm-inline-flex">
+                            <span class="badge bg-warning bg-opacity-20 text-warning-emphasis rounded-circle p-1.5 flex-shrink-0">
+                                <i class="bi bi-mortarboard-fill text-warning fs-6"></i>
+                            </span>
+                            <div class="text-start">
+                                <span class="d-block fw-bold text-dark lh-1" style="font-size: 0.82rem;">IPK 3.68 / 4.00</span>
+                                <span class="text-muted" style="font-size: 0.72rem;">Teknik Informatika</span>
+                            </div>
+                        </div>
+
+                        <!-- Floating Pill 2: Bottom-Right (Core Focus) -->
+                        <div class="hero-float-pill hero-float-pill-2 d-none d-sm-inline-flex">
+                            <span class="badge bg-primary bg-opacity-15 text-primary rounded-circle p-1.5 flex-shrink-0">
+                                <i class="bi bi-diagram-3-fill fs-6"></i>
+                            </span>
+                            <div class="text-start">
+                                <span class="d-block fw-bold text-dark lh-1" style="font-size: 0.82rem;">System Analyst</span>
+                                <span class="text-muted" style="font-size: 0.72rem;">&amp; Software Engineer</span>
+                            </div>
+                        </div>
+
                         <!-- Profile Card on Bento Surface -->
                         <div class="hero-studio-card position-relative mx-auto">
                             @if(!empty($profile->photo_path))
@@ -130,22 +178,17 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Bottom Floating Indicator Dots (Bento Slider Visual Anchor) -->
-            <div class="hero-stage-dots d-flex justify-content-center align-items-center gap-2 mt-4 pt-2">
-                <div class="hero-dots-pill d-inline-flex align-items-center gap-2 px-3 py-1 bg-white bg-opacity-75 shadow-sm rounded-pill">
-                    <span class="hero-dot active"></span>
-                    <span class="hero-dot"></span>
-                    <span class="hero-dot"></span>
-                </div>
-            </div>
         </div>
     </section>
 
     <!-- 2. STRIP KEAHLIAN & TECH STACK (INFINITE MARQUEE SEPERTI GAMBAR 2) -->
     <section class="tech-brand-strip" aria-label="Teknologi dan Tools Andalan">
-        <div class="tech-brand-header">
-            <h2 class="tech-brand-title">Teknologi & Tools Andalan</h2>
+        <div class="tech-brand-header text-center mb-3">
+            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-1 small fw-bold mb-1">
+                <i class="bi bi-stack me-1"></i> TECH STACK &amp; TOOLS
+            </span>
+            <h2 class="tech-brand-title mt-1">Teknologi &amp; Tools Andalan</h2>
+            <p class="text-muted small mb-0">Ekosistem teknologi teruji yang digunakan dalam perancangan &amp; implementasi sistem enterprise</p>
         </div>
 
         @php

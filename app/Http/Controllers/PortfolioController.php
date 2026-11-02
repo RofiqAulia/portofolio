@@ -33,63 +33,63 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 final class PortfolioController extends Controller
 {
-    public function index(): Response
+    public function index(): View
     {
-        $data = Cache::remember('portfolio_home_data', now()->addMinutes(30), function () {
-            $profile = Profile::with(['socialLinks' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')])->first();
+        try {
+            Cache::forget('portfolio_home_data');
+        } catch (\Throwable) {
+            // Ignore cache store connectivity errors in sandbox/testing
+        }
 
-            $technologies = Technology::orderBy('name')->get();
+        $profile = Profile::with(['socialLinks' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')])->first();
 
-            $skillCategories = SkillCategory::with(['skills' => fn ($q) => $q->visible()->ordered()])
-                ->whereIn('type', [SkillType::Hard, SkillType::Soft, SkillType::Analysis])
-                ->get()
-                ->keyBy(fn (SkillCategory $c) => $c->type instanceof SkillType ? $c->type->value : (string) $c->type);
+        $technologies = Technology::orderBy('name')->get();
 
-            $hardSkillCategory = $skillCategories->get(SkillType::Hard->value);
-            $softSkillCategory = $skillCategories->get(SkillType::Soft->value);
-            $analysisSkillCategory = $skillCategories->get(SkillType::Analysis->value);
+        $skillCategories = SkillCategory::with(['skills' => fn ($q) => $q->visible()->ordered()])
+            ->whereIn('type', [SkillType::Hard, SkillType::Soft, SkillType::Analysis])
+            ->get()
+            ->keyBy(fn (SkillCategory $c) => $c->type instanceof SkillType ? $c->type->value : (string) $c->type);
 
-            $hardSkillTiers = $this->buildSkillPyramidTiers($hardSkillCategory);
-            $softSkillTiers = $this->buildSkillPyramidTiers($softSkillCategory);
+        $hardSkillCategory = $skillCategories->get(SkillType::Hard->value);
+        $softSkillCategory = $skillCategories->get(SkillType::Soft->value);
+        $analysisSkillCategory = $skillCategories->get(SkillType::Analysis->value);
 
-            $projects = Project::published()
-                ->ordered()
-                ->with(['technologies', 'media'])
-                ->get();
+        $hardSkillTiers = $this->buildSkillPyramidTiers($hardSkillCategory);
+        $softSkillTiers = $this->buildSkillPyramidTiers($softSkillCategory);
 
-            $allExperiences = Experience::published()
-                ->ordered()
-                ->with(['highlights', 'technologies', 'attachments' => fn ($q) => $q->visible()])
-                ->get();
+        $projects = Project::published()
+            ->ordered()
+            ->with(['technologies', 'media'])
+            ->get();
 
-            $internships = $allExperiences->filter(fn (Experience $e) => $e->type === ExperienceType::Internship)->values();
-            $organizations = $allExperiences->filter(fn (Experience $e) => $e->type === ExperienceType::Organization)->values();
+        $allExperiences = Experience::published()
+            ->ordered()
+            ->with(['highlights', 'technologies', 'attachments' => fn ($q) => $q->visible()])
+            ->get();
 
-            $certifications = Certification::published()
-                ->ordered()
-                ->get();
+        $internships = $allExperiences->filter(fn (Experience $e) => $e->type === ExperienceType::Internship)->values();
+        $organizations = $allExperiences->filter(fn (Experience $e) => $e->type === ExperienceType::Organization)->values();
 
-            $settings = collect(SiteSetting::allKeyed());
+        $certifications = Certification::published()
+            ->ordered()
+            ->get();
 
-            return compact(
-                'profile',
-                'technologies',
-                'hardSkillCategory',
-                'softSkillCategory',
-                'analysisSkillCategory',
-                'hardSkillTiers',
-                'softSkillTiers',
-                'projects',
-                'internships',
-                'organizations',
-                'certifications',
-                'settings',
-            );
-        });
+        $settings = collect(SiteSetting::allKeyed());
 
-        return response()
-            ->view('portfolio.index', $data)
-            ->header('Cache-Control', 'public, max-age=1800, stale-while-revalidate=86400');
+        return view('portfolio.index', compact(
+            'profile',
+            'technologies',
+            'hardSkillCategory',
+            'softSkillCategory',
+            'analysisSkillCategory',
+            'hardSkillTiers',
+            'softSkillTiers',
+            'projects',
+            'internships',
+            'organizations',
+            'certifications',
+            'settings',
+        ));
     }
 
     public function project(string $slug): View
