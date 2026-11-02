@@ -36,9 +36,16 @@ Route::get('/pesan/{message}/lampiran/{index?}', [PortfolioController::class, 'd
 Route::get('/images/{file}', function (string $file) {
     $fallbackFile = public_path('images/'.$file);
     if (file_exists($fallbackFile)) {
+        $mime = match (pathinfo($fallbackFile, PATHINFO_EXTENSION)) {
+            'png' => 'image/png',
+            'webp' => 'image/webp',
+            'svg' => 'image/svg+xml',
+            default => 'image/jpeg',
+        };
+
         return response()->file($fallbackFile, [
-            'Content-Type' => str_ends_with($file, '.png') ? 'image/png' : 'image/jpeg',
-            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Content-Type' => $mime,
+            'Cache-Control' => 'public, max-age=31536000, immutable',
         ]);
     }
 
@@ -46,7 +53,7 @@ Route::get('/images/{file}', function (string $file) {
     if (file_exists($faviconPng)) {
         return response()->file($faviconPng, [
             'Content-Type' => 'image/png',
-            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Cache-Control' => 'public, max-age=31536000, immutable',
         ]);
     }
 

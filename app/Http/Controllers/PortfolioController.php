@@ -24,6 +24,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -32,57 +33,63 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 final class PortfolioController extends Controller
 {
-    public function index(): View
+    public function index(): Response
     {
-        $profile = Profile::with(['socialLinks' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')])->first();
+        $data = Cache::remember('portfolio_home_data', now()->addMinutes(30), function () {
+            $profile = Profile::with(['socialLinks' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')])->first();
 
-        $technologies = Technology::orderBy('name')->get();
+            $technologies = Technology::orderBy('name')->get();
 
-        $skillCategories = SkillCategory::with(['skills' => fn ($q) => $q->visible()->ordered()])
-            ->whereIn('type', [SkillType::Hard, SkillType::Soft, SkillType::Analysis])
-            ->get()
-            ->keyBy(fn (SkillCategory $c) => $c->type instanceof SkillType ? $c->type->value : (string) $c->type);
+            $skillCategories = SkillCategory::with(['skills' => fn ($q) => $q->visible()->ordered()])
+                ->whereIn('type', [SkillType::Hard, SkillType::Soft, SkillType::Analysis])
+                ->get()
+                ->keyBy(fn (SkillCategory $c) => $c->type instanceof SkillType ? $c->type->value : (string) $c->type);
 
-        $hardSkillCategory = $skillCategories->get(SkillType::Hard->value);
-        $softSkillCategory = $skillCategories->get(SkillType::Soft->value);
-        $analysisSkillCategory = $skillCategories->get(SkillType::Analysis->value);
+            $hardSkillCategory = $skillCategories->get(SkillType::Hard->value);
+            $softSkillCategory = $skillCategories->get(SkillType::Soft->value);
+            $analysisSkillCategory = $skillCategories->get(SkillType::Analysis->value);
 
-        $hardSkillTiers = $this->buildSkillPyramidTiers($hardSkillCategory);
-        $softSkillTiers = $this->buildSkillPyramidTiers($softSkillCategory);
+            $hardSkillTiers = $this->buildSkillPyramidTiers($hardSkillCategory);
+            $softSkillTiers = $this->buildSkillPyramidTiers($softSkillCategory);
 
-        $projects = Project::published()
-            ->ordered()
-            ->with(['technologies', 'media'])
-            ->get();
+            $projects = Project::published()
+                ->ordered()
+                ->with(['technologies', 'media'])
+                ->get();
 
-        $allExperiences = Experience::published()
-            ->ordered()
-            ->with(['highlights', 'technologies', 'attachments' => fn ($q) => $q->visible()])
-            ->get();
+            $allExperiences = Experience::published()
+                ->ordered()
+                ->with(['highlights', 'technologies', 'attachments' => fn ($q) => $q->visible()])
+                ->get();
 
-        $internships = $allExperiences->filter(fn (Experience $e) => $e->type === ExperienceType::Internship)->values();
-        $organizations = $allExperiences->filter(fn (Experience $e) => $e->type === ExperienceType::Organization)->values();
+            $internships = $allExperiences->filter(fn (Experience $e) => $e->type === ExperienceType::Internship)->values();
+            $organizations = $allExperiences->filter(fn (Experience $e) => $e->type === ExperienceType::Organization)->values();
 
-        $certifications = Certification::published()
-            ->ordered()
-            ->get();
+            $certifications = Certification::published()
+                ->ordered()
+                ->get();
 
-        $settings = collect(SiteSetting::allKeyed());
+            $settings = collect(SiteSetting::allKeyed());
 
-        return view('portfolio.index', compact(
-            'profile',
-            'technologies',
-            'hardSkillCategory',
-            'softSkillCategory',
-            'analysisSkillCategory',
-            'hardSkillTiers',
-            'softSkillTiers',
-            'projects',
-            'internships',
-            'organizations',
-            'certifications',
-            'settings',
-        ));
+            return compact(
+                'profile',
+                'technologies',
+                'hardSkillCategory',
+                'softSkillCategory',
+                'analysisSkillCategory',
+                'hardSkillTiers',
+                'softSkillTiers',
+                'projects',
+                'internships',
+                'organizations',
+                'certifications',
+                'settings',
+            );
+        });
+
+        return response()
+            ->view('portfolio.index', $data)
+            ->header('Cache-Control', 'public, max-age=1800, stale-while-revalidate=86400');
     }
 
     public function project(string $slug): View
@@ -96,7 +103,7 @@ final class PortfolioController extends Controller
             ])
             ->firstOrFail();
 
-        $settings = SiteSetting::all()->pluck('value', 'key');
+        $settings = collect(SiteSetting::allKeyed());
 
         return view('portfolio.project', compact('project', 'settings'));
     }
@@ -116,7 +123,7 @@ final class PortfolioController extends Controller
             ->with(['highlights', 'technologies', 'attachments' => fn ($q) => $q->visible(), 'media'])
             ->firstOrFail();
 
-        $settings = SiteSetting::all()->pluck('value', 'key');
+        $settings = collect(SiteSetting::allKeyed());
 
         return view('portfolio.experience', compact('experience', 'settings'));
     }
@@ -159,7 +166,7 @@ final class PortfolioController extends Controller
     public function documentations(Request $request): View
     {
         $profile = Profile::with(['socialLinks' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')])->first();
-        $settings = SiteSetting::all()->pluck('value', 'key');
+        $settings = collect(SiteSetting::allKeyed());
 
         $selectedCategory = $request->query('kategori');
         $selectedType = $request->query('tipe');
@@ -213,7 +220,7 @@ final class PortfolioController extends Controller
     public function documentationDetail(string $slug): View
     {
         $profile = Profile::with(['socialLinks' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')])->first();
-        $settings = SiteSetting::all()->pluck('value', 'key');
+        $settings = collect(SiteSetting::allKeyed());
 
         $documentation = Documentation::published()
             ->where('slug', $slug)

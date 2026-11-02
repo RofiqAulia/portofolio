@@ -6,12 +6,23 @@ namespace App\Observers;
 
 use App\Contracts\AttachmentStorage;
 use App\Models\Experience;
+use Illuminate\Support\Facades\Cache;
 
 final class ExperienceObserver
 {
     public function __construct(
         private readonly AttachmentStorage $storage
     ) {}
+
+    public function saved(Experience $experience): void
+    {
+        Cache::forget('portfolio_home_data');
+    }
+
+    public function deleted(Experience $experience): void
+    {
+        Cache::forget('portfolio_home_data');
+    }
 
     public function deleting(Experience $experience): void
     {
