@@ -24,49 +24,66 @@ class Technology extends Model
      */
     public function getLogoUrlAttribute(): ?string
     {
-        if (! empty($this->icon_path)) {
-            return asset('storage/'.ltrim($this->icon_path, '/'));
-        }
-
         $slug = strtolower($this->slug ?? Str::slug($this->name ?? ''));
 
-        $possibleFiles = [
-            "logo/{$slug}-logo.png",
-            "logo/{$slug}-logo.jpg",
-            "logo/{$slug}.png",
-            "logo/{$slug}.jpg",
+        // 1. Direct SVG Mapping for official clean transparent vector logos (zero box/container)
+        $svgMap = [
+            'laravel' => 'logo/laravel-logo.svg',
+            'php' => 'logo/php-logo.svg',
+            'mysql' => 'logo/mysql-logo.svg',
+            'bootstrap' => 'logo/bootstrap-logo.svg',
+            'bootstrap-5' => 'logo/bootstrap-5-logo.svg',
+            'tailwind' => 'logo/tailwind-logo.svg',
+            'tailwind-css' => 'logo/tailwind-css-logo.svg',
+            'docker' => 'logo/docker-logo.svg',
+            'git' => 'logo/git-logo.svg',
+            'vue' => 'logo/vue-logo.svg',
+            'vue-js' => 'logo/vue-logo.svg',
+            'react' => 'logo/react-logo.svg',
+            'redis' => 'logo/redis-logo.svg',
+            'notion' => 'logo/notion-logo.svg',
+            'canva' => 'logo/canva-logo.svg',
+            'draw-io' => 'logo/draw-io-logo.svg',
+            'draw' => 'logo/draw-io-logo.svg',
+            'excel' => 'logo/excel-logo.svg',
+            'word' => 'logo/word-logo.svg',
+            'powerpoint' => 'logo/powerpoint-logo.svg',
+            'pptx' => 'logo/pptx-logo.svg',
+            'ppt' => 'logo/powerpoint-logo.svg',
+            'sharepoint' => 'logo/sharepoint.svg',
+            'power-automate' => 'logo/power-automate-logo.svg',
+            'automate' => 'logo/automate-logo.svg',
         ];
 
-        foreach ($possibleFiles as $file) {
-            if (file_exists(public_path('storage/'.$file)) || file_exists(storage_path('app/public/'.$file))) {
-                return asset('storage/'.$file);
-            }
+        if (isset($svgMap[$slug])) {
+            return asset('storage/'.$svgMap[$slug]);
         }
 
-        $slugMap = [
-            'laravel' => 'logo/laravel-logo.jpg',
-            'php' => 'logo/php-logo.png',
-            'mysql' => 'logo/mysql-logo.png',
-            'bootstrap' => 'logo/bootstrap-logo.jpg',
-            'tailwind' => 'logo/tailwind-logo.jpg',
-            'docker' => 'logo/docker-logo.jpg',
-            'git' => 'logo/git-logo.png',
-            'notion' => 'logo/notion-logo.png',
-            'canva' => 'logo/canva-logo.png',
-            'draw' => 'logo/draw-io-logo.png',
-            'excel' => 'logo/excel-logo.jpg',
-            'word' => 'logo/word-logo.jpg',
-            'powerpoint' => 'logo/pptx-logo.jpg',
-            'pptx' => 'logo/pptx-logo.jpg',
-            'ppt' => 'logo/pptx-logo.jpg',
-            'sharepoint' => 'logo/sharepoint.jpg',
-            'automate' => 'logo/automate-logo.jpg',
-        ];
-
-        foreach ($slugMap as $key => $file) {
+        foreach ($svgMap as $key => $file) {
             if (str_contains($slug, $key)) {
                 return asset('storage/'.$file);
             }
+        }
+
+        // 2. Check if SVG file exists on disk
+        $possibleSvgs = [
+            "logo/{$slug}-logo.svg",
+            "logo/{$slug}.svg",
+        ];
+        if (! empty($this->icon_path)) {
+            $base = pathinfo($this->icon_path, PATHINFO_FILENAME);
+            $dir = pathinfo($this->icon_path, PATHINFO_DIRNAME);
+            $possibleSvgs[] = ($dir !== '.' ? $dir.'/' : '').$base.'.svg';
+        }
+        foreach ($possibleSvgs as $svgFile) {
+            if (file_exists(public_path('storage/'.$svgFile)) || file_exists(storage_path('app/public/'.$svgFile))) {
+                return asset('storage/'.$svgFile);
+            }
+        }
+
+        // 3. Fallback to icon_path if provided
+        if (! empty($this->icon_path)) {
+            return asset('storage/'.ltrim($this->icon_path, '/'));
         }
 
         return null;

@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetId = '#' + track.id;
         const prevBtns = document.querySelectorAll(`[data-target="${targetId}"].btn-slider-prev, [data-target="${targetId}"].project-nav-prev, .project-btn-prev`);
         const nextBtns = document.querySelectorAll(`[data-target="${targetId}"].btn-slider-next, [data-target="${targetId}"].project-nav-next, .project-btn-next`);
-        const items = track.querySelectorAll('.slider-item-2col, .slider-item-3col, .project-slide-item, .internship-slide-item, .organization-slide-item, .certification-slide-item');
+        const items = track.querySelectorAll('.slider-item-2col, .slider-item-3col, .slider-item-4col, .project-slide-item, .internship-slide-item, .organization-slide-item, .certification-slide-item');
         const totalItems = items.length;
 
         if (totalItems === 0) return;
@@ -199,8 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Initialize all sliders (2-container & 3-container tracks)
-    document.querySelectorAll('.slider-track-2col, .slider-track-3col, #projectSliderTrack, #internshipSliderTrack, #organizationSliderTrack, #experienceSliderTrack, #certificationSliderTrack').forEach(track => {
+    // Initialize all sliders (4-container, 3-container & 2-container tracks)
+    document.querySelectorAll('.slider-track-4col, .slider-track-3col, .slider-track-2col, #projectSliderTrack, #internshipSliderTrack, #organizationSliderTrack, #experienceSliderTrack, #certificationSliderTrack').forEach(track => {
         initTwoColSlider(track);
     });
 
@@ -258,14 +258,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const modalTitle = document.getElementById('imageViewerTitle');
         const modalImg = document.getElementById('imageViewerImg');
         const modalDesc = document.getElementById('imageViewerDesc');
+        const modalDescWrap = document.getElementById('imageViewerDescWrap');
         const modalSpinner = document.getElementById('imageViewerSpinner');
         const modalOpenNewTab = document.getElementById('imageViewerOpenNewTab');
         const modalDownloadBtn = document.getElementById('imageViewerDownloadBtn');
+        const modalDialog = modalEl.querySelector('.modal-dialog');
 
         const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
 
         const openViewer = (src, title, desc, downloadUrl, filename) => {
             if (!src) return;
+
+            if (modalDialog) {
+                modalDialog.style.maxWidth = window.innerWidth > 576 ? '600px' : '';
+            }
 
             if (modalSpinner) modalSpinner.style.display = 'inline-block';
             modalImg.style.opacity = '0';
@@ -273,6 +279,25 @@ document.addEventListener('DOMContentLoaded', () => {
             modalImg.onload = () => {
                 if (modalSpinner) modalSpinner.style.display = 'none';
                 modalImg.style.opacity = '1';
+
+                // Responsive auto-fit modal dialog width based on image natural aspect ratio
+                if (modalDialog && modalImg.naturalWidth && modalImg.naturalHeight) {
+                    if (window.innerWidth > 576) {
+                        const ratio = modalImg.naturalWidth / modalImg.naturalHeight;
+                        if (ratio < 0.9) {
+                            // Portrait (e.g. Profile photo)
+                            modalDialog.style.maxWidth = '520px';
+                        } else if (ratio < 1.35) {
+                            // Square / moderate aspect
+                            modalDialog.style.maxWidth = '640px';
+                        } else {
+                            // Wide / 16:9 Landscape screenshot
+                            modalDialog.style.maxWidth = '920px';
+                        }
+                    } else {
+                        modalDialog.style.maxWidth = '';
+                    }
+                }
             };
 
             modalImg.onerror = () => {
@@ -287,10 +312,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (modalDesc) {
                 if (desc && desc.trim()) {
                     modalDesc.textContent = desc;
-                    modalDesc.style.display = 'block';
+                    if (modalDescWrap) modalDescWrap.style.display = 'block';
+                    else modalDesc.style.display = 'block';
                 } else {
                     modalDesc.textContent = '';
-                    modalDesc.style.display = 'none';
+                    if (modalDescWrap) modalDescWrap.style.display = 'none';
+                    else modalDesc.style.display = 'none';
                 }
             }
 
@@ -310,6 +337,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             modalInstance.show();
         };
+
+        modalEl.addEventListener('hidden.bs.modal', () => {
+            if (modalDialog) modalDialog.style.maxWidth = '';
+            modalImg.src = '';
+        });
 
         // Open modal on click of any lightbox trigger
         document.addEventListener('click', (e) => {

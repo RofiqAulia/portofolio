@@ -9,12 +9,12 @@
                     <span class="dot dot-yellow"></span>
                     <span class="dot dot-green"></span>
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-white text-dark border rounded-pill px-2 py-0 small font-monospace" style="font-size: 0.7rem;">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <span class="badge bg-white text-dark border rounded-pill px-2 py-0 small font-monospace text-truncate d-inline-block" style="font-size: 0.68rem; max-width: 120px;">
                         {{ Str::slug($project->title) }}.app
                     </span>
                 </div>
-                <div class="d-flex align-items-center gap-1">
+                <div class="d-flex align-items-center gap-1 flex-shrink-0">
                     <span class="status-pulse-dot" style="width: 6px; height: 6px;"></span>
                     <span class="text-muted small fw-semibold" style="font-size: 0.68rem;">Live</span>
                 </div>
@@ -46,14 +46,6 @@
                             <i class="bi bi-code-slash me-1"></i> {{ $project->role ?? 'Software Engineer' }}
                         </span>
                     </div>
-
-                    @if($project->is_featured)
-                        <div class="position-absolute top-0 end-0 m-2 z-2">
-                            <span class="bento-badge-pill bento-badge-amber py-1 px-3 shadow-sm">
-                                <i class="bi bi-star-fill text-warning me-1"></i> UNGGULAN
-                            </span>
-                        </div>
-                    @endif
 
                     <!-- Hover Quick Actions Overlay -->
                     <div class="project-preview-overlay">
@@ -111,34 +103,27 @@
 
         <!-- Tech Stack Tags -->
         @if($project->technologies && $project->technologies->isNotEmpty())
-            <div class="inspo-tags-row mb-3">
-                @foreach($project->technologies->take(4) as $tech)
+            <div class="inspo-tags-row mb-3 d-flex flex-wrap gap-1 align-items-center">
+                @foreach($project->technologies->take(3) as $tech)
                     <span class="bento-badge-pill bento-badge-blue py-0 px-2 small">{{ $tech->name }}</span>
                 @endforeach
-                @if($project->technologies->count() > 4)
-                    <span class="badge bg-light text-muted border rounded-pill px-2 py-0 small">+{{ $project->technologies->count() - 4 }}</span>
+                @if($project->technologies->count() > 3)
+                    <span class="badge bg-light text-muted border rounded-pill px-1.5 py-0 small">+{{ $project->technologies->count() - 3 }}</span>
                 @endif
             </div>
         @endif
     </div>
 
-    {{-- 3. Card Footer Action Bar with Transparent BG-Image Overlay --}}
+    {{-- 3. Card Footer Action Bar --}}
     <div class="project-action-overlay position-relative mt-auto overflow-hidden rounded-4">
-        {{-- Background image at 20% opacity --}}
-        @if($project->thumbnail_path)
-            <div class="project-action-bg" style="background-image: url('{{ asset('storage/' . $project->thumbnail_path) }}');"></div>
-        @else
-            <div class="project-action-bg project-action-bg-fallback"></div>
-        @endif
-
         {{-- Overlay content --}}
-        <div class="project-action-content d-flex align-items-center justify-content-between gap-2 position-relative z-2">
-            <a href="{{ route('portfolio.project.show', $project->slug) }}" class="btn-bento-primary py-2 px-3 fs-6">
+        <div class="project-action-content d-flex align-items-center justify-content-between gap-1.5 position-relative z-2">
+            <a href="{{ route('portfolio.project.show', $project->slug) }}" class="btn-bento-primary py-1.5 px-2.5 fs-6">
                 <span>Detail Cerita</span>
                 <i class="bi bi-arrow-right"></i>
             </a>
 
-            <div class="inspo-action-icons">
+            <div class="inspo-action-icons d-flex align-items-center gap-1">
                 @if($project->demo_url)
                     <a href="{{ $project->demo_url }}" target="_blank" rel="noopener noreferrer" class="btn-inspo-icon" title="Buka Live Demo">
                         <i class="bi bi-box-arrow-up-right"></i>

@@ -8,11 +8,11 @@
 <div class="container">
 
     <!-- 1. HERO BENTO MASTER STAGE -->
-    <section id="tentang" class="py-3 py-lg-4">
+    <section id="tentang" class="py-3 py-lg-4" aria-labelledby="hero-main-title">
         <div class="hero-brand-stage position-relative overflow-hidden">
-            <div class="row align-items-center gy-5 position-relative z-2">
+            <div class="row align-items-center gy-4 gy-lg-5 position-relative z-2">
                 {{-- Left Column: Copy & CTAs --}}
-                <div class="col-lg-6 col-xl-7">
+                <div class="col-lg-7">
                     <!-- Status Badges Cluster -->
                     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
                         @if($profile && $profile->is_open_to_work)
@@ -28,8 +28,8 @@
                         </span>
                     </div>
 
-                    <!-- Main Headline -->
-                    <h1 class="hero-stage-title mb-3">
+                    <!-- Main Headline (Strict 1x <h1>) -->
+                    <h1 id="hero-main-title" class="hero-stage-title mb-3">
                         Siap <span class="hero-stage-highlight">Berkontribusi Nyata</span> <br class="d-none d-md-inline">dalam <span class="hero-stage-highlight-blue">Proyek &amp; Perusahaan</span> Anda
                     </h1>
 
@@ -39,98 +39,37 @@
                     </p>
 
                     <!-- CTAs (Vibrant Bento Pill Buttons) -->
-                    <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
-                        <a href="https://wa.me/6282228035426" target="_blank" rel="noopener noreferrer" class="btn-hero-purple js-wa-btn">
+                    <div class="d-flex flex-wrap align-items-center gap-3">
+                        <a href="https://wa.me/6282228035426" target="_blank" rel="noopener noreferrer" class="btn-hero-purple js-wa-btn" aria-label="Mulai Diskusi Proyek via WhatsApp">
                             <span>Hire Me / Diskusi Proyek</span>
                             <i class="bi bi-arrow-right"></i>
                         </a>
-                        <a href="#proyek" class="btn-hero-white">
+                        <a href="#proyek" class="btn-hero-white" aria-label="Jelajahi Portofolio Proyek">
                             <span>Jelajahi Portofolio</span>
                             <i class="bi bi-arrow-down"></i>
                         </a>
                         @if(!empty($profile->cv_path))
-                            <a href="{{ asset('storage/' . $profile->cv_path) }}" target="_blank" class="btn-hero-white d-none d-md-inline-flex">
+                            <a href="{{ asset('storage/' . $profile->cv_path) }}" target="_blank" class="btn-hero-white d-none d-md-inline-flex" aria-label="Unduh Berkas Curriculum Vitae">
                                 <i class="bi bi-file-earmark-arrow-down text-primary"></i>
                                 <span>Unduh CV</span>
                             </a>
                         @endif
                     </div>
-
-                    <!-- 3 Core Competency Bento Highlights -->
-                    <div class="hero-stage-bio p-3 p-md-3.5">
-                        <div class="row g-2.5 align-items-stretch">
-                            <div class="col-md-4">
-                                <div class="p-2.5 h-100 rounded-3 bg-white bg-opacity-80 border border-light-subtle d-flex flex-column justify-content-between">
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <span class="badge bg-primary bg-opacity-10 text-primary rounded-circle p-1.5 flex-shrink-0">
-                                            <i class="bi bi-diagram-3-fill"></i>
-                                        </span>
-                                        <strong class="text-dark small fw-bold">Analisis Sistem</strong>
-                                    </div>
-                                    <p class="text-muted mb-0" style="font-size: 0.78rem; line-height: 1.45;">BPMN, Flowchart, ERD 3NF &amp; Rekayasa Spesifikasi SRS</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="p-2.5 h-100 rounded-3 bg-white bg-opacity-80 border border-light-subtle d-flex flex-column justify-content-between">
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <span class="badge bg-success bg-opacity-10 text-success rounded-circle p-1.5 flex-shrink-0">
-                                            <i class="bi bi-code-slash"></i>
-                                        </span>
-                                        <strong class="text-dark small fw-bold">Rekayasa Web</strong>
-                                    </div>
-                                    <p class="text-muted mb-0" style="font-size: 0.78rem; line-height: 1.45;">PHP Laravel, MySQL, RESTful API &amp; Prinsip OOP/SOLID</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="p-2.5 h-100 rounded-3 bg-white bg-opacity-80 border border-light-subtle d-flex flex-column justify-content-between">
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <span class="badge bg-warning bg-opacity-15 text-warning-emphasis rounded-circle p-1.5 flex-shrink-0">
-                                            <i class="bi bi-patch-check-fill text-warning"></i>
-                                        </span>
-                                        <strong class="text-dark small fw-bold">Karya Cipta HKI</strong>
-                                    </div>
-                                    <p class="text-muted mb-0" style="font-size: 0.78rem; line-height: 1.45;">Sistem Terdaftar Resmi HKI &amp; Teruji di Industri Manufaktur</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 {{-- Right Column: Bento Studio Showcase (Profile & Staged Dev Gear) --}}
-                <div class="col-lg-6 col-xl-5 text-center">
-                    <div class="hero-studio-stage position-relative d-inline-block w-100">
-                        <!-- Floating Pill 1: Top-Left (Academic Achievement) -->
-                        <div class="hero-float-pill hero-float-pill-1 d-none d-sm-inline-flex">
-                            <span class="badge bg-warning bg-opacity-20 text-warning-emphasis rounded-circle p-1.5 flex-shrink-0">
-                                <i class="bi bi-mortarboard-fill text-warning fs-6"></i>
-                            </span>
-                            <div class="text-start">
-                                <span class="d-block fw-bold text-dark lh-1" style="font-size: 0.82rem;">IPK 3.68 / 4.00</span>
-                                <span class="text-muted" style="font-size: 0.72rem;">Teknik Informatika</span>
-                            </div>
-                        </div>
-
-                        <!-- Floating Pill 2: Bottom-Right (Core Focus) -->
-                        <div class="hero-float-pill hero-float-pill-2 d-none d-sm-inline-flex">
-                            <span class="badge bg-primary bg-opacity-15 text-primary rounded-circle p-1.5 flex-shrink-0">
-                                <i class="bi bi-diagram-3-fill fs-6"></i>
-                            </span>
-                            <div class="text-start">
-                                <span class="d-block fw-bold text-dark lh-1" style="font-size: 0.82rem;">System Analyst</span>
-                                <span class="text-muted" style="font-size: 0.72rem;">&amp; Software Engineer</span>
-                            </div>
-                        </div>
-
+                <div class="col-lg-5 text-center d-flex justify-content-center align-items-center">
+                    <div class="hero-studio-stage position-relative w-100">
                         <!-- Profile Card on Bento Surface -->
-                        <div class="hero-studio-card position-relative mx-auto">
+                        <div class="hero-studio-card position-relative mx-auto w-100">
                             @if(!empty($profile->photo_path))
                                 <div class="hero-studio-photo-wrap position-relative overflow-hidden">
                                     <img src="{{ asset('storage/' . $profile->photo_path) }}" 
                                          itemprop="image"
-                                         alt="{{ $profile->full_name ?? 'M. Rofiq Aulia' }} - System Analyst & Software Engineer Indonesia" 
+                                         alt="Foto Profil {{ $profile->full_name ?? 'M. Rofiq Aulia' }} - System Analyst &amp; Software Engineer Indonesia" 
                                          class="img-fluid w-100 object-fit-cover hero-studio-photo" 
                                          width="480"
-                                         height="380"
+                                         height="420"
                                          fetchpriority="high"
                                          decoding="async"
                                          role="button"
@@ -165,16 +104,6 @@
                                     <span class="font-heading fs-5">{{ $profile->full_name ?? 'M. Rofiq Aulia' }}</span>
                                 </div>
                             @endif
-
-                            <div class="p-3 text-start bg-white">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <p class="mb-0 font-heading fs-5 text-dark fw-bold">{{ $profile->full_name ?? 'M. Rofiq Aulia' }}</p>
-                                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill small px-2 py-1">
-                                        <i class="bi bi-patch-check-fill text-primary"></i> Verified
-                                    </span>
-                                </div>
-                                <p class="text-muted small mb-0">{{ $profile->headline ?? 'System Analyst & IT Business Analyst, Software Engineer' }}</p>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -194,24 +123,24 @@
 
         @php
             $techList = $technologies->isNotEmpty() ? $technologies : collect([
-                (object)['name' => 'Laravel', 'slug' => 'laravel', 'icon_path' => 'logo/laravel-logo.jpg'],
-                (object)['name' => 'PHP', 'slug' => 'php', 'icon_path' => 'logo/php-logo.png'],
-                (object)['name' => 'MySQL', 'slug' => 'mysql', 'icon_path' => 'logo/mysql-logo.png'],
-                (object)['name' => 'Bootstrap 5', 'slug' => 'bootstrap-5', 'icon_path' => 'logo/bootstrap-logo.jpg'],
+                (object)['name' => 'Laravel', 'slug' => 'laravel', 'icon_path' => 'logo/laravel-logo.svg'],
+                (object)['name' => 'PHP', 'slug' => 'php', 'icon_path' => 'logo/php-logo.svg'],
+                (object)['name' => 'MySQL', 'slug' => 'mysql', 'icon_path' => 'logo/mysql-logo.svg'],
+                (object)['name' => 'Bootstrap 5', 'slug' => 'bootstrap-5', 'icon_path' => 'logo/bootstrap-5-logo.svg'],
                 (object)['name' => 'Vue.js', 'slug' => 'vue-js', 'icon_path' => 'logo/vue-logo.svg'],
                 (object)['name' => 'React', 'slug' => 'react', 'icon_path' => 'logo/react-logo.svg'],
-                (object)['name' => 'Tailwind CSS', 'slug' => 'tailwind-css', 'icon_path' => 'logo/tailwind-logo.jpg'],
+                (object)['name' => 'Tailwind CSS', 'slug' => 'tailwind-css', 'icon_path' => 'logo/tailwind-css-logo.svg'],
                 (object)['name' => 'Redis', 'slug' => 'redis', 'icon_path' => 'logo/redis-logo.svg'],
-                (object)['name' => 'Docker', 'slug' => 'docker', 'icon_path' => 'logo/docker-logo.jpg'],
-                (object)['name' => 'Git', 'slug' => 'git', 'icon_path' => 'logo/git-logo.png'],
-                (object)['name' => 'Notion', 'slug' => 'notion', 'icon_path' => 'logo/notion-logo.png'],
-                (object)['name' => 'Canva', 'slug' => 'canva', 'icon_path' => 'logo/canva-logo.png'],
-                (object)['name' => 'Draw.io', 'slug' => 'draw-io', 'icon_path' => 'logo/draw-io-logo.png'],
-                (object)['name' => 'Microsoft Excel', 'slug' => 'excel', 'icon_path' => 'logo/excel-logo.jpg'],
-                (object)['name' => 'Microsoft Word', 'slug' => 'word', 'icon_path' => 'logo/word-logo.jpg'],
-                (object)['name' => 'Microsoft PowerPoint', 'slug' => 'powerpoint', 'icon_path' => 'logo/pptx-logo.jpg'],
-                (object)['name' => 'Microsoft SharePoint', 'slug' => 'sharepoint', 'icon_path' => 'logo/sharepoint.jpg'],
-                (object)['name' => 'Power Automate', 'slug' => 'power-automate', 'icon_path' => 'logo/automate-logo.jpg'],
+                (object)['name' => 'Docker', 'slug' => 'docker', 'icon_path' => 'logo/docker-logo.svg'],
+                (object)['name' => 'Git', 'slug' => 'git', 'icon_path' => 'logo/git-logo.svg'],
+                (object)['name' => 'Notion', 'slug' => 'notion', 'icon_path' => 'logo/notion-logo.svg'],
+                (object)['name' => 'Canva', 'slug' => 'canva', 'icon_path' => 'logo/canva-logo.svg'],
+                (object)['name' => 'Draw.io', 'slug' => 'draw-io', 'icon_path' => 'logo/draw-io-logo.svg'],
+                (object)['name' => 'Microsoft Excel', 'slug' => 'excel', 'icon_path' => 'logo/excel-logo.svg'],
+                (object)['name' => 'Microsoft Word', 'slug' => 'word', 'icon_path' => 'logo/word-logo.svg'],
+                (object)['name' => 'Microsoft PowerPoint', 'slug' => 'powerpoint', 'icon_path' => 'logo/powerpoint-logo.svg'],
+                (object)['name' => 'Microsoft SharePoint', 'slug' => 'sharepoint', 'icon_path' => 'logo/sharepoint.svg'],
+                (object)['name' => 'Power Automate', 'slug' => 'power-automate', 'icon_path' => 'logo/power-automate-logo.svg'],
             ]);
 
             $count = $techList->count();
@@ -542,7 +471,7 @@
         </div>
     </section>
 
-    <!-- 6. PENGALAMAN PROYEK (ALA GAMBAR 2: MAX 2 CONTAINER DENGAN SLIDER) -->
+    <!-- 6. PENGALAMAN PROYEK (DESKTOP: 4 CONTAINER SLIDER, MOBILE: 1 CONTAINER SLIDER) -->
     <section id="proyek" class="py-5 inspo-section">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4 pb-2">
             <div>
@@ -569,10 +498,10 @@
                 </div>
             </div>
         @else
-            <div class="slider-container-2col">
-                <div class="slider-track-2col" id="projectSliderTrack">
+            <div class="slider-container-4col">
+                <div class="slider-track-4col" id="projectSliderTrack">
                     @foreach($projects as $index => $project)
-                        <div class="project-slide-item slider-item-2col" data-index="{{ $index }}">
+                        <div class="project-slide-item slider-item-4col" data-index="{{ $index }}">
                             @include('portfolio.partials.project-card', ['project' => $project])
                         </div>
                     @endforeach

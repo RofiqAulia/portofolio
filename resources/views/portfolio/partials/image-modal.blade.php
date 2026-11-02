@@ -1,6 +1,6 @@
 <!-- Global Image Viewer / Lightbox Modal -->
 <div class="modal fade" id="imageViewerModal" tabindex="-1" aria-labelledby="imageViewerTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-lg" id="imageViewerDialog">
         <div class="modal-content border-0 rounded-4 shadow-lg p-0 overflow-hidden bg-white">
             <!-- Modal Header -->
             <div class="modal-header border-bottom bg-white px-3 px-md-4 py-3 align-items-center">
@@ -22,22 +22,27 @@
                 </button>
             </div>
 
-            <!-- Modal Body -->
-            <div class="modal-body p-2 p-md-4 text-center position-relative image-viewer-body bg-light bg-opacity-50">
-                <div class="image-viewer-stage d-flex align-items-center justify-content-center p-2 rounded-4 bg-white shadow-sm border position-relative">
-                    <div id="imageViewerSpinner" class="spinner-border text-primary position-absolute" role="status" style="display: none;">
+            <!-- Modal Body (Edge-to-Edge Full-Width Image Stage) -->
+            <div class="modal-body p-0 position-relative image-viewer-body bg-light">
+                <div class="image-viewer-stage position-relative overflow-hidden w-100 d-flex align-items-center justify-content-center">
+                    <div id="imageViewerSpinner" class="spinner-border text-primary position-absolute" role="status" style="display: none; z-index: 10;">
                         <span class="visually-hidden">Memuat gambar...</span>
                     </div>
-                    <img src="" id="imageViewerImg" alt="Preview Gambar" class="img-fluid rounded-3 object-fit-contain image-viewer-photo">
+                    <img src="" id="imageViewerImg" alt="Preview Gambar" class="w-100 image-viewer-photo d-block">
                 </div>
                 
-                <p id="imageViewerDesc" class="text-muted small mt-3 mb-0 text-start px-2" style="display: none;"></p>
+                <div id="imageViewerDescWrap" class="px-3 px-md-4 py-3 bg-white border-top text-start" style="display: none;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-info-circle-fill text-primary flex-shrink-0"></i>
+                        <p id="imageViewerDesc" class="text-dark small mb-0 fw-medium"></p>
+                    </div>
+                </div>
             </div>
 
             <!-- Modal Footer -->
             <div class="modal-footer border-top bg-white px-3 px-md-4 py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
                 <div class="text-muted small d-none d-md-block">
-                    <i class="bi bi-info-circle text-primary me-1"></i> Klik unduh untuk menyimpan file gambar ke perangkat Anda.
+                    <i class="bi bi-shield-check text-success me-1"></i> File gambar terverifikasi asli resolusi penuh.
                 </div>
                 <div class="d-flex flex-wrap gap-2 w-100 w-md-auto justify-content-end">
                     <a href="#" id="imageViewerOpenNewTab" target="_blank" rel="noopener noreferrer" class="btn-inspo-outline py-2 px-3 fs-6">

@@ -110,18 +110,18 @@
     <!-- Sticky Pill Navbar -->
     <header class="pill-navbar-container">
         <div class="container d-flex justify-content-center">
-            <nav class="pill-navbar navbar navbar-expand-lg">
-                <a class="navbar-brand fw-bold me-4 d-flex align-items-center gap-2" href="{{ route('portfolio.home') }}">
+            <nav class="pill-navbar navbar navbar-expand-xl w-100" aria-label="Navigasi Utama">
+                <a class="navbar-brand fw-bold me-3 me-xl-4 d-flex align-items-center gap-2" href="{{ route('portfolio.home') }}" aria-label="Beranda Portofolio {{ $profile->full_name ?? 'M. Rofiq Aulia' }}">
                     <span class="inspo-brand-icon">
                         <i class="bi bi-code-slash"></i>
                     </span>
                     <span class="font-heading fs-5">{{ $profile->full_name ?? 'Rofiq.dev' }}</span>
                 </a>
-                <button class="navbar-toggler border-0 shadow-none p-1" type="button" data-bs-toggle="collapse" data-bs-target="#portfolioNav" aria-controls="portfolioNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler border-0 shadow-none p-1" type="button" data-bs-toggle="collapse" data-bs-target="#portfolioNav" aria-controls="portfolioNav" aria-expanded="false" aria-label="Buka menu navigasi">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="portfolioNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center gap-1">
+                    <ul class="navbar-nav me-auto mb-2 mb-xl-0 align-items-center gap-1">
                         <li class="nav-item">
                             <a class="nav-link nav-link-pill" href="{{ route('portfolio.home') }}#tentang">Tentang</a>
                         </li>
@@ -146,13 +146,13 @@
                             <a class="nav-link nav-link-pill" href="{{ route('portfolio.home') }}#kontak">Kontak</a>
                         </li>
                     </ul>
-                    <div class="navbar-actions d-flex flex-wrap align-items-center justify-content-center gap-2 ms-lg-3">
+                    <div class="navbar-actions d-flex flex-wrap align-items-center justify-content-center gap-2 ms-xl-3 flex-shrink-0">
                         @if(!empty($profile->cv_path))
-                            <a href="{{ asset('storage/' . $profile->cv_path) }}" target="_blank" class="btn-inspo-outline py-2 px-3 fs-6">
+                            <a href="{{ asset('storage/' . $profile->cv_path) }}" target="_blank" class="btn-inspo-outline py-2 px-3 fs-6 d-none d-xxl-inline-flex" aria-label="Unduh berkas CV">
                                 <i class="bi bi-file-earmark-arrow-down"></i> Unduh CV
                             </a>
                         @endif
-                        <a href="https://wa.me/6282228035426" target="_blank" rel="noopener noreferrer" class="btn-inspo-header py-2 px-3 fs-6 js-wa-btn">
+                        <a href="https://wa.me/6282228035426" target="_blank" rel="noopener noreferrer" class="btn-inspo-header py-2 px-3 fs-6 js-wa-btn" aria-label="Hubungi saya via WhatsApp">
                             Hire Me <i class="bi bi-whatsapp"></i>
                         </a>
                     </div>
