@@ -132,6 +132,7 @@
                                          width="480"
                                          height="380"
                                          fetchpriority="high"
+                                         decoding="async"
                                          role="button"
                                          tabindex="0"
                                          aria-label="Lihat foto profil {{ $profile->full_name }}"

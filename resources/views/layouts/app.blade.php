@@ -4,18 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Portofolio M Rofiq Aulia')</title>
-    <!-- Google Fonts Preconnect & High-Performance Asynchronous Font Loading (Non Render-Blocking) -->
+    <!-- Google Fonts Preconnect & Stylesheet with display=swap -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" media="print" onload="this.media='all'">
-    <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap">
-    </noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap">
 
     @if(!empty($profile->photo_path))
-        <!-- Preload LCP Hero Image -->
-        <link rel="preload" as="image" href="{{ asset('storage/' . $profile->photo_path) }}" fetchpriority="high">
+        <!-- Preload LCP Hero Image for Desktop (above the fold) -->
+        <link rel="preload" as="image" href="{{ asset('storage/' . $profile->photo_path) }}" media="(min-width: 992px)" fetchpriority="high">
     @endif
 
     <!-- Favicon & Mobile Touch Icons -->

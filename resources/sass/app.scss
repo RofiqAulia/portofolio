@@ -37,6 +37,11 @@ $btn-border-radius: 9999px;
     --yellow: #{$brand-yellow};
 }
 
+html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: $font-family-sans-serif;
     color: var(--navy);
@@ -73,6 +78,7 @@ section[id],
     top: 0;
     z-index: 1030;
     padding: 0.75rem 1rem;
+    min-height: 68px;
     background: linear-gradient(180deg, rgba(248, 250, 253, 0.96) 0%, rgba(248, 250, 253, 0.82) 75%, rgba(248, 250, 253, 0) 100%);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -80,6 +86,7 @@ section[id],
 
     @media (max-width: 991.98px) {
         padding: 0.5rem 0.75rem;
+        min-height: 56px;
     }
 }
 
@@ -310,6 +317,14 @@ section[id],
     display: inline;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
+
+    // Mobile fallback to solid vibrant indigo to ensure Chromium registers the text node as a valid LCP candidate (fixes NO_LCP)
+    @media (max-width: 767.98px) {
+        background: none !important;
+        -webkit-background-clip: border-box !important;
+        -webkit-text-fill-color: #4F46E5 !important;
+        color: #4F46E5 !important;
+    }
 }
 
 .hero-stage-highlight-blue {
@@ -319,6 +334,14 @@ section[id],
     display: inline;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
+
+    // Mobile fallback to solid vibrant ocean blue for LCP detection
+    @media (max-width: 767.98px) {
+        background: none !important;
+        -webkit-background-clip: border-box !important;
+        -webkit-text-fill-color: #0284C7 !important;
+        color: #0284C7 !important;
+    }
 }
 
 .hero-stage-desc {
@@ -433,6 +456,12 @@ section[id],
     background-color: #F8FAFD;
     position: relative;
     contain: layout;
+
+    @media (max-width: 576px) {
+        height: auto;
+        min-height: 250px;
+        aspect-ratio: 480 / 380;
+    }
 
     .project-thumbnail-overlay {
         opacity: 0;
@@ -564,6 +593,13 @@ section[id],
     -webkit-text-fill-color: transparent;
     font-weight: 800;
     display: inline;
+
+    @media (max-width: 767.98px) {
+        background: none !important;
+        -webkit-background-clip: border-box !important;
+        -webkit-text-fill-color: #5C46E5 !important;
+        color: #5C46E5 !important;
+    }
 }
 
 // Hero Status Pills
@@ -894,6 +930,7 @@ section[id],
 
 .tech-brand-marquee {
     width: 100%;
+    min-height: 48px;
     overflow: hidden;
     position: relative;
     display: flex;
