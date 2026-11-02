@@ -24,9 +24,46 @@ class Technology extends Model
      */
     public function getLogoUrlAttribute(): ?string
     {
+        // 1. Prioritaskan gambar asli yang diupload melalui admin panel (icon_path)
+        if (! empty($this->icon_path)) {
+            $rawPath = ltrim($this->icon_path, '/');
+
+            // Cek keberadaan berkas asli yang diunggah di storage
+            if (file_exists(public_path('storage/'.$rawPath)) || file_exists(storage_path('app/public/'.$rawPath))) {
+                return asset('storage/'.$rawPath);
+            }
+
+            // Jika berkas asli dengan ekstensi tersebut tidak ditemukan, cari sibling file dengan nama sama
+            $dir = pathinfo($rawPath, PATHINFO_DIRNAME);
+            $fn = pathinfo($rawPath, PATHINFO_FILENAME);
+            $prefix = ($dir && $dir !== '.') ? $dir.'/' : '';
+            foreach (['svg', 'png', 'webp', 'jpg', 'jpeg'] as $ext) {
+                $cand = $prefix.$fn.'.'.$ext;
+                if (file_exists(public_path('storage/'.$cand)) || file_exists(storage_path('app/public/'.$cand))) {
+                    return asset('storage/'.$cand);
+                }
+            }
+        }
+
         $slug = strtolower($this->slug ?? Str::slug($this->name ?? ''));
 
-        // 1. Direct SVG Mapping for official clean transparent vector logos (zero box/container)
+        // 2. Pencarian file berdasarkan slug / nama
+        $searchBases = [
+            "logo/{$slug}-logo",
+            "logo/{$slug}",
+            'logo/'.Str::slug($this->name ?? '').'-logo',
+            'logo/'.Str::slug($this->name ?? ''),
+        ];
+        foreach ($searchBases as $base) {
+            foreach (['svg', 'png', 'webp', 'jpg', 'jpeg'] as $ext) {
+                $cand = $base.'.'.$ext;
+                if (file_exists(public_path('storage/'.$cand)) || file_exists(storage_path('app/public/'.$cand))) {
+                    return asset('storage/'.$cand);
+                }
+            }
+        }
+
+        // 3. Fallback pemetaan SVG resmi jika belum ketemu
         $svgMap = [
             'laravel' => 'logo/laravel-logo.svg',
             'php' => 'logo/php-logo.svg',
@@ -65,23 +102,7 @@ class Technology extends Model
             }
         }
 
-        // 2. Check if SVG file exists on disk
-        $possibleSvgs = [
-            "logo/{$slug}-logo.svg",
-            "logo/{$slug}.svg",
-        ];
-        if (! empty($this->icon_path)) {
-            $base = pathinfo($this->icon_path, PATHINFO_FILENAME);
-            $dir = pathinfo($this->icon_path, PATHINFO_DIRNAME);
-            $possibleSvgs[] = ($dir !== '.' ? $dir.'/' : '').$base.'.svg';
-        }
-        foreach ($possibleSvgs as $svgFile) {
-            if (file_exists(public_path('storage/'.$svgFile)) || file_exists(storage_path('app/public/'.$svgFile))) {
-                return asset('storage/'.$svgFile);
-            }
-        }
-
-        // 3. Fallback to icon_path if provided
+        // 4. Fallback langsung ke icon_path jika disediakan
         if (! empty($this->icon_path)) {
             return asset('storage/'.ltrim($this->icon_path, '/'));
         }

@@ -930,13 +930,13 @@ section[id],
 
 .tech-brand-marquee {
     width: 100%;
-    min-height: 72px;
+    min-height: 58px;
     overflow: hidden;
     position: relative;
     display: flex;
     align-items: center;
     user-select: none;
-    --brand-gap: 3.5rem;
+    --brand-gap: 4.5rem;
     gap: var(--brand-gap);
     mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 1) 6%, rgba(0, 0, 0, 1) 94%, transparent 100%);
     -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 1) 6%, rgba(0, 0, 0, 1) 94%, transparent 100%);
@@ -952,7 +952,7 @@ section[id],
     align-items: center;
     gap: var(--brand-gap);
     min-width: 100%;
-    animation: tech-brand-marquee-scroll 32s linear infinite;
+    animation: tech-brand-marquee-scroll 38s linear infinite;
     will-change: transform;
 }
 
@@ -974,23 +974,23 @@ section[id],
     border: none !important;
     box-shadow: none !important;
     border-radius: 0 !important;
-    padding: 0 !important;
+    padding: 0 1rem !important;
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
     cursor: default;
     user-select: none;
     flex-shrink: 0;
 
     &:hover {
-        transform: scale(1.1);
+        transform: scale(1.08);
     }
 
     .tech-brand-logo {
-        height: 68px;
-        width: auto;
-        max-height: 68px;
-        max-width: 140px;
-        object-fit: contain;
-        display: block;
+        height: 50px !important;
+        width: auto !important;
+        max-height: 50px !important;
+        max-width: 130px !important;
+        object-fit: contain !important;
+        display: block !important;
         flex-shrink: 0;
         vertical-align: middle;
         border-radius: 0 !important;
@@ -1018,19 +1018,21 @@ section[id],
     }
 
     .tech-brand-marquee {
-        --brand-gap: 2rem;
-        min-height: 56px;
+        --brand-gap: 2.75rem;
+        min-height: 48px;
     }
 
     .tech-brand-track {
-        animation-duration: 26s;
+        animation-duration: 30s;
     }
 
     .tech-brand-item {
+        padding: 0 0.5rem !important;
+
         .tech-brand-logo {
-            height: 52px;
-            max-height: 52px;
-            max-width: 100px;
+            height: 40px !important;
+            max-height: 40px !important;
+            max-width: 95px !important;
             border-radius: 0 !important;
             filter: none !important;
             box-shadow: none !important;
