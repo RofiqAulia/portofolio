@@ -9,11 +9,10 @@ use App\Data\PageViewData;
 use App\Models\Project;
 use App\Services\VisitorHasher;
 use Closure;
-use Illuminate\Contracts\Http\TerminableMiddleware;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class TrackPageViewMiddleware implements TerminableMiddleware
+final class TrackPageViewMiddleware
 {
     public function __construct(
         private readonly VisitorHasher $hasher,
