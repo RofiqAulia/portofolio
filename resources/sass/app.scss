@@ -8301,3 +8301,45 @@ textarea.form-control-modern,
 .certification-slide-item .btn {
     border-radius: 0 !important;
 }
+
+// ==========================================
+// Unified image preview button (navy → orange on hover)
+// ==========================================
+button.btn-lightbox-open,
+a.btn-lightbox-open {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.75rem 1.35rem !important;
+    background: #2B2D63 !important;
+    color: #FFFFFF !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0.01em;
+    box-shadow: none !important;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    i {
+        font-size: 1rem;
+        line-height: 1;
+    }
+
+    &:hover,
+    &:focus {
+        background: #F2703C !important;
+        color: #FFFFFF !important;
+    }
+}
+
+// Icon-only variant keeps its square size
+button.btn-lightbox-open.p-0 {
+    width: 36px;
+    height: 36px;
+    padding: 0 !important;
+    gap: 0;
+}

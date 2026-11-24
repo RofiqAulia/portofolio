@@ -113,7 +113,7 @@
                                         data-image-desc="{{ $documentation->summary }}"
                                         data-image-download="{{ $hasDownloadFile ? route('portfolio.documentations.download', $documentation->slug) : $previewUrl }}"
                                         data-image-filename="{{ $documentation->getDownloadFilename() }}">
-                                    <i class="bi bi-zoom-in"></i> Zoom Lightbox
+                                    <i class="bi bi-arrows-angle-expand"></i> Preview Penuh
                                 </button>
                             </div>
 
@@ -126,7 +126,7 @@
                                         data-image-desc="{{ $documentation->summary }}"
                                         data-image-download="{{ $hasDownloadFile ? route('portfolio.documentations.download', $documentation->slug) : $previewUrl }}"
                                         data-image-filename="{{ $documentation->getDownloadFilename() }}">
-                                    <i class="bi bi-eye"></i> Zoom
+                                    <i class="bi bi-arrows-angle-expand"></i> Preview Penuh
                                 </button>
                             </div>
                         </div>
@@ -266,7 +266,7 @@
                                                                 data-image-download="{{ route('portfolio.documentations.download', ['slug' => $documentation->slug, 'file' => $file['index']]) }}"
                                                                 data-image-filename="{{ $documentation->getDownloadFilename($file['index']) }}"
                                                                 title="Zoom Modal">
-                                                            <i class="bi bi-zoom-in"></i>
+                                                            <i class="bi bi-arrows-angle-expand"></i>
                                                         </button>
                                                     @endif
                                                     <a href="{{ route('portfolio.documentations.download', ['slug' => $documentation->slug, 'file' => $file['index']]) }}" class="btn-bento-amber py-1 px-2 small" title="Unduh Berkas Ini">
@@ -357,7 +357,7 @@
                                     data-image-desc="{{ $documentation->summary }}"
                                     data-image-download="{{ $previewUrl }}"
                                     data-image-filename="{{ $documentation->getDownloadFilename() }}">
-                                <i class="bi bi-eye"></i> Buka Preview Berkas
+                                <i class="bi bi-arrows-angle-expand"></i> Preview Penuh
                             </button>
                         @endif
                         @if($documentation->external_url)

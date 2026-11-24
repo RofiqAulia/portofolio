@@ -212,7 +212,7 @@
                                                 data-image-download="{{ $hasDownloadFile ? route('portfolio.documentations.download', $doc->slug) : $previewUrl }}"
                                                 data-image-filename="{{ $doc->getDownloadFilename() }}"
                                                 title="Lihat Gambar Penuh">
-                                            <i class="bi bi-eye-fill"></i> View
+                                            <i class="bi bi-arrows-angle-expand"></i> Preview Penuh
                                         </button>
                                         @if($hasDownloadFile)
                                             <a href="{{ route('portfolio.documentations.download', $doc->slug) }}" 
@@ -244,7 +244,7 @@
                                                 data-image-download="{{ $hasDownloadFile ? route('portfolio.documentations.download', $doc->slug) : $previewUrl }}"
                                                 data-image-filename="{{ $doc->getDownloadFilename() }}"
                                                 aria-label="Lihat Gambar">
-                                            <i class="bi bi-eye-fill small"></i>
+                                            <i class="bi bi-arrows-angle-expand"></i>
                                         </button>
                                     </div>
                                 </div>
