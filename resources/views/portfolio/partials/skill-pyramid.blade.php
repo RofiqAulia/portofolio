@@ -63,7 +63,7 @@
                         <line x1="118" y1="{{ $ymid }}" x2="{{ $centerX - $wmid - 6 }}" y2="{{ $ymid }}" stroke="{{ $c['from'] }}" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.65" />
                         <circle cx="{{ $centerX - $wmid - 6 }}" cy="{{ $ymid }}" r="3.5" fill="{{ $c['from'] }}" />
                         <rect x="8" y="{{ $ymid - 14 }}" width="110" height="28" rx="14" fill="{{ $c['bg'] }}" stroke="{{ $c['from'] }}" stroke-width="1.2" />
-                        <text x="63" y="{{ $ymid + 5 }}" text-anchor="middle" fill="{{ $c['text'] }}" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="11">
+                        <text x="63" y="{{ $ymid + 5 }}" text-anchor="middle" fill="{{ $c['text'] }}" font-family="'DM Sans', sans-serif" font-weight="700" font-size="11">
                             Tingkat {{ $tier['label'] }}
                         </text>
                     </g>
@@ -80,17 +80,19 @@
                         <title>{{ $tier['label'] }}: {{ $tier['skills']->pluck('name')->implode(', ') }}</title>
                     </polygon>
 
-                    <!-- Center Label on Slice -->
-                    <text x="{{ $centerX }}" y="{{ $ymid + 5 }}" 
-                          text-anchor="middle" 
-                          fill="#FFFFFF" 
-                          font-family="'Plus Jakarta Sans', sans-serif" 
-                          font-weight="800" 
-                          font-size="{{ $totalTiers > 4 ? 10.5 : 12.5 }}" 
-                          letter-spacing="0.6" 
-                          pointer-events="none">
-                        {{ strtoupper($tier['label']) }}
-                    </text>
+                    <!-- Center Label on Slice (skipped on apex: the slice is too narrow for text) -->
+                    @if($i > 0)
+                        <text x="{{ $centerX }}" y="{{ $ymid + 5 }}" 
+                              text-anchor="middle" 
+                              fill="#FFFFFF" 
+                              font-family="'DM Sans', sans-serif" 
+                              font-weight="800" 
+                              font-size="{{ $totalTiers > 4 ? 10.5 : 12.5 }}" 
+                              letter-spacing="0.6" 
+                              pointer-events="none">
+                            {{ strtoupper($tier['label']) }}
+                        </text>
+                    @endif
 
                     <!-- Right Connector & Skill Explanation Pill -->
                     <g class="pyramid-connector pyramid-connector-right" data-target-tier="{{ $tierId }}">
@@ -100,7 +102,7 @@
                         <text x="397" y="{{ $ymid + 5 }}" 
                               text-anchor="start" 
                               fill="#0F172A" 
-                              font-family="'Plus Jakarta Sans', sans-serif" 
+                              font-family="'DM Sans', sans-serif" 
                               font-weight="600" 
                               font-size="10.5">
                             {{ $tier['summary'] }}

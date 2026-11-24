@@ -22,11 +22,11 @@
             <div class="min-w-0 flex-grow-1" style="overflow: hidden;">
                 {{-- Category Badge (Guaranteed 100% High Contrast & Visible) --}}
                 <span class="{{ $certification->getCategoryBadgeClass() }} mb-1 d-inline-flex align-items-center">
-                    <i class="bi {{ $certification->getCategoryIcon() }}"></i> {{ $certification->category }}
+                    {{ $certification->category }}
                 </span>
                 @if($certification->issuer)
                     <div class="text-dark small fw-medium text-truncate" style="font-size: 0.8rem; color: #000000 !important; max-width: 100%;" title="{{ $certification->issuer }}">
-                        <i class="bi bi-buildings me-1 text-primary"></i> {{ $certification->issuer }}
+                        {{ $certification->issuer }}
                     </div>
                 @endif
             </div>

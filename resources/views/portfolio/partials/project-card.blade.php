@@ -59,11 +59,6 @@
                                 title="Perbesar Gambar Resolusi Penuh">
                             <i class="bi bi-arrows-angle-expand me-1"></i> Preview Penuh
                         </button>
-                        <a href="{{ route('portfolio.project.download-thumbnail', $project->slug) }}" 
-                           class="btn-bento-amber py-2 px-3 fs-6 shadow"
-                           title="Unduh Gambar Resolusi Tinggi">
-                            <i class="bi bi-download me-1"></i> Unduh
-                        </a>
                     </div>
                 @else
                     {{-- Clean Branded Graphic Fallback --}}
@@ -132,11 +127,6 @@
                 @if($project->repo_url)
                     <a href="{{ $project->repo_url }}" target="_blank" rel="noopener noreferrer" class="btn-inspo-icon" title="Lihat Source Code di GitHub">
                         <i class="bi bi-github"></i>
-                    </a>
-                @endif
-                @if($project->thumbnail_path)
-                    <a href="{{ route('portfolio.project.download-thumbnail', $project->slug) }}" class="btn-inspo-icon" title="Unduh Tangkapan Layar">
-                        <i class="bi bi-download"></i>
                     </a>
                 @endif
             </div>

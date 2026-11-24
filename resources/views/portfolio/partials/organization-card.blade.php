@@ -20,7 +20,7 @@
                 </div>
                 <div>
                     <span class="bento-badge mb-1 d-inline-flex align-items-center">
-                        <i class="bi bi-people-fill me-1"></i> KEPEMIMPINAN & TIM
+                        KEPEMIMPINAN & TIM
                     </span>
                     <div class="text-white small fw-bold" style="font-size: 0.8rem;">
                         <i class="bi bi-award-fill text-warning me-1"></i> Kontribusi & Sinergi
@@ -30,7 +30,6 @@
 
             <div class="d-none d-sm-block text-end">
                 <span class="bento-date-pill">
-                    <i class="bi bi-calendar-event me-1"></i>
                     {{ $experience->start_date?->format('M Y') }} — {{ $experience->is_current ? 'Sekarang' : ($experience->end_date ? $experience->end_date->format('M Y') : '-') }}
                 </span>
             </div>
@@ -39,7 +38,6 @@
         {{-- Mobile Date Badge --}}
         <div class="d-sm-none mb-3">
             <span class="bento-date-pill">
-                <i class="bi bi-calendar-event me-1"></i>
                 {{ $experience->start_date?->format('M Y') }} — {{ $experience->is_current ? 'Sekarang' : ($experience->end_date ? $experience->end_date->format('M Y') : '-') }}
             </span>
         </div>
@@ -52,9 +50,9 @@
         </h3>
 
         <div class="text-white text-opacity-90 fw-bold fs-6 mb-2 text-truncate">
-            <i class="bi bi-person-badge-fill me-1 text-white text-opacity-75"></i> {{ $experience->position }}
+            {{ $experience->position }}
             @if($experience->location)
-                <span class="small fw-normal text-white text-opacity-80 ms-1">• <i class="bi bi-geo-alt-fill text-white text-opacity-75"></i> {{ $experience->location }}</span>
+                <span class="small fw-normal text-white text-opacity-80 ms-1">• {{ $experience->location }}</span>
             @endif
         </div>
 
@@ -73,8 +71,8 @@
                     <span class="bento-tag-pill">+{{ $experience->technologies->count() - 4 }}</span>
                 @endif
             @else
-                <span class="bento-tag-pill"><i class="bi bi-people-fill me-1"></i> Manajemen Tim</span>
-                <span class="bento-tag-pill"><i class="bi bi-check2-circle me-1"></i> Kepemimpinan</span>
+                <span class="bento-tag-pill">Manajemen Tim</span>
+                <span class="bento-tag-pill">Kepemimpinan</span>
             @endif
         </div>
 

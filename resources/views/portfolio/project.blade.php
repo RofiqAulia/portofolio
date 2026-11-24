@@ -17,7 +17,7 @@
         <div class="col-lg-8">
             <div class="bento-detail-card p-4 p-md-5 bg-white mb-4">
                 <!-- Badges -->
-                <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                <div class="project-badge-row d-flex flex-wrap align-items-center gap-2 mb-3">
                     @if($project->is_featured)
                         <span class="bento-badge-pill bento-badge-amber">
                             <i class="bi bi-star-fill text-warning"></i> PROYEK UNGGULAN

@@ -92,6 +92,19 @@ final class PortfolioController extends Controller
         ));
     }
 
+    public function certifications(): View
+    {
+        $profile = Profile::with(['socialLinks' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')])->first();
+
+        $certifications = Certification::published()
+            ->ordered()
+            ->get();
+
+        $settings = collect(SiteSetting::allKeyed());
+
+        return view('portfolio.certifications', compact('profile', 'certifications', 'settings'));
+    }
+
     public function project(string $slug): View
     {
         $project = Project::published()
@@ -421,12 +434,12 @@ final class PortfolioController extends Controller
         });
 
         $palette = [
-            ['from' => '#4338CA', 'to' => '#4F46E5', 'text' => '#3730A3', 'bg' => 'rgba(67, 56, 202, 0.1)', 'border' => '#4338CA', 'icon' => 'bi-trophy-fill'],
-            ['from' => '#0369A1', 'to' => '#0284C7', 'text' => '#075985', 'bg' => 'rgba(3, 105, 161, 0.1)', 'border' => '#0369A1', 'icon' => 'bi-gear-wide-connected'],
-            ['from' => '#047857', 'to' => '#059669', 'text' => '#065F46', 'bg' => 'rgba(4, 120, 87, 0.1)', 'border' => '#047857', 'icon' => 'bi-layers-fill'],
-            ['from' => '#B45309', 'to' => '#D97706', 'text' => '#92400E', 'bg' => 'rgba(180, 83, 9, 0.1)', 'border' => '#B45309', 'icon' => 'bi-lightning-charge-fill'],
-            ['from' => '#BE123C', 'to' => '#E11D48', 'text' => '#9F1239', 'bg' => 'rgba(190, 18, 60, 0.1)', 'border' => '#BE123C', 'icon' => 'bi-star-fill'],
-            ['from' => '#6D28D9', 'to' => '#7C3AED', 'text' => '#5B21B6', 'bg' => 'rgba(109, 40, 217, 0.1)', 'border' => '#6D28D9', 'icon' => 'bi-award-fill'],
+            ['from' => '#101828', 'to' => '#1D2939', 'text' => '#101828', 'bg' => 'rgba(16, 24, 40, 0.08)', 'border' => '#101828', 'icon' => 'bi-trophy-fill'],
+            ['from' => '#1E3FCC', 'to' => '#2E5BFF', 'text' => '#1E3FCC', 'bg' => 'rgba(46, 91, 255, 0.08)', 'border' => '#2E5BFF', 'icon' => 'bi-gear-wide-connected'],
+            ['from' => '#344054', 'to' => '#475467', 'text' => '#344054', 'bg' => 'rgba(52, 64, 84, 0.08)', 'border' => '#344054', 'icon' => 'bi-layers-fill'],
+            ['from' => '#475467', 'to' => '#5A6B85', 'text' => '#475467', 'bg' => 'rgba(71, 84, 103, 0.08)', 'border' => '#475467', 'icon' => 'bi-lightning-charge-fill'],
+            ['from' => '#5A6B85', 'to' => '#667085', 'text' => '#475467', 'bg' => 'rgba(90, 107, 133, 0.08)', 'border' => '#5A6B85', 'icon' => 'bi-star-fill'],
+            ['from' => '#667085', 'to' => '#7A869A', 'text' => '#475467', 'bg' => 'rgba(102, 112, 133, 0.08)', 'border' => '#667085', 'icon' => 'bi-award-fill'],
         ];
 
         $tierIndex = 0;

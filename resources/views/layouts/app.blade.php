@@ -7,7 +7,7 @@
     <!-- Google Fonts Preconnect & Stylesheet with display=swap -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
 
     @if(!empty($profile->photo_path))
         <!-- Preload LCP Hero Image for Desktop (above the fold) -->
@@ -106,7 +106,7 @@
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
-<body>
+<body class="@yield('body_class')">
     <!-- Sticky Pill Navbar -->
     <header class="pill-navbar-container">
         <div class="container d-flex justify-content-center">
@@ -135,7 +135,7 @@
                             <a class="nav-link nav-link-pill" href="{{ route('portfolio.home') }}#pengalaman">Pengalaman</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link nav-link-pill" href="{{ route('portfolio.home') }}#sertifikasi">Sertifikasi</a>
+                            <a class="nav-link nav-link-pill" href="{{ route('portfolio.certifications.index') }}">Sertifikasi</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link nav-link-pill {{ request()->routeIs('portfolio.documentations.*') ? 'active' : '' }}" href="{{ route('portfolio.documentations.index') }}">
@@ -358,6 +358,23 @@
                     });
                 }
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var navShell = document.querySelector('.pill-navbar-container');
+            if (!navShell) {
+                return;
+            }
+
+            var syncStuckState = function () {
+                navShell.classList.toggle('is-stuck', window.scrollY > 8);
+                document.documentElement.style.setProperty('--nav-h', navShell.offsetHeight + 'px');
+            };
+
+            syncStuckState();
+            window.addEventListener('scroll', syncStuckState, { passive: true });
+            window.addEventListener('resize', syncStuckState);
         });
     </script>
 </body>

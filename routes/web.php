@@ -16,6 +16,7 @@ Route::get('/dokumentasi/{slug}', [PortfolioController::class, 'documentationDet
 Route::get('/dokumentasi/{slug}/preview', [PortfolioController::class, 'previewDocumentation'])->name('portfolio.documentations.preview');
 Route::get('/dokumentasi/{slug}/download', [PortfolioController::class, 'downloadDocumentation'])->name('portfolio.documentations.download');
 
+Route::get('/sertifikasi', [PortfolioController::class, 'certifications'])->name('portfolio.certifications.index');
 Route::get('/sertifikasi/{slug}/berkas/{index?}', [PortfolioController::class, 'downloadCertificationFile'])->name('portfolio.certifications.download-file');
 Route::get('/sertifikasi/{slug}/gambar/{index?}', [PortfolioController::class, 'downloadCertificationImage'])->name('portfolio.certifications.download-image');
 

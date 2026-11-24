@@ -106,11 +106,6 @@
 
                             <!-- Hover Overlay -->
                             <div class="project-thumbnail-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center gap-2">
-                                @if($hasDownloadFile)
-                                    <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" target="_blank" rel="noopener noreferrer" class="btn-bento-primary py-2 px-3 fs-6">
-                                        <i class="bi bi-box-arrow-up-right"></i> Buka File Asli
-                                    </a>
-                                @endif
                                 <button type="button" 
                                         class="btn-bento-secondary py-2 px-3 fs-6 btn-lightbox-open"
                                         data-image-src="{{ $previewUrl }}"
@@ -120,20 +115,10 @@
                                         data-image-filename="{{ $documentation->getDownloadFilename() }}">
                                     <i class="bi bi-zoom-in"></i> Zoom Lightbox
                                 </button>
-                                @if($hasDownloadFile)
-                                    <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" class="btn-bento-amber py-2 px-3 fs-6">
-                                        <i class="bi bi-download"></i> Unduh Berkas
-                                    </a>
-                                @endif
                             </div>
 
                             <!-- Mobile Quick Action -->
                             <div class="position-absolute bottom-0 end-0 m-3 d-md-none d-flex gap-2">
-                                @if($hasDownloadFile)
-                                    <a href="{{ route('portfolio.documentations.preview', $documentation->slug) }}" target="_blank" rel="noopener noreferrer" class="btn-bento-primary py-1 px-3 fs-6">
-                                        <i class="bi bi-box-arrow-up-right"></i> Buka File
-                                    </a>
-                                @endif
                                 <button type="button" 
                                         class="btn-bento-secondary py-1 px-3 fs-6 btn-lightbox-open"
                                         data-image-src="{{ $previewUrl }}"
@@ -143,11 +128,6 @@
                                         data-image-filename="{{ $documentation->getDownloadFilename() }}">
                                     <i class="bi bi-eye"></i> Zoom
                                 </button>
-                                @if($hasDownloadFile)
-                                    <a href="{{ route('portfolio.documentations.download', $documentation->slug) }}" class="btn-bento-amber py-1 px-3 fs-6">
-                                        <i class="bi bi-download"></i> Unduh
-                                    </a>
-                                @endif
                             </div>
                         </div>
                         <div class="text-center mt-2">
